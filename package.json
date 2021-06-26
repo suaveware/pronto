@@ -1,5 +1,5 @@
 {
-  "name": "~TODO~",
+  "name": "Pronto",
   "version": "0.0.1",
   "scripts": {
     "dev": "svelte-kit dev",
@@ -10,17 +10,22 @@
   },
   "devDependencies": {
     "@sveltejs/kit": "next",
+    "autoprefixer": "^10.2.6",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-svelte3": "^3.2.0",
     "prettier": "~2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
-    "svelte": "^3.34.0"
+    "svelte": "^3.34.0",
+    "tailwindcss": "^2.2.4"
   },
   "type": "module",
   "dependencies": {
     "@fontsource/fira-mono": "^4.2.2",
     "@lukeed/uuid": "^2.0.0",
-    "cookie": "^0.4.1"
+    "cookie": "^0.4.1",
+    "dexie": "^3.0.3",
+    "luxon": "^1.27.0",
+    "svelte-feather-icons": "^3.5.0"
   }
 }
