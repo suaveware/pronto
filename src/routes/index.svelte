@@ -1,11 +1,16 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { dndzone, TRIGGERS } from 'svelte-dnd-action';
+	import { flip } from 'svelte/animate';
 	import { actionsStore, actions } from '$lib/actionsStore';
 	import ActionForm from '../lib/ActionForm.svelte';
 	import ActionItem from '../lib/ActionItem.svelte';
+	import { longpress } from '$lib/custom-actions/longpress';
 	import { PlusIcon, MaximizeIcon } from 'svelte-feather-icons';
 
-	console.log('$actionsStore', $actionsStore);
+	const flipDurationMs = 50;
+
+	let editingAction = null;
 
 	const handleAdd = ({ detail }) => {
 		editingAction = null;
@@ -24,23 +29,52 @@
 		editingAction = { title: '', description: '' };
 	};
 
-	const handleActionItemPressed = action => () => {
+	const handleItemPressed = action => () => {
 		editingAction = action;
 	};
 
-	let editingAction = null;
+	function handleDnd({ detail }) {
+		$actionsStore = detail.items;
+
+		if (detail.info.trigger === TRIGGERS.DRAG_STARTED) {
+			// main.classList.add('overflow-hidden');
+			// main.classList.remove('overflow-y-scroll');
+		}
+		if (detail.info.trigger.includes('dropped')) {
+			console.log('stopped');
+			// main.classList.add('overflow-y-scroll');
+			// main.classList.remove('overflow-hidden');
+		}
+		if (detail.info.trigger === TRIGGERS.DROPPED_INTO_ZONE) {
+			actions.reorder(detail.items);
+		}
+	}
 
 	$: {
 		console.log('$actionsStore', $actionsStore);
 	}
-
 </script>
 
-<div class='p-4 flex-col inline-flex gap-2 w-full'>
-	{#each $actionsStore as action}
-		<ActionItem on:click={handleActionItemPressed(action)} action={action} />
+<div
+	use:dndzone='{{
+		items: $actionsStore,
+	  flipDurationMs,
+    customStartEvent: "longpress",
+	}}'
+	on:consider='{handleDnd}'
+	on:finalize='{handleDnd}'
+	class='p-4 flex-col inline-flex gap-2 w-full relative'
+>
+	{#each $actionsStore as action (action._id)}
+		<span
+			animate:flip='{{ duration: flipDurationMs }}'
+			use:longpress
+		>
+			<ActionItem on:click={handleItemPressed(action)} action={action} />
+		</span>
 	{/each}
 </div>
+
 {#if editingAction}
 	<ActionForm
 		action={editingAction}

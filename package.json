@@ -1,6 +1,7 @@
 {
   "name": "Pronto",
   "version": "0.0.1",
+  "license": "GNU GPLv3",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
@@ -15,6 +16,7 @@
     ]
   },
   "devDependencies": {
+    "@sveltejs/adapter-static": "^1.0.0-next.0",
     "@sveltejs/kit": "next",
     "autoprefixer": "^10.2.6",
     "eslint": "^7.22.0",
@@ -33,6 +35,7 @@
     "dexie": "^3.0.3",
     "luxon": "^1.27.0",
     "nodemon": "^2.0.7",
+    "svelte-dnd-action": "./src/svelte-dnd-action",
     "svelte-feather-icons": "^3.5.0",
     "workbox-precaching": "^6.1.5",
     "workbox-routing": "^6.1.5",
