@@ -6,7 +6,13 @@
     "build": "svelte-kit build",
     "preview": "svelte-kit preview",
     "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
-    "format": "prettier --write --plugin-search-dir=. ."
+    "format": "prettier --write --plugin-search-dir=. .",
+    "generate-assets": "pwa-asset-generator ./static/icon.svg ./static -i ./src/app.html -m ./static/manifest.json -f"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      ".svelte-kit/*"
+    ]
   },
   "devDependencies": {
     "@sveltejs/kit": "next",
@@ -26,6 +32,10 @@
     "cookie": "^0.4.1",
     "dexie": "^3.0.3",
     "luxon": "^1.27.0",
-    "svelte-feather-icons": "^3.5.0"
+    "nodemon": "^2.0.7",
+    "svelte-feather-icons": "^3.5.0",
+    "workbox-precaching": "^6.1.5",
+    "workbox-routing": "^6.1.5",
+    "workbox-strategies": "^6.1.5"
   }
 }

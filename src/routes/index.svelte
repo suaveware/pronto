@@ -36,15 +36,6 @@
 
 </script>
 
-<svelte:head>
-	<link rel='preconnect' href='https://fonts.googleapis.com'>
-	<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
-	<link
-		href='https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap'
-		rel='stylesheet'>
-</svelte:head>
-
-
 <div class='p-4 flex-col inline-flex gap-2 w-full'>
 	{#each $actionsStore as action}
 		<ActionItem on:click={handleActionItemPressed(action)} action={action} />
@@ -83,9 +74,9 @@
         @apply p-4 border shadow-md bg-white rounded-full;
     }
 
-		.small {
-				@apply p-2;
-		}
+    .small {
+        @apply p-2;
+    }
 
     :global(html) {
         width: 100%;
