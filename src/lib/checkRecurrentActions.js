@@ -50,7 +50,7 @@ addFunction(() => {
 			({ state, recurrence }) =>
 				state === actions.STATE.DONE &&
 				recurrence?.type &&
-				recurrence.type !== actions.RECURRENCE_TYPE.DISABLED &&
+				recurrence.type !== actions.RECURRENCE_TYPE.NO_RECURRENCE &&
 				(recurrence.nextDate ? DateTime.fromMillis(recurrence.nextDate).diffNow() <= 0 : false)
 		)
 		.toArray()

@@ -10,7 +10,7 @@
 	let title = action.title;
 	let description = action.description;
 	let recurrence = action.recurrence || {
-		type: actions.RECURRENCE_TYPE.DISABLED,
+		type: actions.RECURRENCE_TYPE.NO_RECURRENCE,
 		weekdays: [],
 		monthDays: []
 	};

@@ -9,7 +9,7 @@ const STATE = {
 	DONE: 'done',
 };
 const RECURRENCE_TYPE = {
-	DISABLED: 'no_recurrence',
+	NO_RECURRENCE: 'no_recurrence',
 	// ONCE: 'once',
 	EVERY_WEEK_DAYS: 'every_week_days',
 	EVERY_MONTH_DAYS: 'every_month_days',
