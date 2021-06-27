@@ -12,7 +12,7 @@
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 
-	const flipDurationMs = 50;
+	const flipDurationMs = 100;
 
 	let main;
 	let editingAction = null;
@@ -128,8 +128,8 @@
     }
 
     :global(main) {
-        font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen,
-        Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        font-family: Fira Sans, Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen,
+        Ubuntu, Cantarell, Droid Sans, Helvetica Neue, sans-serif;
         font-size: 16px;
         line-height: 1em;
     }

@@ -26,10 +26,6 @@
 			'recurrence.nextDate': calculateNextDate(action.recurrence)
 		});
 	};
-
-	$: {
-		console.log('descriptionNode', descriptionNode);
-	}
 </script>
 
 <svelte:head>
@@ -44,20 +40,31 @@
 
 <div
 	class='w-full h-full inline-flex flex-col gap-6 p-4 justify-center items-center'>
-	<p class='text-bg'>{action ? action?.title : "You're done!"}</p>
+	<p
+		class='text-bg font-bold text-xl'>{action ? action?.title : "You're done!"}</p>
 	<p
 		bind:this={descriptionNode}
 		on:click={() => {
 			descriptionNode.contentEditable = true;
 			descriptionNode.focus();
+
+			if (!action?.description) {
+				descriptionNode.innerText = ""
+			}
 		}}
 		on:blur={() => {
+			const newDescription = descriptionNode.innerText.trim();
+
 			descriptionNode.contentEditable = false;
-			actions.save({ ...action, description: descriptionNode.innerHTML });
+			actions.save({ ...action, description: newDescription });
+
+			if (!newDescription) {
+				descriptionNode.innerText = "..."
+			}
 		}}
-		class='font-light text-md'
+		class='font-light text-sm font-mono text-base whitespace-pre-wrap'
 	>
-		{@html action ? action?.description : "There's nothing else to do."}
+		{action ? (action?.description || "...") : "There's nothing else to do."}
 	</p>
 </div>
 

@@ -55,7 +55,7 @@
 		autofocus
 	/>
 	<textarea
-		class='w-full h-40 p-1 form-input'
+		class='w-full h-40 p-1 form-input font-mono'
 		placeholder='Description text'
 		bind:value={description}
 	></textarea>
