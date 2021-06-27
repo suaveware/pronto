@@ -1,7 +1,14 @@
 import Dexie from 'dexie';
+import { isClient } from '$lib/helpers';
 
-export const db = new Dexie('pronto');
+export let db;
 
-db.version(2).stores({
-	actions: '_id,order',
-});
+if (isClient()) {
+	db = new Dexie('pronto');
+
+	db.version(2).stores({
+		actions: '_id,order',
+	});
+
+	window.prontoDb = db;
+}

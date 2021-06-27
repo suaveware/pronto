@@ -1,24 +1,30 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 	import { actionsStore, actions } from '$lib/actionsStore';
 	import { ChevronLeftIcon, CheckIcon } from 'svelte-feather-icons';
+	import { DateTime } from 'luxon';
+	import { calculateNextDate } from '$lib/checkRecurrentActions';
 
 	let action;
 	$: action = $actionsStore[0];
-	console.log('action', action);
+
+	if (action) {
+		actions.save({ ...action, startedAt: DateTime.now().toMillis() });
+	}
 
 	const handleBackPressed = () => {
-		goto('/');
+		goto(`${base}/`);
 	};
 
 	const handleCheckPressed = () => {
-		actions.save({ ...action, state: actions.STATE.DONE });
+		actions.save({
+			...action,
+			state: actions.STATE.DONE,
+			completedAt: DateTime.now().toMillis(),
+			'recurrence.nextDate': calculateNextDate(action.recurrence)
+		});
 	};
-
-	$: {
-		console.log('$actionsStore', $actionsStore);
-	}
-
 </script>
 
 <svelte:head>
@@ -32,10 +38,10 @@
 </button>
 
 <div
-	class='w-full h-full inline-flex flex-col gap-6 justify-center items-center'>
-	<p class='text-bg'>{action?.title || "You're done!"}</p>
+	class='w-full h-full inline-flex flex-col gap-6 p-4 justify-center items-center'>
+	<p class='text-bg'>{action ? action?.title : "You're done!"}</p>
 	<p
-		class='font-light text-md'>{action?.description || "There's nothing else to do."}</p>
+		class='font-light text-md'>{action ? action?.description : "There's nothing else to do."}</p>
 </div>
 
 {#if action}

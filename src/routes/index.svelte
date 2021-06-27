@@ -1,15 +1,20 @@
 <script>
+	import '$lib/tick';
+	import '$lib/checkRecurrentActions';
 	import { goto } from '$app/navigation';
 	import { dndzone, TRIGGERS } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 	import { actionsStore, actions } from '$lib/actionsStore';
 	import ActionForm from '../lib/ActionForm.svelte';
 	import ActionItem from '../lib/ActionItem.svelte';
-	import { longpress } from '$lib/custom-actions/longpress';
+	import { longpress } from '$lib/custom_actions/longpress';
 	import { PlusIcon, MaximizeIcon } from 'svelte-feather-icons';
+	import { base } from '$app/paths';
+	import { onMount } from 'svelte';
 
 	const flipDurationMs = 50;
 
+	let main;
 	let editingAction = null;
 
 	const handleAdd = ({ detail }) => {
@@ -22,7 +27,7 @@
 	};
 
 	const handleMaximizePressed = () => {
-		goto('/focus');
+		goto(`${base}/focus`);
 	};
 
 	const handlePlusPressed = () => {
@@ -37,22 +42,21 @@
 		$actionsStore = detail.items;
 
 		if (detail.info.trigger === TRIGGERS.DRAG_STARTED) {
-			// main.classList.add('overflow-hidden');
-			// main.classList.remove('overflow-y-scroll');
+			main.classList.add('overflow-hidden');
+			main.classList.remove('overflow-y-scroll');
 		}
 		if (detail.info.trigger.includes('dropped')) {
-			console.log('stopped');
-			// main.classList.add('overflow-y-scroll');
-			// main.classList.remove('overflow-hidden');
+			main.classList.add('overflow-y-scroll');
+			main.classList.remove('overflow-hidden');
 		}
 		if (detail.info.trigger === TRIGGERS.DROPPED_INTO_ZONE) {
 			actions.reorder(detail.items);
 		}
 	}
 
-	$: {
-		console.log('$actionsStore', $actionsStore);
-	}
+	onMount(() => {
+		main = document.getElementsByTagName('main')[0];
+	});
 </script>
 
 <div

@@ -8,6 +8,13 @@ const STATE = {
 	READY: 'ready',
 	DONE: 'done',
 };
+const RECURRENCE_TYPE = {
+	DISABLED: 'no_recurrence',
+	// ONCE: 'once',
+	EVERY_WEEK_DAYS: 'every_week_days',
+	EVERY_MONTH_DAYS: 'every_month_days',
+	// FIXED_INTERVAL: 'fixed_interval',
+};
 export const actionsStore = writable([]);
 
 const refreshAction = () =>
@@ -15,7 +22,7 @@ const refreshAction = () =>
 		.orderBy('order')
 		.filter(({ state }) => state === STATE.READY)
 		.toArray()
-		.then((dbActions) => {
+		.then(dbActions => {
 			console.log('dbActions', dbActions);
 			actionsStore.set(dbActions);
 		});
@@ -26,7 +33,7 @@ if (isClient()) {
 	db.actions
 		.toCollection()
 		.toArray()
-		.then((result) => console.log('actions', result));
+		.then(result => console.log('actions', result));
 
 	refreshAction();
 }
@@ -48,11 +55,12 @@ export const actions = isClient() && {
 					.then(refreshAction);
 	},
 	remove: ({ _id }) => db.actions.where({ _id }).delete().then(refreshAction),
-	reorder: async (orderedActions) => {
+	reorder: async orderedActions => {
 		db.transaction('rw', db.actions, async () =>
 			orderedActions.map(({ _id }, index) => db.actions.update(_id, { order: index }))
 		).then(refreshAction);
 	},
 	refresh: refreshAction(),
 	STATE,
+	RECURRENCE_TYPE,
 };

@@ -5,22 +5,22 @@ import { StaleWhileRevalidate } from 'workbox-strategies';
 
 // Edit the list of routes so they get cached and routed correctly, allowing
 // cold start or hot reload to work offline.
-const skRoutes = ['/', '/focus'];
+const skRoutes = [`/`, `/focus`];
 
-self.addEventListener('message', (event) => {
+self.addEventListener('message', event => {
 	if (event.data && event.data.type === 'SKIP_WAITING') {
 		self.skipWaiting();
 	}
 });
 
 precacheAndRoute([
-	...build.map((url) => {
+	...build.map(url => {
 		return {
 			url,
 			revision: null,
 		};
 	}),
-	...files.map((url) => {
+	...files.map(url => {
 		return {
 			url,
 			revision: `${timestamp}`,
@@ -29,7 +29,7 @@ precacheAndRoute([
 ]);
 
 precache(
-	skRoutes.map((url) => {
+	skRoutes.map(url => {
 		return {
 			url,
 			revision: `${timestamp}`,
@@ -38,6 +38,6 @@ precache(
 );
 
 const matchCb = ({ url /*, request, event*/ }) => {
-	return skRoutes.some((path) => url.pathname === path);
+	return skRoutes.some(path => url.pathname === path);
 };
 registerRoute(matchCb, new StaleWhileRevalidate({}));
