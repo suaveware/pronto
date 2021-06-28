@@ -8,7 +8,14 @@
 
 	let action;
 	let descriptionNode;
-	$: action = $actionsStore[0];
+	$: {
+		action = $actionsStore[0];
+
+		// Gambiarra that makes the description text work properly
+		if (descriptionNode && action.description) {
+			descriptionNode.innerText = action.description;
+		}
+	}
 
 	if (action) {
 		actions.save({ ...action, startedAt: DateTime.now().toMillis() });
@@ -45,6 +52,10 @@
 	<p
 		bind:this={descriptionNode}
 		on:click={() => {
+			if (document.activeElement === descriptionNode) {
+				return;
+			}
+
 			descriptionNode.contentEditable = true;
 			descriptionNode.focus();
 
@@ -55,6 +66,9 @@
 		on:blur={() => {
 			const newDescription = descriptionNode.innerText.trim();
 
+			// Gambiarra that makes the description text work properly
+			action.description = newDescription;
+
 			descriptionNode.contentEditable = false;
 			actions.save({ ...action, description: newDescription });
 
@@ -64,7 +78,7 @@
 		}}
 		class='font-light text-sm font-mono text-base whitespace-pre-wrap'
 	>
-		{action ? (action?.description || "...") : "There's nothing else to do."}
+		{action ? (action.description || "...") : "There's nothing else to do."}
 	</p>
 </div>
 
