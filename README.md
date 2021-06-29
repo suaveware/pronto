@@ -17,4 +17,5 @@ implementar:
 # Running
 
 1. Clone this repository.
-2. Run `yarn dev` from the project's folder.
+2. Run `yarn install` or `npm install` from the project's folder.
+3. Run `yarn dev` or `npm run dev` from the project's folder.
