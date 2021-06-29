@@ -6,15 +6,11 @@ import { DateTime } from 'luxon';
 export const calculateNextDate = ({ type, weekdays, monthDays, nextDate }) => {
 	const now = DateTime.now();
 
-	if (nextDate && DateTime.fromMillis(nextDate).diffNow().toMillis() > 0) {
-		console.log('RETURNING SAME', {
-			nextDate,
-			diff: DateTime.fromMillis(nextDate).diffNow().toMillis(),
-		});
+	if (nextDate && DateTime.fromISO(nextDate).diffNow().toMillis() > 0) {
 		return nextDate;
 	}
 
-	const fromDate = nextDate ? DateTime.fromMillis(nextDate).startOf('day') : now.startOf('day');
+	const fromDate = nextDate ? DateTime.fromISO(nextDate).startOf('day') : now.startOf('day');
 
 	switch (type) {
 		case actions.RECURRENCE_TYPE.EVERY_WEEK_DAYS: {
@@ -24,7 +20,7 @@ export const calculateNextDate = ({ type, weekdays, monthDays, nextDate }) => {
 			);
 			const nextweekday = nextWeekdays.find(day => day > fromWeekday);
 
-			return fromDate.plus({ days: nextweekday - fromWeekday }).toMillis();
+			return fromDate.plus({ days: nextweekday - fromWeekday }).toISO();
 		}
 
 		case actions.RECURRENCE_TYPE.EVERY_MONTH_DAYS: {
@@ -35,7 +31,7 @@ export const calculateNextDate = ({ type, weekdays, monthDays, nextDate }) => {
 			].sort();
 			const nextDay = nextDays.find(day => day > fromDay);
 
-			return fromDate.plus({ days: nextDay - fromDay }).toMillis();
+			return fromDate.plus({ days: nextDay - fromDay }).toISO();
 		}
 
 		default:
@@ -51,7 +47,9 @@ addFunction(() => {
 				state === actions.STATE.DONE &&
 				recurrence?.type &&
 				recurrence.type !== actions.RECURRENCE_TYPE.NO_RECURRENCE &&
-				(recurrence.nextDate ? DateTime.fromMillis(recurrence.nextDate).diffNow() <= 0 : false)
+				(recurrence.nextDate
+					? DateTime.fromISO(recurrence.nextDate).diffNow().toMillis() <= 0
+					: false)
 		)
 		.toArray()
 		.then(dbActions => {

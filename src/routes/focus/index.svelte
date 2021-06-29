@@ -18,7 +18,7 @@
 	}
 
 	if (action) {
-		actions.save({ ...action, startedAt: DateTime.now().toMillis() });
+		actions.save({ ...action, startedAt: DateTime.now().toISO() });
 	}
 
 	const handleBackPressed = () => {
@@ -29,7 +29,7 @@
 		actions.save({
 			...action,
 			state: actions.STATE.DONE,
-			completedAt: DateTime.now().toMillis(),
+			completedAt: DateTime.now().toISO(),
 			'recurrence.nextDate': calculateNextDate(action.recurrence)
 		});
 	};

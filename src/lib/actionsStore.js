@@ -49,7 +49,7 @@ export const actions = isClient() && {
 						_id: uuid(),
 						order: actionCount,
 						state: STATE.READY,
-						createdAt: DateTime.now().toMillis(),
+						createdAt: DateTime.now().toISO(),
 						...action,
 					})
 					.then(refreshAction);
