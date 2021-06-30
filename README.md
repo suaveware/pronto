@@ -14,3 +14,8 @@ implementar:
 * Visão de calendário: onde você poderia ver todas as interrupções que estão
   marcadas.
   
+# Running
+
+1. Clone this repository.
+2. Run `yarn install` or `npm install` from the project's folder.
+3. Run `yarn dev` or `npm run dev` from the project's folder.
