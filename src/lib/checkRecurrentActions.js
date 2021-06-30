@@ -1,10 +1,10 @@
 import { addFunction } from '$lib/tick';
-import { db } from '$lib/db';
-import { actions } from '$lib/actionsStore';
+import { dexieDb } from '$lib/dexieDb';
+import { ACTIVITIES_STATE, RECURRENCE_TYPE, saveActivity } from '$lib/state';
 import { DateTime } from 'luxon';
 
 export const calculateNextDate = ({ type, weekdays, monthDays, nextDate }) => {
-	const now = DateTime.now();
+	const now = DateTime.utc();
 
 	if (nextDate && DateTime.fromISO(nextDate).diffNow().toMillis() > 0) {
 		return nextDate;
@@ -13,7 +13,7 @@ export const calculateNextDate = ({ type, weekdays, monthDays, nextDate }) => {
 	const fromDate = nextDate ? DateTime.fromISO(nextDate).startOf('day') : now.startOf('day');
 
 	switch (type) {
-		case actions.RECURRENCE_TYPE.EVERY_WEEK_DAYS: {
+		case RECURRENCE_TYPE.EVERY_WEEK_DAYS: {
 			const fromWeekday = fromDate.weekday;
 			const nextWeekdays = [...weekdays.map(day => +day), ...weekdays.map(day => +day + 7)].sort(
 				(a, b) => a - b
@@ -23,7 +23,7 @@ export const calculateNextDate = ({ type, weekdays, monthDays, nextDate }) => {
 			return fromDate.plus({ days: nextweekday - fromWeekday }).toISO();
 		}
 
-		case actions.RECURRENCE_TYPE.EVERY_MONTH_DAYS: {
+		case RECURRENCE_TYPE.EVERY_MONTH_DAYS: {
 			const fromDay = fromDate.day;
 			const nextDays = [
 				...monthDays.map(day => +day),
@@ -40,32 +40,24 @@ export const calculateNextDate = ({ type, weekdays, monthDays, nextDate }) => {
 };
 
 addFunction(() => {
-	db.actions
+	dexieDb.activities
 		.orderBy('order')
 		.filter(
 			({ state, recurrence }) =>
-				state === actions.STATE.DONE &&
+				state === ACTIVITIES_STATE.DONE &&
 				recurrence?.type &&
-				recurrence.type !== actions.RECURRENCE_TYPE.NO_RECURRENCE &&
+				recurrence.type !== RECURRENCE_TYPE.NO_RECURRENCE &&
 				(recurrence.nextDate
 					? DateTime.fromISO(recurrence.nextDate).diffNow().toMillis() <= 0
 					: false)
 		)
 		.toArray()
 		.then(dbActions => {
-			dbActions.forEach(action => {
-				actions
-					.save({
-						...action,
-						state: actions.STATE.READY,
-					})
-					.then(result => {
-						console.log(
-							`Reactivating action, next date: ${action.recurrence.nextDate}. Result: `,
-							result,
-							action
-						);
-					});
+			dbActions.forEach(activity => {
+				saveActivity({
+					...activity,
+					state: ACTIVITIES_STATE.READY,
+				});
 			});
 		});
 });

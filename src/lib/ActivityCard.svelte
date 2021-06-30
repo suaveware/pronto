@@ -1,10 +1,10 @@
 <script>
-	export let action = {};
+	export let activity;
 </script>
 
 <div
 	class='p-2 shadow-md border rounded'
 	on:click
 >
-	{action.title}
+	{activity.title}
 </div>

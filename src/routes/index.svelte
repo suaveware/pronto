@@ -4,9 +4,9 @@
 	import { goto } from '$app/navigation';
 	import { dndzone, TRIGGERS } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
-	import { actionsStore, actions } from '$lib/actionsStore';
-	import ActionForm from '../lib/ActionForm.svelte';
-	import ActionItem from '../lib/ActionItem.svelte';
+	import { Activity, reorderActivities, state } from '$lib/state';
+	import ActivityForm from '$lib/ActivityForm.svelte';
+	import ActivityCard from '../lib/ActivityCard.svelte';
 	import { longpress } from '$lib/custom_actions/longpress';
 	import { PlusIcon, MaximizeIcon } from 'svelte-feather-icons';
 	import { base } from '$app/paths';
@@ -15,32 +15,27 @@
 	const flipDurationMs = 100;
 
 	let main;
-	let editingAction = null;
-
-	const handleAdd = ({ detail }) => {
-		editingAction = null;
-		actions.save(detail);
-	};
-
-	const handleCancel = () => {
-		editingAction = null;
-	};
+	let jsActivities;
+	$: jsActivities = $state.activities.toJS();
+	let editingActivity = null;
 
 	const handleMaximizePressed = () => {
 		goto(`${base}/focus`);
 	};
 
 	const handlePlusPressed = () => {
-		editingAction = { title: '', description: '' };
+		editingActivity = Activity();
 	};
 
-	const handleItemPressed = action => () => {
-		editingAction = action;
+	const handleItemPressed = index => () => {
+		editingActivity = $state.activities.get(index);
 	};
 
 	function handleDnd({ detail }) {
-		$actionsStore = detail.items;
+		jsActivities = detail.items;
 
+		// We need to add and remove these classes to prevent scrolling while
+		// reordering the activities
 		if (detail.info.trigger === TRIGGERS.DRAG_STARTED) {
 			main.classList.add('overflow-hidden');
 			main.classList.remove('overflow-y-scroll');
@@ -50,7 +45,7 @@
 			main.classList.remove('overflow-hidden');
 		}
 		if (detail.info.trigger === TRIGGERS.DROPPED_INTO_ZONE) {
-			actions.reorder(detail.items);
+			reorderActivities(detail.items);
 		}
 	}
 
@@ -61,7 +56,7 @@
 
 <div
 	use:dndzone='{{
-		items: $actionsStore,
+		items: jsActivities,
 	  flipDurationMs,
     customStartEvent: "longpress",
 	}}'
@@ -69,22 +64,21 @@
 	on:finalize='{handleDnd}'
 	class='p-4 flex-col inline-flex gap-2 w-full relative'
 >
-	{#each $actionsStore as action (action._id)}
+	{#each jsActivities as activity, index (activity._id)}
 		<span
 			animate:flip='{{ duration: flipDurationMs }}'
 			use:longpress
 		>
-			<ActionItem on:click={handleItemPressed(action)} action={action} />
+			<ActivityCard
+				on:click={handleItemPressed(index)}
+				activity={activity}
+			/>
 		</span>
 	{/each}
 </div>
 
-{#if editingAction}
-	<ActionForm
-		action={editingAction}
-		on:add={handleAdd}
-		on:cancel={handleCancel}
-	/>
+{#if editingActivity}
+	<ActivityForm bind:activity={editingActivity} />
 {:else}
 	<div
 		class='fixed bottom-4 right-4 gap-3 items-center inline-flex flex-col'
@@ -92,11 +86,11 @@
 		<button
 			on:click={handlePlusPressed}
 			class='fab'
-			class:small={!!$actionsStore.length}
+			class:small={!!$state.activities.size}
 		>
-			<PlusIcon size={$actionsStore.length ? '16' : '24'} />
+			<PlusIcon size={$state.activities.size ? '16' : '24'} />
 		</button>
-		{#if $actionsStore.length}
+		{#if $state.activities.size}
 			<button
 				on:click={handleMaximizePressed}
 				class='p-4 fab'
@@ -116,21 +110,4 @@
         @apply p-2;
     }
 
-    :global(html) {
-        width: 100%;
-        height: 100%;
-    }
-
-    :global(body) {
-        width: 100%;
-        height: 100%;
-
-    }
-
-    :global(main) {
-        font-family: Fira Sans, Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen,
-        Ubuntu, Cantarell, Droid Sans, Helvetica Neue, sans-serif;
-        font-size: 16px;
-        line-height: 1em;
-    }
 </style>
