@@ -67,18 +67,22 @@
 	});
 </script>
 
+
 <div
-	use:dndzone='{{
-		items: readyActivities,
-	  flipDurationMs,
-    customStartEvent: "longpress",
-	}}'
-	on:consider='{handleDnd}'
-	on:finalize='{handleDnd}'
 	class='p-4 flex-col inline-flex gap-2 w-full relative'
 >
 	<p class='text-xl'>Next activities</p>
-	{#each readyActivities as activity, index (activity._id)}
+	<div
+		class='w-full flex-col inline-flex gap-2'
+		use:dndzone='{{
+		items: dndActivities,
+	  flipDurationMs,
+    customStartEvent: "longpress",
+	}}'
+		on:consider='{handleDnd}'
+		on:finalize='{handleDnd}'
+	>
+		{#each dndActivities as activity, index (activity._id)}
 		<span
 			animate:flip='{{ duration: flipDurationMs }}'
 			use:longpress
@@ -88,12 +92,9 @@
 				activity={activity}
 			/>
 		</span>
-	{/each}
-</div>
+		{/each}
+	</div>
 
-<div
-	class='p-4 flex-col inline-flex gap-2 w-full relative'
->
 	<p class='text-xl'>Waiting activities</p>
 	{#each waitingActivities as activity, index (activity._id)}
 		<ActivityCard

@@ -179,10 +179,10 @@ export const reorderActivities = createOperation((currentState, newOrder) => {
 		{}
 	);
 	const newActivities = currentState.activities
-		.map(activity => activity.set('order', orderById[activity._id]))
+		.map(activity => activity.set('order', orderById[activity._id] ?? activity.order))
 		.sort((a, b) => a.order - b.order);
 
-	console.log('new order', newActivities.map(a => a.title).toJS());
+	console.log('new order', newActivities.map(a => `${a.order}. ${a.title}`).toJS());
 
 	const newState = currentState.set('activities', newActivities);
 
