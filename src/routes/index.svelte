@@ -1,23 +1,36 @@
 <script>
-	import '$lib/tick';
-	import '$lib/checkRecurrentActions';
 	import { goto } from '$app/navigation';
 	import { dndzone, TRIGGERS } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 	import { Activity, reorderActivities, state } from '$lib/state';
 	import ActivityForm from '$lib/ActivityForm.svelte';
-	import ActivityCard from '../lib/ActivityCard.svelte';
+	import ActivityCard from '$lib/ActivityCard.svelte';
 	import { longpress } from '$lib/custom_actions/longpress';
 	import { PlusIcon, MaximizeIcon } from 'svelte-feather-icons';
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
+	import { ACTIVITIES_STATE } from '$lib/constants';
 
 	const flipDurationMs = 100;
 
 	let main;
-	let jsActivities;
-	$: jsActivities = $state.activities.toJS();
 	let editingActivity = null;
+
+	let doneActivities;
+	$: {
+		doneActivities = $state.activities.filter(activity => activity.state === ACTIVITIES_STATE.DONE).toJS();
+	}
+
+	let waitingActivities;
+	$: {
+		waitingActivities = $state.activities.filter(activity => activity.state === ACTIVITIES_STATE.WAITING).toJS();
+	}
+
+	// Svelte dnd needs mutable stuff
+	let readyActivities;
+	$: {
+		readyActivities = $state.activities.filter(activity => activity.state === ACTIVITIES_STATE.READY).toJS();
+	}
 
 	const handleMaximizePressed = () => {
 		goto(`${base}/focus`);
@@ -32,7 +45,7 @@
 	};
 
 	function handleDnd({ detail }) {
-		jsActivities = detail.items;
+		readyActivities = detail.items;
 
 		// We need to add and remove these classes to prevent scrolling while
 		// reordering the activities
@@ -56,7 +69,7 @@
 
 <div
 	use:dndzone='{{
-		items: jsActivities,
+		items: readyActivities,
 	  flipDurationMs,
     customStartEvent: "longpress",
 	}}'
@@ -64,7 +77,8 @@
 	on:finalize='{handleDnd}'
 	class='p-4 flex-col inline-flex gap-2 w-full relative'
 >
-	{#each jsActivities as activity, index (activity._id)}
+	<p class='text-xl'>Next activities</p>
+	{#each readyActivities as activity, index (activity._id)}
 		<span
 			animate:flip='{{ duration: flipDurationMs }}'
 			use:longpress
@@ -74,6 +88,25 @@
 				activity={activity}
 			/>
 		</span>
+	{/each}
+</div>
+
+<div
+	class='p-4 flex-col inline-flex gap-2 w-full relative'
+>
+	<p class='text-xl'>Waiting activities</p>
+	{#each waitingActivities as activity, index (activity._id)}
+		<ActivityCard
+			on:click={handleItemPressed(index)}
+			activity={activity}
+		/>
+	{/each}
+	<p class='text-xl'>Done activities</p>
+	{#each doneActivities as activity, index (activity._id)}
+		<ActivityCard
+			on:click={handleItemPressed(index)}
+			activity={activity}
+		/>
 	{/each}
 </div>
 

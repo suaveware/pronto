@@ -1,12 +1,10 @@
 import { isClient } from '$lib/helpers';
-import { DateTime } from 'luxon';
 
 export let addFunction = () => {};
 
 if (isClient()) {
 	const timeout = 500;
 	window.prontoTick = () => {};
-	window.DateTime = DateTime;
 
 	const timer = setInterval(
 		() =>
@@ -16,6 +14,8 @@ if (isClient()) {
 			}),
 		timeout
 	);
+
+	window.prontoTickTimer = timer;
 
 	addFunction = fun => {
 		const old = window.prontoTick;

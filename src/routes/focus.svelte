@@ -1,18 +1,22 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
-	import { ACTIVITIES_STATE, saveActivity, state } from '$lib/state';
+	import {
+		completeActivity,
+		saveActivity,
+		state
+	} from '$lib/state';
 	import { ChevronLeftIcon, CheckIcon } from 'svelte-feather-icons';
 	import { DateTime } from 'luxon';
-	import { calculateNextDate } from '$lib/checkRecurrentActions';
+	import { ACTIVITIES_STATE } from '$lib/constants';
 
 	let activity;
 	let descriptionNode;
 	$: {
-		activity = $state.activities.get(0);
+		activity = $state.activities.find(activity => activity.state === ACTIVITIES_STATE.READY);
 
 		// Gambiarra that makes the description text work properly
-		if (descriptionNode && activity.description) {
+		if (descriptionNode && activity?.description) {
 			descriptionNode.innerText = activity.description;
 		}
 	}
@@ -26,13 +30,7 @@
 	};
 
 	const handleCheckPressed = () => {
-		saveActivity(activity.merge({
-			state: ACTIVITIES_STATE.DONE,
-			completedAt: DateTime.utc().toISO(),
-			recurrence: {
-				nextDate: calculateNextDate(activity.recurrence)
-			}
-		}));
+		completeActivity(activity);
 	};
 
 	const handleDescriptionOnBlur = () => {

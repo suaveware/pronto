@@ -1,42 +1,16 @@
 import { writable } from 'svelte/store';
-import { isClient } from './helpers';
+import { calculateNextDate, isClient } from './helpers';
 import { v4 as uuid } from '@lukeed/uuid';
 import { DateTime } from 'luxon';
 import { dexieDb } from '$lib/dexieDb';
 import { List, Record } from 'immutable';
-
-/**
- * Helper constant to access the possible values of a activity state
- * @type {{READY: ('ready'), DONE: ('done'), WAITING: ('waiting')}}
- */
-export const ACTIVITIES_STATE = {
-	READY: 'ready',
-	DONE: 'done',
-	WAITING: 'waiting',
-};
-
-/**
- * Helper constant to access the possible values of a recurrence type
- * @type {{
- *   EVERY_MONTH_DAYS: ('every_month_days'),
- *   NO_RECURRENCE: ('no_recurrence'),
- *   EVERY_WEEK_DAYS: ('every_week_days')
- * }}
- */
-
-export const RECURRENCE_TYPE = {
-	NO_RECURRENCE: 'no_recurrence',
-	// ONCE: 'once',
-	EVERY_WEEK_DAYS: 'every_week_days',
-	EVERY_MONTH_DAYS: 'every_month_days',
-	// FIXED_INTERVAL: 'fixed_interval',
-};
+import { ACTIVITIES_STATE } from '$lib/constants';
 
 /**
  * @type {Record.Factory} Recurrence
  * @param {{
  *   type: string,
- *   weekDays: List<Number>,
+ *   weekdays: List<Number>,
  *   monthDays: List<Number>,
  *   nextDate: string,
  * }} recurrence
@@ -44,7 +18,7 @@ export const RECURRENCE_TYPE = {
 export const Recurrence = Record(
 	{
 		type: 'no_recurrence',
-		weekDays: List(),
+		weekdays: List(),
 		monthDays: List(),
 		nextDate: '',
 	},
@@ -81,7 +55,18 @@ const refreshState = () =>
 		.orderBy('order')
 		.toArray()
 		.then(dbActivities => {
-			state.set(State({ activities: List(dbActivities.map(Activity)) }));
+			state.set(
+				State({
+					activities: List(
+						dbActivities.map(dbActivity =>
+							Activity({
+								...dbActivity,
+								recurrence: Recurrence(dbActivity.recurrence),
+							})
+						)
+					),
+				})
+			);
 		});
 
 /**
@@ -215,9 +200,22 @@ export const reorderActivities = createOperation((currentState, newOrder) => {
 	return newState;
 });
 
+export const completeActivity = activity => {
+	const nextDate = calculateNextDate(activity.recurrence);
+
+	saveActivity(
+		activity.merge({
+			state: nextDate ? ACTIVITIES_STATE.WAITING : ACTIVITIES_STATE.DONE,
+			completedAt: DateTime.utc().toISO(),
+			recurrence: activity.recurrence.merge({ nextDate }),
+		})
+	);
+};
+
 if (isClient()) {
 	window.appState = state;
 	window.dexieDb = dexieDb;
+	window.DateTime = DateTime;
 
 	// Log current db content
 	refreshState();

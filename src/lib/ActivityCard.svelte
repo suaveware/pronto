@@ -6,5 +6,8 @@
 	class='p-2 shadow-md border rounded'
 	on:click
 >
-	{activity.title}
+	<div class='inline-flex justify-between items-center w-full'>
+		<div>{activity.title}</div>
+		<div>{activity.state}</div>
+	</div>
 </div>

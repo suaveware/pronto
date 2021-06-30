@@ -1,7 +1,7 @@
 <script>
+	import { RECURRENCE_TYPE } from '$lib/constants';
 	import { TrashIcon } from 'svelte-feather-icons';
 	import {
-		RECURRENCE_TYPE,
 		removeActivity,
 		saveActivity
 	} from '$lib/state';
@@ -56,14 +56,15 @@
 
 	<div class=' w-full inline-flex gap-2 flex-wrap'>
 		<select bind:value={form.recurrence.type} class='form-input'>
+
 			{#each Object.values(RECURRENCE_TYPE) as type}
 				<option>{type}</option>
 			{/each}
 		</select>
-		{#if activity.recurrence.type === RECURRENCE_TYPE.ONCE}
+		{#if form.recurrence.type === RECURRENCE_TYPE.ONCE}
 			<input class='form-input' type='date' />
 			<input class='form-input' type='time' />
-		{:else if activity.recurrence.type === RECURRENCE_TYPE.EVERY_WEEK_DAYS}
+		{:else if form.recurrence.type === RECURRENCE_TYPE.EVERY_WEEK_DAYS}
 			<div class='inline-flex flex-wrap gap-2'>
 				{#each Info.weekdays("long", { locale: "en" }) as weekDay, index}
 					<label>
@@ -76,7 +77,7 @@
 					</label>
 				{/each}
 			</div>
-		{:else if activity.recurrence.type === RECURRENCE_TYPE.EVERY_MONTH_DAYS}
+		{:else if form.recurrence.type === RECURRENCE_TYPE.EVERY_MONTH_DAYS}
 			<div class='inline-flex flex-wrap gap-2'>
 				{#each new Array(31).fill(0).map((v, index) => index + 1) as monthDay}
 					<label>
