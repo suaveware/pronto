@@ -10,27 +10,23 @@
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { ACTIVITIES_STATE } from '$lib/constants';
+	import { List } from 'immutable';
 
 	const flipDurationMs = 100;
 
 	let main;
 	let editingActivity = null;
+	let activitiesByState;
+	let dndActivities; // Svelte dnd needs mutable stuff
 
-	let doneActivities;
 	$: {
-		doneActivities = $state.activities.filter(activity => activity.state === ACTIVITIES_STATE.DONE).toJS();
+		activitiesByState = $state.activities.groupBy(activity => activity.state);
+		dndActivities = activitiesByState.get(ACTIVITIES_STATE.READY, List()).toJS();
 	}
 
-	let waitingActivities;
-	$: {
-		waitingActivities = $state.activities.filter(activity => activity.state === ACTIVITIES_STATE.WAITING).toJS();
-	}
-
-	// Svelte dnd needs mutable stuff
-	let readyActivities;
-	$: {
-		readyActivities = $state.activities.filter(activity => activity.state === ACTIVITIES_STATE.READY).toJS();
-	}
+	onMount(() => {
+		main = document.getElementsByTagName('main')[0];
+	});
 
 	const handleMaximizePressed = () => {
 		goto(`${base}/focus`);
@@ -44,8 +40,8 @@
 		editingActivity = $state.activities.get(index);
 	};
 
-	function handleDnd({ detail }) {
-		readyActivities = detail.items;
+	const handleDnd = ({ detail }) => {
+		dndActivities = detail.items;
 
 		// We need to add and remove these classes to prevent scrolling while
 		// reordering the activities
@@ -60,11 +56,7 @@
 		if (detail.info.trigger === TRIGGERS.DROPPED_INTO_ZONE) {
 			reorderActivities(detail.items);
 		}
-	}
-
-	onMount(() => {
-		main = document.getElementsByTagName('main')[0];
-	});
+	};
 </script>
 
 
@@ -96,14 +88,14 @@
 	</div>
 
 	<p class='text-xl'>Waiting activities</p>
-	{#each waitingActivities as activity, index (activity._id)}
+	{#each activitiesByState.get(ACTIVITIES_STATE.WAITING, List()).toArray() as activity, index (activity._id)}
 		<ActivityCard
 			on:click={handleItemPressed(index)}
 			activity={activity}
 		/>
 	{/each}
 	<p class='text-xl'>Done activities</p>
-	{#each doneActivities as activity, index (activity._id)}
+	{#each activitiesByState.get(ACTIVITIES_STATE.DONE, List()).toArray() as activity, index (activity._id)}
 		<ActivityCard
 			on:click={handleItemPressed(index)}
 			activity={activity}

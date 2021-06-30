@@ -7,10 +7,10 @@ import { StaleWhileRevalidate } from 'workbox-strategies';
 // cold start or hot reload to work offline.
 const skRoutes = [`/`, `/focus`];
 
-self.addEventListener('message', event => {
-	if (event.data && event.data.type === 'SKIP_WAITING') {
-		self.skipWaiting();
-	}
+// Just update to the new serviceworker if there's any
+self.addEventListener('statechanged', () => {
+	console.log('SERVICE WORKER STATE CHANGED');
+	self.skipWaiting();
 });
 
 precacheAndRoute([
