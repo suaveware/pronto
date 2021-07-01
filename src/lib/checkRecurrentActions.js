@@ -12,7 +12,7 @@ addFunction(() => {
 				recurrence?.type &&
 				recurrence.type !== RECURRENCE_TYPE.NO_RECURRENCE &&
 				(recurrence.nextDate
-					? DateTime.fromISO(recurrence.nextDate).diffNow().toMillis() <= 0
+					? DateTime.fromISO(recurrence.nextDate).startOf('day').diffNow().toMillis() <= 0
 					: false)
 		)
 		.toArray()

@@ -13,6 +13,12 @@ self.addEventListener('statechanged', () => {
 	self.skipWaiting();
 });
 
+// Just update to the new serviceworker if there's any, attempt 2
+// In the future we show a message before doing it.
+setTimeout(() => {
+	self.skipWaiting();
+}, 2000);
+
 precacheAndRoute([
 	...build.map(url => {
 		return {

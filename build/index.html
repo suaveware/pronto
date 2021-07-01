@@ -2,14 +2,17 @@
 <html lang='en'>
 <head>
 	<meta charset='utf-8'>
+	<meta name="theme-color" content="#fff">
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
 
 	<link rel='manifest' href='/manifest.json' crossorigin='use-credentials'>
+
+	<!-- FONTS -->
 	<link rel='preconnect' href='https://fonts.googleapis.com'>
-	<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin=''>
+	<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
 	<link
-		href='https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap'
+		href='https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'
 		rel='stylesheet'>
-	<meta name='viewport' content='width=device-width, initial-scale=1'>
 
 	<link rel='icon' type='image/png' sizes='196x196'
 				href='/favicon-196.png'>
@@ -98,22 +101,42 @@
 				media='(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)'>
 
 </head>
+<style>
+    html {
+        width: 100%;
+        height: 100%;
+    }
+
+    body {
+        width: 100%;
+        height: 100%;
+
+    }
+
+    main {
+        font-family: Fira Sans, Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen,
+        Ubuntu, Cantarell, Droid Sans, Helvetica Neue, sans-serif;
+        font-size: 16px;
+        line-height: 1em;
+    }
+</style>
 <body>
 
 		
 
-		<link rel="modulepreload" href="/./_app/start-1353d4f8.js">
-		<link rel="modulepreload" href="/./_app/chunks/vendor-b5f9722e.js">
-		<link rel="modulepreload" href="/./_app/chunks/singletons-bb9012b7.js">
-		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-59cdcae7.js">
-		<link rel="modulepreload" href="/./_app/pages/index.svelte-1e5808fe.js">
-		<link rel="modulepreload" href="/./_app/chunks/actionsStore-7780aa00.js">
+		<link rel="modulepreload" href="/./_app/start-53a27df6.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-9b7a0713.js">
+		<link rel="modulepreload" href="/./_app/chunks/paths-7dc55c62.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-e8b4e96b.js">
+		<link rel="modulepreload" href="/./_app/chunks/state-5c0efd2e.js">
+		<link rel="modulepreload" href="/./_app/pages/index.svelte-94ef9304.js">
+		<link rel="modulepreload" href="/./_app/chunks/navigation-c804b3db.js">
 		<link rel="stylesheet" href="/./_app/assets/start-8077b9bf.css">
-		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-da54b9dd.css">
-		<link rel="stylesheet" href="/./_app/assets/pages/index.svelte-4f07df4c.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-783cf015.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/index.svelte-617800a5.css">
 
 		<script type="module">
-			import { start } from "/./_app/start-1353d4f8.js";
+			import { start } from "/./_app/start-53a27df6.js";
 			start({
 				target: document.querySelector("#svelte"),
 				paths: {"base":"","assets":"/."},
@@ -126,8 +149,8 @@
 					status: 200,
 					error: null,
 					nodes: [
-						import("/./_app/pages/__layout.svelte-59cdcae7.js"),
-						import("/./_app/pages/index.svelte-1e5808fe.js")
+						import("/./_app/pages/__layout.svelte-e8b4e96b.js"),
+						import("/./_app/pages/index.svelte-94ef9304.js")
 					],
 					page: {
 						host: location.host, // TODO this is redundant
@@ -143,9 +166,15 @@
 <div id='svelte' style='width: 100%; height: 100%'>
 
 
-<main class="w-full h-full"><div class="p-4 flex-col inline-flex gap-2 w-full relative"></div>
+<main class="w-full h-full"><div class="p-4 flex-col inline-flex gap-2 w-full relative"><p class="text-xl">Next activities</p>
+	<div class="w-full flex-col inline-flex gap-2"></div>
 
-<div class="fixed bottom-4 right-4 gap-3 items-center inline-flex flex-col"><button class="fab svelte-1hxo9nt"><svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus "><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+	<p class="text-xl">Waiting activities</p>
+	
+	<p class="text-xl">Done activities</p>
+	</div>
+
+<div class="fixed bottom-4 right-4 gap-3 items-center inline-flex flex-col"><button class="fab svelte-cy62oh"><svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus "><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
 </div>
 </main>
 
