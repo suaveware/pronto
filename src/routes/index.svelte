@@ -36,8 +36,8 @@
 		editingActivity = Activity();
 	};
 
-	const handleItemPressed = index => () => {
-		editingActivity = $state.activities.get(index);
+	const handleItemPressed = _id => () => {
+		editingActivity = $state.activities.find(activity => activity._id === _id);
 	};
 
 	const handleDnd = ({ detail }) => {
@@ -80,7 +80,7 @@
 			use:longpress
 		>
 			<ActivityCard
-				on:click={handleItemPressed(index)}
+				on:click={handleItemPressed(activity._id)}
 				activity={activity}
 			/>
 		</span>
@@ -90,14 +90,14 @@
 	<p class='text-xl'>Waiting activities</p>
 	{#each activitiesByState.get(ACTIVITIES_STATE.WAITING, List()).toArray() as activity, index (activity._id)}
 		<ActivityCard
-			on:click={handleItemPressed(index)}
+			on:click={handleItemPressed(activity._id)}
 			activity={activity}
 		/>
 	{/each}
 	<p class='text-xl'>Done activities</p>
 	{#each activitiesByState.get(ACTIVITIES_STATE.DONE, List()).toArray() as activity, index (activity._id)}
 		<ActivityCard
-			on:click={handleItemPressed(index)}
+			on:click={handleItemPressed(activity._id)}
 			activity={activity}
 		/>
 	{/each}
