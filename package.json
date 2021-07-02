@@ -8,7 +8,8 @@
     "preview": "svelte-kit preview",
     "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "format": "prettier --write --plugin-search-dir=. .",
-    "generate-assets": "pwa-asset-generator ./static/icon.svg ./static -i ./src/app.html -m ./static/manifest.json -f"
+    "generate-assets": "pwa-asset-generator ./static/icon.svg ./static -i ./src/app.html -m ./static/manifest.json -f",
+    "deploy": "zsh deploy.sh"
   },
   "nodemonConfig": {
     "ignore": [
