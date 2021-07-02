@@ -12,6 +12,8 @@
     "deploy": "zsh deploy.sh"
   },
   "nodemonConfig": {
+    "exec": "yarn build; yarn preview --host -H",
+    "ext": "*.js,*.svelte,*.html,*.css",
     "ignore": [
       ".svelte-kit/*",
       "build/*"
