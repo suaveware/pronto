@@ -24,7 +24,11 @@ export const Recurrence = (properties = {}) =>
 			...properties,
 		},
 		'Recurrence'
-	)(properties);
+	)({
+		...properties,
+		weekdays: List(properties.weekdays),
+		monthDays: List(properties.monthDays),
+	});
 
 export const CheckItem = Record({
 	text: '',
@@ -39,14 +43,13 @@ export const Activity = (properties = {}) =>
 			description: '',
 			order: 0,
 			state: ACTIVITIES_STATE.READY,
-			recurrence: Recurrence(properties.recurrence),
+			recurrence: Recurrence(),
 			checkList: List(),
 			createdAt: '',
 			completedAt: '',
-			...properties,
 		},
 		'Activity'
-	)(properties);
+	)({ ...properties, recurrence: Recurrence(properties.recurrence) });
 
 /**
  * @type {Record.Factory} State
