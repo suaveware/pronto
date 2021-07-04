@@ -5,7 +5,7 @@
 	import { Activity, reorderActivities, state } from '$lib/state';
 	import ActivityForm from '$lib/ActivityForm.svelte';
 	import ActivityCard from '$lib/ActivityCard.svelte';
-	import { longpress } from '$lib/custom_actions/longpress';
+	import { longpress } from '$lib/custom-actions/longpress';
 	import { PlusIcon, MaximizeIcon } from 'svelte-feather-icons';
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';

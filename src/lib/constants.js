@@ -18,9 +18,18 @@ export const ACTIVITIES_STATE = {
  */
 
 export const RECURRENCE_TYPE = {
-	NO_RECURRENCE: 'no_recurrence',
+	NO_RECURRENCE: {
+		key: 'no_recurrence',
+		label: 'No recurrence',
+	},
 	// ONCE: 'once',
-	EVERY_WEEK_DAYS: 'every_week_days',
-	EVERY_MONTH_DAYS: 'every_month_days',
+	EVERY_WEEK_DAYS: {
+		key: 'every_week_days',
+		label: 'Every weekdays',
+	},
+	EVERY_MONTH_DAYS: {
+		key: 'every_month_days',
+		label: 'Every month days',
+	},
 	// FIXED_INTERVAL: 'fixed_interval',
 };
