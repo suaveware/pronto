@@ -1,4 +1,4 @@
-import { Activity, Recurrence, saveActivity } from '$lib/state';
+import { Activity, saveActivity } from '$lib/state';
 import { DateTime } from 'luxon';
 import { addFunction } from '$lib/tick';
 import { dexieDb } from '$lib/dexieDb';
@@ -22,7 +22,6 @@ addFunction(() => {
 				saveActivity(
 					Activity({
 						...activity,
-						recurrence: Recurrence(activity.recurrence),
 						state: ACTIVITIES_STATE.READY,
 					})
 				);

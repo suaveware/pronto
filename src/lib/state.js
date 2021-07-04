@@ -7,37 +7,46 @@ import { List, Record } from 'immutable';
 import { ACTIVITIES_STATE } from '$lib/constants';
 
 /**
- * @type {Record.Factory} Recurrence
  * @param {{
  *   type: string,
- *   weekdays: List<Number>,
- *   monthDays: List<Number>,
+ *   weekdays: Array<Number>,
+ *   monthDays: Array<Number>,
  *   nextDate: string,
- * }} recurrence
+ * }} properties
  */
-export const Recurrence = Record(
-	{
-		type: 'no_recurrence',
-		weekdays: List(),
-		monthDays: List(),
-		nextDate: '',
-	},
-	'Recurrence'
-);
+export const Recurrence = (properties = {}) =>
+	Record(
+		{
+			type: 'no_recurrence',
+			weekdays: List(),
+			monthDays: List(),
+			nextDate: '',
+			...properties,
+		},
+		'Recurrence'
+	)(properties);
 
-export const Activity = Record(
-	{
-		_id: '',
-		title: '',
-		description: '',
-		order: 0,
-		state: ACTIVITIES_STATE.READY,
-		recurrence: Recurrence(),
-		createdAt: '',
-		completedAt: '',
-	},
-	'Activity'
-);
+export const CheckItem = Record({
+	text: '',
+	checked: false,
+});
+
+export const Activity = (properties = {}) =>
+	Record(
+		{
+			_id: '',
+			title: '',
+			description: '',
+			order: 0,
+			state: ACTIVITIES_STATE.READY,
+			recurrence: Recurrence(properties.recurrence),
+			checkList: List(),
+			createdAt: '',
+			completedAt: '',
+			...properties,
+		},
+		'Activity'
+	)(properties);
 
 /**
  * @type {Record.Factory} State
@@ -57,14 +66,7 @@ const refreshState = () =>
 		.then(dbActivities => {
 			state.set(
 				State({
-					activities: List(
-						dbActivities.map(dbActivity =>
-							Activity({
-								...dbActivity,
-								recurrence: Recurrence(dbActivity.recurrence),
-							})
-						)
-					),
+					activities: List(dbActivities.map(Activity)),
 				})
 			);
 		});
@@ -72,7 +74,6 @@ const refreshState = () =>
 /**
  * This is a store to represent the entire app state.
  * See https://svelte.dev/docs#writable.
- * @type {writable<State>}
  */
 export const state = writable(State());
 console.log('state', state);
