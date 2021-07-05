@@ -16,9 +16,9 @@
 		activity = $state.activities.find(activity => activity.state === ACTIVITIES_STATE.READY);
 
 		// Gambiarra that makes the description text work properly
-		if (descriptionNode && activity?.description) {
-			descriptionNode.innerText = activity.description;
-		}
+		// if (descriptionNode && activity?.description) {
+		// 	descriptionNode.innerText = activity.description;
+		// }
 	}
 
 	if (activity) {
@@ -73,7 +73,7 @@
 </button>
 
 <div
-	class='w-full h-full inline-flex flex-col gap-6 p-4 justify-center items-center'>
+	class='w-full h-full inline-flex flex-col text-blueGray-600 gap-6 p-4 justify-center items-center'>
 	<p
 		class='text-bg font-bold text-xl'>{activity ? activity?.title : "You're done!"}</p>
 	<p

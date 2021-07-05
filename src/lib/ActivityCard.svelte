@@ -1,12 +1,12 @@
 <script>
-	import { RECURRENCE_TYPE, ACTIVITIES_STATE } from '$lib/constants';
+	import { ACTIVITIES_STATE } from '$lib/constants';
 	import { DateTime } from 'luxon';
 
 	export let activity;
 </script>
 
 <div
-	class='w-full p-2 inline-flex flex-col gap-2 shadow-md border rounded'
+	class='w-full p-2 inline-flex bg-white flex-col gap-2 shadow-md border rounded'
 	on:click
 >
 	<div class='inline-flex justify-between items-center w-full'>

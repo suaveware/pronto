@@ -8,7 +8,7 @@
 	export let options = [];
 </script>
 
-<div class='inline-flex flex-col w-full'>
+<div class='inline-flex flex-col w-full {$$props.class}'>
 	{#if label}
 		<label
 			class='block uppercase text-blueGray-600 text-xs font-bold mb-2'
@@ -19,7 +19,7 @@
 	{/if}
 	<div
 		id='form-select'
-		class='relative rounded inline-flex gap-4 items-center justify-between shadow px-3 py-2 border text-blueGray-600 cursor-pointer box-border'
+		class='relative rounded bg-white inline-flex gap-4 items-center justify-between shadow px-3 py-2 border text-blueGray-600 cursor-pointer box-border'
 		use:clickOutside
 		on:clickedOutside={() => {
 				open = false

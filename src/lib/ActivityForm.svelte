@@ -37,7 +37,7 @@
 </script>
 
 <div
-	class='fixed z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col gap-2 bg-white h-full'
+	class='fixed z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col gap-2 bg-blueGray-100 h-full'
 >
 	{#if activity?._id}
 		<button

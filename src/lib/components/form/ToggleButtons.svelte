@@ -20,7 +20,7 @@
 	{/if}
 	<div
 		id='form-toggle-button'
-		class='box-border shadow rounded p-1 w-full gap-1 grid grid-cols-7 auto-cols-min'>
+		class='box-border shadow bg-white rounded p-2 w-full gap-1 grid grid-cols-7 auto-cols-min'>
 		{#each options as option, index}
 			<Button
 				toggle

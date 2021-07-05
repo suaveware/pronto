@@ -61,9 +61,9 @@
 
 
 <div
-	class='p-4 flex-col inline-flex gap-2 w-full relative'
+	class='p-4 flex-col text-blueGray-600 inline-flex gap-2 w-full relative'
 >
-	<p class='text-xl'>Next activities</p>
+	<h6 class='text-xl text-blueGray-800'>Next activities</h6>
 	<div
 		class='w-full flex-col inline-flex gap-2'
 		use:dndzone='{{
@@ -87,14 +87,14 @@
 		{/each}
 	</div>
 
-	<p class='text-xl'>Waiting activities</p>
+	<h6 class='text-xl text-blueGray-800'>Waiting activities</h6>
 	{#each activitiesByState.get(ACTIVITIES_STATE.WAITING, List()).toArray() as activity, index (activity._id)}
 		<ActivityCard
 			on:click={handleItemPressed(activity._id)}
 			activity={activity}
 		/>
 	{/each}
-	<p class='text-xl'>Done activities</p>
+	<h6 class='text-xl text-blueGray-800'>Done activities</h6>
 	{#each activitiesByState.get(ACTIVITIES_STATE.DONE, List()).toArray() as activity, index (activity._id)}
 		<ActivityCard
 			on:click={handleItemPressed(activity._id)}
@@ -107,7 +107,7 @@
 	<ActivityForm bind:activity={editingActivity} />
 {:else}
 	<div
-		class='fixed bottom-4 right-4 gap-3 items-center inline-flex flex-col'
+		class='fixed bottom-4 text-blueGray-600 right-4 gap-3 items-center inline-flex flex-col'
 	>
 		<button
 			on:click={handlePlusPressed}
