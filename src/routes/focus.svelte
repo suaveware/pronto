@@ -67,9 +67,9 @@
 
 <button
 	on:click={handleBackPressed}
-	class='fixed top-4 left-4'
+	class='fixed text-blueGray-600 top-4 left-4'
 >
-	<ChevronLeftIcon size='24' />
+	<ChevronLeftIcon class='text-blueGray-600' size='24' />
 </button>
 
 <div
@@ -92,7 +92,7 @@
 	>
 		<button
 			on:click={handleCheckPressed}
-			class='p-4 border shadow-md bg-white rounded-full'
+			class='p-4 border text-blueGray-600 shadow-md bg-white rounded-full'
 		>
 			<CheckIcon size='24' />
 		</button>

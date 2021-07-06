@@ -9,7 +9,7 @@
 	class='w-full p-2 inline-flex bg-white flex-col gap-2 shadow-md border rounded'
 	on:click
 >
-	<div class='inline-flex justify-between items-center w-full'>
+	<div class='inline-flex justify-between gap-1 items-center w-full'>
 		<div>{activity.title}</div>
 		<div>{activity.state}</div>
 	</div>

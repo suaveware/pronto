@@ -6,7 +6,8 @@
 	export let multi;
 	export let value = multi ? [] : '';
 
-	let pressedMap = {};
+	const valueArray = Array.isArray(value) ? value : [value];
+	let pressedMap = Object.fromEntries(valueArray.map(v => [v, true]));
 </script>
 
 <div class='inline-flex flex-col w-full'>

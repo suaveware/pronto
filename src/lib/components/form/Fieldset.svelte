@@ -4,7 +4,7 @@
 
 <div class='{$$props.class}'>
 {#if title}
-	<h6 class='text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase'>
+	<h6 class='text-blueGray-400 text-sm mt-2 mb-6 font-bold uppercase'>
 		{title}
 	</h6>
 {/if}

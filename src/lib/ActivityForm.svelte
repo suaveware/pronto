@@ -2,6 +2,7 @@
 	import { RECURRENCE_TYPE } from '$lib/constants';
 	import { TrashIcon } from 'svelte-feather-icons';
 	import {
+		Activity,
 		removeActivity,
 		saveActivity
 	} from '$lib/state';
@@ -30,25 +31,29 @@
 
 	// TODO: use the saveActivity here instead of weirdly sending it up
 	const handleConfirmPressed = () => {
-		saveActivity(activity.merge(form));
+		saveActivity(Activity({
+			...activity.toJS(),
+			...form,
+			_id: activity._id,
+		}));
 
 		activity = null;
 	};
 </script>
 
 <div
-	class='fixed z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col gap-2 bg-blueGray-100 h-full'
+	class='fixed z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col gap-2 bg-white h-full'
 >
 	{#if activity?._id}
 		<button
 			on:click={handleTrashPressed}
-			class='fixed top-4 right-4'
+			class='fixed text-blueGray-600 top-4 right-4'
 		>
 			<TrashIcon size='24' />
 		</button>
 	{/if}
 
-	<Fieldset title='Activity'>
+	<Fieldset title='Activity' class='bg-blueGray-100 p-4 rounded shadow mb-4'>
 		<Input
 			label='Title'
 			bind:value={form.title}

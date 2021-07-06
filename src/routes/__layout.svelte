@@ -6,7 +6,7 @@
 </script>
 
 
-<main class='w-full h-full bg-blueGray-100'>
+<main class='w-full h-full bg-white'>
 	<slot />
 </main>
 
