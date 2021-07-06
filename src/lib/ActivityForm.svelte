@@ -17,7 +17,6 @@
 	export let activity;
 
 	let form = activity.toJS();
-	$: console.log('form', form);
 
 	const handleTrashPressed = () => {
 		removeActivity(activity);

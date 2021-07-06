@@ -36,7 +36,6 @@
 				if (!multi) {
 					pressedMap = { [option.value]: true };
 				}
-				console.log('pressedMap[option.value]', option.value, pressedMap[option.value]);
 			}}
 			>
 				{option.label}

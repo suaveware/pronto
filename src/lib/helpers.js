@@ -6,16 +6,10 @@ export const isClient = () => typeof window !== 'undefined';
 export const calculateNextDate = ({ type, weekdays, monthDays, nextDate }) => {
 	const localNow = DateTime.now();
 
-	// console.log('nextDate', nextDate);
-	// console.log('localNow', localNow.toISO());
-
 	switch (type) {
-		case RECURRENCE_TYPE.EVERY_WEEK_DAYS: {
+		case RECURRENCE_TYPE.EVERY_WEEK_DAYS.key: {
 			const localNextDate = nextDate && DateTime.fromISO(nextDate).toLocal().startOf('day');
 			const fromDate = localNextDate ? localNextDate.startOf('day') : localNow.startOf('day');
-
-			// console.log('fromDate.toISO()', fromDate.toISO());
-			// console.log('localNextDate', localNextDate.toISO());
 
 			// If localNextDate is in the future, keep same date
 			if (localNextDate && localNextDate.diff(localNow).toMillis() > 0) {
@@ -34,7 +28,7 @@ export const calculateNextDate = ({ type, weekdays, monthDays, nextDate }) => {
 				.toISO();
 		}
 
-		case RECURRENCE_TYPE.EVERY_MONTH_DAYS: {
+		case RECURRENCE_TYPE.EVERY_MONTH_DAYS.key: {
 			const localNextDate = nextDate && DateTime.fromISO(nextDate).toLocal().startOf('day');
 			const fromDate = localNextDate ? localNextDate.startOf('day') : localNow.startOf('day');
 
@@ -57,6 +51,7 @@ export const calculateNextDate = ({ type, weekdays, monthDays, nextDate }) => {
 		}
 
 		default:
+			console.error(`Returning empty next date. No match for recurrence type "${type}".`);
 			return '';
 	}
 };

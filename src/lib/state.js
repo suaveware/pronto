@@ -79,7 +79,6 @@ const refreshState = () =>
  * See https://svelte.dev/docs#writable.
  */
 export const state = writable(State());
-console.log('state', state);
 
 /**
  * Receives a function and returns a function that expects the currentState and
@@ -89,13 +88,7 @@ console.log('state', state);
  * @returns {function(...[*]): void}
  */
 const createOperation = operationFunction => (...payload) =>
-	state.update(currentState => {
-		const newState = operationFunction(currentState, ...payload);
-
-		console.log('newState', newState);
-
-		return newState;
-	});
+	state.update(currentState => operationFunction(currentState, ...payload));
 
 /**
  * OPERATIONS
@@ -110,7 +103,7 @@ const createOperation = operationFunction => (...payload) =>
  * @param {Object} activity
  */
 export const saveActivity = createOperation((currentState, activity) => {
-	console.log('Save activity called with ', { currentState, activity });
+	console.info('Save activity called with ', { currentState, activity });
 
 	const index = currentState.activities.findIndex(a => a._id === activity._id);
 	const newActivity = activity._id
@@ -125,13 +118,11 @@ export const saveActivity = createOperation((currentState, activity) => {
 			? currentState.activities.push(newActivity)
 			: currentState.activities.set(index, newActivity);
 	const newState = currentState.set('activities', newActivities);
-	console.log('index', index);
-	console.log('newActivities', newActivities);
 
 	if (activity._id) {
 		dexieDb.activities.update(newActivity._id, newActivity.toJS()).catch(error => {
 			// TODO: Show error message
-			console.error(error);
+			console.error('Error on updating activity: ', { activity, error });
 			state.set(currentState);
 		});
 
@@ -141,7 +132,7 @@ export const saveActivity = createOperation((currentState, activity) => {
 	dexieDb.activities.add(newActivity.toJS()).catch(error => {
 		if (error) {
 			// TODO: Show error message
-			console.error(error);
+			console.error('Error on adding activity: ', { activity, error });
 			state.set(currentState);
 		}
 	});
@@ -163,7 +154,7 @@ export const removeActivity = createOperation((currentState, activity) => {
 		.delete()
 		.catch(error => {
 			// TODO: show error message
-			console.error(error);
+			console.error('Error on deleting activity: ', { activity, error });
 			state.set(currentState);
 		});
 
@@ -186,8 +177,6 @@ export const reorderActivities = createOperation((currentState, newOrder) => {
 		.map(activity => activity.set('order', orderById[activity._id] ?? activity.order))
 		.sort((a, b) => a.order - b.order);
 
-	console.log('new order', newActivities.map(a => `${a.order}. ${a.title}`).toJS());
-
 	const newState = currentState.set('activities', newActivities);
 
 	dexieDb
@@ -197,7 +186,11 @@ export const reorderActivities = createOperation((currentState, newOrder) => {
 			)
 		)
 		.catch(error => {
-			console.error(error);
+			console.error('Error on reordering activities: ', {
+				activities: currentState.activities,
+				newActivities,
+				error,
+			});
 			state.set(currentState);
 		});
 
@@ -206,6 +199,8 @@ export const reorderActivities = createOperation((currentState, newOrder) => {
 
 export const completeActivity = activity => {
 	const nextDate = calculateNextDate(activity.recurrence);
+
+	console.info(`Completing activity with next date: ${nextDate}`, activity);
 
 	saveActivity(
 		activity.merge({

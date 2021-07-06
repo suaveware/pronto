@@ -18,7 +18,7 @@ addFunction(() => {
 		.toArray()
 		.then(dbActivities => {
 			dbActivities.forEach(activity => {
-				console.log('Reactivating activity: ', activity);
+				console.info('Reactivating activity: ', activity);
 				saveActivity(
 					Activity({
 						...activity,

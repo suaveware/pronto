@@ -9,7 +9,7 @@ const skRoutes = [`/`, `/focus`];
 
 // Just update to the new serviceworker if there's any
 self.addEventListener('statechanged', () => {
-	console.log('SERVICE WORKER STATE CHANGED');
+	console.info('SERVICE WORKER STATE CHANGED');
 	self.skipWaiting();
 });
 
