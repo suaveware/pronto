@@ -21,9 +21,9 @@
 		activity = $state.activities.find(activity => activity.state === ACTIVITIES_STATE.READY);
 
 		// Gambiarra that makes the description text work properly
-		// if (descriptionNode && activity?.description) {
-		// 	descriptionNode.innerText = activity.description;
-		// }
+		if (descriptionNode && activity?.description) {
+			descriptionNode.innerText = activity.description;
+		}
 	}
 
 	if (activity) {
