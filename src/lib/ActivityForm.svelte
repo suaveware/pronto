@@ -18,9 +18,9 @@
 
 	let form = activity.toJS();
 
-	if (!form.checkList.length) {
-		form.checkList = [CheckItem().toJS()];
-	}
+	// Make sure there's always an empty item at the end
+	form.checkList = [...form.checkList, CheckItem().toJS()];
+
 	const handleTrashPressed = () => {
 		removeActivity(activity);
 
