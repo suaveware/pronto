@@ -1,8 +1,8 @@
 <script>
-	export let label;
+	export let label = '';
 	export let rows;
-	export let value;
-	export let placeholder;
+	export let value = '';
+	export let placeholder = '';
 </script>
 <div class='relative w-full {$$props.class}'>
 	{#if label}

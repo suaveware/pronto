@@ -6,7 +6,12 @@
 		saveActivity,
 		state
 	} from '$lib/state';
-	import { ChevronLeftIcon, CheckIcon } from 'svelte-feather-icons';
+	import {
+		ChevronLeftIcon,
+		CheckIcon,
+		SquareIcon,
+		CheckSquareIcon
+	} from 'svelte-feather-icons';
 	import { DateTime } from 'luxon';
 	import { ACTIVITIES_STATE } from '$lib/constants';
 
@@ -59,6 +64,13 @@
 			descriptionNode.innerText = '';
 		}
 	};
+
+	const handleCheckItemClicked = (index) => {
+		saveActivity(activity.setIn(
+			['checkList', index, 'checked'],
+			!activity.checkList.get(index).checked
+		));
+	};
 </script>
 
 <svelte:head>
@@ -84,6 +96,23 @@
 	>
 		{activity ? (activity.description || "...") : "There's nothing else to do."}
 	</p>
+	<div class='inline-flex flex-col gap-2 px-4 pt-4 w-full'>
+		{#each activity?.checkList.toArray() || [] as item, index (item._id)}
+			<div
+				on:click={() => handleCheckItemClicked(index)}
+				class='inline-flex gap-4 cursor-pointer'
+			>
+				<div>
+					{#if (item.checked)}
+						<CheckSquareIcon size='24' />
+					{:else}
+						<SquareIcon size='24' />
+					{/if}
+				</div>
+				<div>{item.name}</div>
+			</div>
+		{/each}
+	</div>
 </div>
 
 {#if activity}

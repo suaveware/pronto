@@ -54,7 +54,7 @@
     }
 
     .outlined {
-        @apply border text-blueGray-500 border-solid border-blueGray-500;
+        @apply border text-blueGray-500 bg-white border-solid border-blueGray-500;
     }
 
     .outlined.pressed {

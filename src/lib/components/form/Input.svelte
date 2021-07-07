@@ -1,9 +1,9 @@
 <script>
 	export let type = 'text';
-	export let label;
-	export let placeholder;
-	export let autofocus;
-	export let value;
+	export let label = '';
+	export let placeholder = '';
+	export let autofocus = false;
+	export let value = '';
 
 	export let small = false;
 	export let large = false;
@@ -23,6 +23,9 @@
 		on:focus={event => {
 			event.target.type = type
 		}}
+		on:change
+		on:focus
+		on:blur
 		class:regular={!(small || large)}
 		class:small={small}
 		class:large={large}

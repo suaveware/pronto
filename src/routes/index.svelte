@@ -63,7 +63,10 @@
 <div
 	class='p-4 flex-col text-blueGray-600 inline-flex gap-2 w-full relative'
 >
-	<h6 class='text-xl text-blueGray-800'>Next activities</h6>
+	<h6 class='text-2xl mb-4 text-blueGray-800'>Activities</h6>
+	{#if !dndActivities.length}
+		<span>No activities, click the "+" icon to add more.</span>
+	{/if}
 	<div
 		class='w-full flex-col inline-flex gap-2'
 		use:dndzone='{{
@@ -75,26 +78,31 @@
 		on:finalize='{handleDnd}'
 	>
 		{#each dndActivities as activity, index (activity._id)}
-		<span
-			animate:flip='{{ duration: flipDurationMs }}'
-			use:longpress
-		>
-			<ActivityCard
-				on:click={handleItemPressed(activity._id)}
-				activity={activity}
-			/>
-		</span>
+			<span
+				animate:flip='{{ duration: flipDurationMs }}'
+				use:longpress
+			>
+				<ActivityCard
+					on:click={handleItemPressed(activity._id)}
+					activity={activity}
+				/>
+			</span>
 		{/each}
 	</div>
 
-	<h6 class='text-xl text-blueGray-800'>Waiting activities</h6>
+	{#if activitiesByState.get(ACTIVITIES_STATE.WAITING)?.size}
+		<hr />
+	{/if}
 	{#each activitiesByState.get(ACTIVITIES_STATE.WAITING, List()).toArray() as activity, index (activity._id)}
 		<ActivityCard
 			on:click={handleItemPressed(activity._id)}
 			activity={activity}
 		/>
 	{/each}
-	<h6 class='text-xl text-blueGray-800'>Done activities</h6>
+
+	{#if activitiesByState.get(ACTIVITIES_STATE.DONE)?.size}
+		<hr />
+	{/if}
 	{#each activitiesByState.get(ACTIVITIES_STATE.DONE, List()).toArray() as activity, index (activity._id)}
 		<ActivityCard
 			on:click={handleItemPressed(activity._id)}

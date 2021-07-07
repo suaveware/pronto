@@ -2,7 +2,7 @@
 	import { RECURRENCE_TYPE } from '$lib/constants';
 	import { TrashIcon } from 'svelte-feather-icons';
 	import {
-		Activity,
+		Activity, CheckItem,
 		removeActivity,
 		saveActivity
 	} from '$lib/state';
@@ -18,6 +18,9 @@
 
 	let form = activity.toJS();
 
+	if (!form.checkList.length) {
+		form.checkList = [CheckItem().toJS()];
+	}
 	const handleTrashPressed = () => {
 		removeActivity(activity);
 
@@ -33,26 +36,43 @@
 		saveActivity(Activity({
 			...activity.toJS(),
 			...form,
-			_id: activity._id,
+			checkList: form.checkList.filter(({ name }) => name),
+			_id: activity._id
 		}));
 
 		activity = null;
 	};
+
+	const handleTaskOnBlur = () => {
+		const currentLastItem = form.checkList.pop();
+		const lastItem = currentLastItem.name ? CheckItem().toJS() : currentLastItem;
+
+		form.checkList = [...form.checkList.filter(({ name }) => name), lastItem];
+	};
+
+	const handleTaskOnFocus = (item) => {
+		if (!item.name) {
+			form.checkList = [...form.checkList, CheckItem().toJS()];
+		}
+	};
 </script>
 
 <div
-	class='fixed z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col gap-2 bg-white h-full'
+	class='fixed z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col bg-white h-full'
 >
-	{#if activity?._id}
-		<button
-			on:click={handleTrashPressed}
-			class='fixed text-blueGray-600 top-4 right-4'
-		>
-			<TrashIcon size='24' />
-		</button>
-	{/if}
 
-	<Fieldset title='Activity' class='bg-blueGray-100 p-4 rounded shadow mb-4'>
+	<Fieldset
+		title='Activity'
+		class='bg-blueGray-100 p-4 relative rounded shadow mb-4'
+	>
+		{#if activity?._id}
+			<button
+				on:click={handleTrashPressed}
+				class='absolute text-blueGray-600 top-5 right-3'
+			>
+				<TrashIcon size='24' />
+			</button>
+		{/if}
 		<Input
 			label='Title'
 			bind:value={form.title}
@@ -64,6 +84,22 @@
 			bind:value={form.description}
 			rows={5}
 		/>
+		<div class='inline-flex flex-col gap-2'>
+			{#each form.checkList as item, index (item._id)}
+				<Input
+					small
+					label={!index ? 'Checklist' : ''}
+					bind:value={form.checkList[index].name}
+					on:blur={handleTaskOnBlur}
+					on:focus={() => handleTaskOnFocus(item)}
+					placeholder={
+						index < form.checkList.length - 1
+							? 'Leave empty to remove'
+							: 'New task'
+					}
+				/>
+			{/each}
+		</div>
 		<Select
 			label='Recurrence'
 			options={Object.values(RECURRENCE_TYPE).map(({key, label}) => ({value:key, label}))}

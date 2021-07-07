@@ -30,10 +30,12 @@ export const Recurrence = (properties = {}) =>
 		monthDays: List(properties.monthDays),
 	});
 
-export const CheckItem = Record({
-	text: '',
-	checked: false,
-});
+export const CheckItem = (properties = {}) =>
+	Record({
+		_id: '',
+		name: '',
+		checked: false,
+	})({ ...properties, _id: uuid() });
 
 export const Activity = (properties = {}) =>
 	Record(
@@ -49,7 +51,11 @@ export const Activity = (properties = {}) =>
 			completedAt: '',
 		},
 		'Activity'
-	)({ ...properties, recurrence: Recurrence(properties.recurrence) });
+	)({
+		...properties,
+		recurrence: Recurrence(properties.recurrence),
+		checkList: List(properties.checkList?.map?.(CheckItem) || []),
+	});
 
 /**
  * @type {Record.Factory} State
@@ -203,11 +209,16 @@ export const completeActivity = activity => {
 	console.info(`Completing activity with next date: ${nextDate}`, activity);
 
 	saveActivity(
-		activity.merge({
-			state: nextDate ? ACTIVITIES_STATE.WAITING : ACTIVITIES_STATE.DONE,
-			completedAt: DateTime.utc().toISO(),
-			recurrence: activity.recurrence.merge({ nextDate }),
-		})
+		activity
+			.set('state', nextDate ? ACTIVITIES_STATE.WAITING : ACTIVITIES_STATE.DONE)
+			.set('completedAt', DateTime.utc().toISO())
+			.setIn(['recurrence', 'nextDate'], nextDate)
+			.updateIn(['checkList'], items =>
+				items.map(item => ({
+					...item,
+					checked: false,
+				}))
+			)
 	);
 };
 
