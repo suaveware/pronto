@@ -68,18 +68,6 @@ const State = Record(
 	'State'
 );
 
-const refreshState = () =>
-	dexieDb.activities
-		.orderBy('order')
-		.toArray()
-		.then(dbActivities => {
-			state.set(
-				State({
-					activities: List(dbActivities.map(Activity)),
-				})
-			);
-		});
-
 /**
  * This is a store to represent the entire app state.
  * See https://svelte.dev/docs#writable.
@@ -222,11 +210,31 @@ export const completeActivity = activity => {
 	);
 };
 
+const fileParseTime = DateTime.now();
+const refreshState = () => {
+	const start = DateTime.now();
+	return dexieDb.activities
+		.orderBy('order')
+		.toArray()
+		.then(dbActivities => {
+			state.set(
+				State({
+					activities: List(dbActivities.map(Activity)),
+				})
+			);
+			const end = DateTime.now();
+			console.log('{start, end}', { start: start.toISO(), end: end.toISO() });
+			console.log('start.diffTo(end)', { interval: start.diff(end).toMillis() });
+			console.log('fileParseTime.diffTo(end)', {
+				sinceFileParse: fileParseTime.diff(end).toMillis(),
+			});
+		});
+};
+
 if (isClient()) {
 	window.appState = state;
 	window.dexieDb = dexieDb;
 	window.DateTime = DateTime;
 
-	// Log current db content
 	refreshState();
 }

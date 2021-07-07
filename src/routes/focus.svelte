@@ -121,9 +121,9 @@
 	>
 		<button
 			on:click={handleCheckPressed}
-			class='p-4 border text-blueGray-600 shadow-md bg-white rounded-full'
+			class='p-5 bg-blueGray-400 text-white shadow bg-white rounded-full'
 		>
-			<CheckIcon size='24' />
+			<CheckIcon size='28' />
 		</button>
 	</div>
 {/if}

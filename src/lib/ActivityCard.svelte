@@ -6,12 +6,11 @@
 </script>
 
 <div
-	class='w-full p-2 inline-flex bg-white flex-col gap-2 shadow-md border rounded'
+	class='w-full p-2 inline-flex bg-white text-blueGray-800 border-l-4 border-blueGray-500 flex-col gap-2 shadow-md border rounded'
 	on:click
 >
 	<div class='inline-flex justify-between gap-1 items-center w-full'>
 		<div>{activity.title}</div>
-		<div>{activity.state}</div>
 	</div>
 
 

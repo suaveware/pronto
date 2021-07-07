@@ -58,7 +58,7 @@
 </script>
 
 <div
-	class='fixed z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col bg-white h-full'
+	class='fixed z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col bg-blueGray-600 h-full'
 >
 
 	<Fieldset
@@ -126,6 +126,7 @@
 		class='box-border mt-auto w-full bottom-2 inline-flex justify-evenly mb-4 mt-auto'
 	>
 		<Button
+			class='!bg-blueGray-100 !text-blueGray-600'
 			on:click={handleCancelPressed}
 		>
 			Cancel
