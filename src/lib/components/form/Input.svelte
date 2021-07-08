@@ -26,6 +26,7 @@
 		on:change
 		on:focus
 		on:blur
+		on:keyup
 		class:regular={!(small || large)}
 		class:small={small}
 		class:large={large}

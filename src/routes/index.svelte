@@ -14,14 +14,13 @@
 		ToolIcon
 	} from 'svelte-feather-icons';
 	import { base } from '$app/paths';
-	import { onMount } from 'svelte';
 	import { ACTIVITIES_STATE } from '$lib/constants';
 	import { List } from 'immutable';
 	import Separator from '$lib/components/Separator.svelte';
 
 	const flipDurationMs = 100;
 
-	let main;
+	let scrollContainer;
 	let isSettingsOpen = false;
 	let editingActivity = null;
 	let activitiesByState;
@@ -31,10 +30,6 @@
 		activitiesByState = $state.activities.groupBy(activity => activity.state);
 		dndActivities = activitiesByState.get(ACTIVITIES_STATE.READY, List()).toJS();
 	}
-
-	onMount(() => {
-		main = document.getElementsByTagName('main')[0];
-	});
 
 	const handleMaximizePressed = () => {
 		goto(`${base}/focus`);
@@ -54,12 +49,12 @@
 		// We need to add and remove these classes to prevent scrolling while
 		// reordering the activities
 		if (detail.info.trigger === TRIGGERS.DRAG_STARTED) {
-			main.classList.add('overflow-hidden');
-			main.classList.remove('overflow-y-scroll');
+			scrollContainer.classList.add('overflow-hidden');
+			scrollContainer.classList.remove('overflow-y-scroll');
 		}
 		if (detail.info.trigger.includes('dropped')) {
-			main.classList.add('overflow-y-scroll');
-			main.classList.remove('overflow-hidden');
+			scrollContainer.classList.add('overflow-y-scroll');
+			scrollContainer.classList.remove('overflow-hidden');
 		}
 		if (detail.info.trigger === TRIGGERS.DROPPED_INTO_ZONE) {
 			reorderActivities(detail.items);
@@ -97,7 +92,8 @@
 		class='text-white box-border overflow-hidden transition-all ease-in-out max-h-0 duration-500'
 		class:hfull={isSettingsOpen}
 	>
-		<div class='p-8 pt-12 inline-flex animate-pulse flex-col gap-4 w-full items-center'>
+		<div
+			class='p-8 pt-12 inline-flex animate-pulse flex-col gap-4 w-full items-center'>
 			<div class='text-2xl'>Under construction</div>
 			<div class='flex justify-center'>
 				<ToolIcon strokeWidth='0.5' size='150' />
@@ -107,7 +103,7 @@
 
 	<div
 		class='p-4 pt-6 relative top-0 transition-all duration-300 overflow-y-scroll flex-col bg-white shadow h-full border-bluGray-400 inline-flex rounded-t-2xl gap-2 w-full relative'
-		class:hidedown={false}
+		bind:this={scrollContainer}
 	>
 		{#if !dndActivities.length}
 			<span class='text-blueGray-800'>No activities, click the "+" icon to add more.</span>
@@ -189,10 +185,6 @@
 
     .small {
         @apply p-2;
-    }
-
-    .hidedown {
-        @apply top-2/3 opacity-90;
     }
 
     .hfull {

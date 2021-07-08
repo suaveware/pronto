@@ -201,19 +201,12 @@ export const completeActivity = activity => {
 			.set('state', nextDate ? ACTIVITIES_STATE.WAITING : ACTIVITIES_STATE.DONE)
 			.set('completedAt', DateTime.utc().toISO())
 			.setIn(['recurrence', 'nextDate'], nextDate)
-			.updateIn(['checkList'], items =>
-				items.map(item => ({
-					...item,
-					checked: false,
-				}))
-			)
+			.updateIn(['checkList'], items => items.map(item => item.set('checked', false)))
 	);
 };
 
-const fileParseTime = DateTime.now();
-const refreshState = () => {
-	const start = DateTime.now();
-	return dexieDb.activities
+const refreshState = () =>
+	dexieDb.activities
 		.orderBy('order')
 		.toArray()
 		.then(dbActivities => {
@@ -222,14 +215,7 @@ const refreshState = () => {
 					activities: List(dbActivities.map(Activity)),
 				})
 			);
-			const end = DateTime.now();
-			console.log('{start, end}', { start: start.toISO(), end: end.toISO() });
-			console.log('start.diffTo(end)', { interval: start.diff(end).toMillis() });
-			console.log('fileParseTime.diffTo(end)', {
-				sinceFileParse: fileParseTime.diff(end).toMillis(),
-			});
 		});
-};
 
 if (isClient()) {
 	window.appState = state;

@@ -16,6 +16,7 @@
 
 	export let activity;
 
+	let scrollContainer;
 	let form = activity.toJS();
 
 	// Make sure there's always an empty item at the end
@@ -50,15 +51,32 @@
 		form.checkList = [...form.checkList.filter(({ name }) => name), lastItem];
 	};
 
-	const handleTaskOnFocus = (item) => {
+	const handleTaskOnFocus = (item, event) => {
+		scrollContainer.scrollTop = event.target.offsetTop - event.target.offsetHeight;
 		if (!item.name) {
 			form.checkList = [...form.checkList, CheckItem().toJS()];
+		}
+	};
+
+	const handleTaskKeyUp = (event) => {
+		if (event.key === 'Enter') {
+			const nextInput = event.target.parentElement?.nextElementSibling?.firstElementChild;
+
+			// This is a quick and REALLY dirty solution. I just wanted to focus the
+			// next input on "Enter". I'll have to refactor in the future.
+			if (nextInput && nextInput.localName === 'input'){
+				event.target.parentElement.nextElementSibling.firstElementChild.focus();
+				return;
+			}
+
+			console.error("Not an input element. You'll to fix this ugly workaround code.")
 		}
 	};
 </script>
 
 <div
 	class='fixed z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col bg-blueGray-600 h-full'
+	bind:this={scrollContainer}
 >
 
 	<Fieldset
@@ -91,7 +109,8 @@
 					label={!index ? 'Checklist' : ''}
 					bind:value={form.checkList[index].name}
 					on:blur={handleTaskOnBlur}
-					on:focus={() => handleTaskOnFocus(item)}
+					on:focus={(event) => handleTaskOnFocus(item, event)}
+					on:keyup={handleTaskKeyUp}
 					placeholder={
 						index < form.checkList.length - 1
 							? 'Leave empty to remove'
