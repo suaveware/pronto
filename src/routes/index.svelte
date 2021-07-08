@@ -105,21 +105,23 @@
 		class='p-4 pt-6 relative top-0 transition-all duration-300 overflow-y-scroll flex-col bg-white shadow h-full border-bluGray-400 inline-flex rounded-t-2xl gap-2 w-full relative'
 		bind:this={scrollContainer}
 	>
-		{#if !dndActivities.length}
+		{#if !$state.activities.size}
 			<span class='text-blueGray-800'>No activities, click the "+" icon to add more.</span>
 		{/if}
-		<div
-			class='w-full mb-10 flex-col inline-flex gap-2'
-			use:dndzone='{{
-			items: dndActivities,
-			dragDisabled: isSettingsOpen,
-			flipDurationMs,
-			customStartEvent: "longpress",
-		}}'
-			on:consider='{handleDnd}'
-			on:finalize='{handleDnd}'
-		>
-			{#each dndActivities as activity, index (activity._id)}
+
+		{#if dndActivities.length}
+			<div
+				class='w-full mb-10 flex-col inline-flex gap-2'
+				use:dndzone='{{
+					items: dndActivities,
+					dragDisabled: isSettingsOpen,
+					flipDurationMs,
+					customStartEvent: "longpress",
+				}}'
+				on:consider='{handleDnd}'
+				on:finalize='{handleDnd}'
+			>
+				{#each dndActivities as activity, index (activity._id)}
 			<span
 				animate:flip='{{ duration: flipDurationMs }}'
 				use:longpress
@@ -129,11 +131,12 @@
 					activity={activity}
 				/>
 			</span>
-			{/each}
-		</div>
+				{/each}
+			</div>
+		{/if}
 
 		{#if activitiesByState.get(ACTIVITIES_STATE.WAITING)?.size}
-			<Separator title={ACTIVITIES_STATE.WAITING} />
+			<Separator title={ACTIVITIES_STATE.WAITING} class='mt-4' />
 		{/if}
 		{#each activitiesByState.get(ACTIVITIES_STATE.WAITING, List()).toArray() as activity, index (activity._id)}
 			<ActivityCard
@@ -143,7 +146,7 @@
 		{/each}
 
 		{#if activitiesByState.get(ACTIVITIES_STATE.DONE)?.size}
-			<Separator title={ACTIVITIES_STATE.DONE} />
+			<Separator title={ACTIVITIES_STATE.DONE} class='mt-4' />
 		{/if}
 		{#each activitiesByState.get(ACTIVITIES_STATE.DONE, List()).toArray() as activity, index (activity._id)}
 			<ActivityCard
