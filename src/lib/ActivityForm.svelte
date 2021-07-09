@@ -4,7 +4,7 @@
 	import {
 		Activity, CheckItem,
 		removeActivity,
-		saveActivity
+		saveActivity,
 	} from '$lib/state';
 	import { Info } from 'luxon';
 	import Input from './components/form/Input.svelte';
@@ -38,7 +38,7 @@
 			...activity.toJS(),
 			...form,
 			checkList: form.checkList.filter(({ name }) => name),
-			_id: activity._id
+			_id: activity._id,
 		}));
 
 		activity = null;
@@ -51,8 +51,7 @@
 		form.checkList = [...form.checkList.filter(({ name }) => name), lastItem];
 	};
 
-	const handleTaskOnFocus = (item, event) => {
-		scrollContainer.scrollTop = event.target.offsetTop - event.target.offsetHeight;
+	const handleTaskOnFocus = (item) => {
 		if (!item.name) {
 			form.checkList = [...form.checkList, CheckItem().toJS()];
 		}
@@ -60,16 +59,16 @@
 
 	const handleTaskKeyUp = (event) => {
 		if (event.key === 'Enter') {
-			const nextInput = event.target.parentElement?.nextElementSibling?.firstElementChild;
+			const nextInputElement = event.target.parentElement?.nextElementSibling?.firstElementChild;
 
 			// This is a quick and REALLY dirty solution. I just wanted to focus the
 			// next input on "Enter". I'll have to refactor in the future.
-			if (nextInput && nextInput.localName === 'input'){
-				event.target.parentElement.nextElementSibling.firstElementChild.focus();
+			if (nextInputElement && nextInputElement.localName === 'input') {
+				nextInputElement.focus();
 				return;
 			}
 
-			console.error("Not an input element. You'll to fix this ugly workaround code.")
+			console.error("Not an input element. You'll to fix this ugly workaround code.");
 		}
 	};
 </script>
@@ -107,9 +106,10 @@
 				<Input
 					small
 					label={!index ? 'Checklist' : ''}
+					scrollOnFocus
 					bind:value={form.checkList[index].name}
 					on:blur={handleTaskOnBlur}
-					on:focus={(event) => handleTaskOnFocus(item, event)}
+					on:focus={() => handleTaskOnFocus(item)}
 					on:keyup={handleTaskKeyUp}
 					placeholder={
 						index < form.checkList.length - 1
@@ -128,7 +128,7 @@
 			<ToggleButtons
 				label='Weekdays'
 				multi
-				options={Info.weekdays("narrow").map((label, index) => ({label, value: index+1}))}
+				options={Info.weekdays('narrow').map((label, index) => ({label, value: index+1}))}
 				bind:value={form.recurrence.weekdays}
 			/>
 		{:else if form.recurrence.type === RECURRENCE_TYPE.EVERY_MONTH_DAYS.key}

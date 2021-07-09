@@ -4,9 +4,19 @@
 	export let placeholder = '';
 	export let autofocus = false;
 	export let value = '';
+	export let scrollOnFocus = false;
 
 	export let small = false;
 	export let large = false;
+
+	const handleOnFocus = event => {
+		// Dinamically set the input type
+		event.target.type = type;
+
+		if (scrollOnFocus) {
+			event.target.scrollIntoView();
+		}
+	};
 </script>
 
 <div class='w-full {$$props.class}'>
@@ -20,9 +30,7 @@
 	{/if}
 	<input
 		id='grid-username'
-		on:focus={event => {
-			event.target.type = type
-		}}
+		on:focus={handleOnFocus}
 		on:change
 		on:focus
 		on:blur

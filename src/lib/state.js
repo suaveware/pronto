@@ -81,8 +81,10 @@ export const state = writable(State());
  * @param operationFunction
  * @returns {function(...[*]): void}
  */
-const createOperation = operationFunction => (...payload) =>
-	state.update(currentState => operationFunction(currentState, ...payload));
+const createOperation =
+	operationFunction =>
+	(...payload) =>
+		state.update(currentState => operationFunction(currentState, ...payload));
 
 /**
  * OPERATIONS

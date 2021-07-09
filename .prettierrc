@@ -5,5 +5,12 @@
   "printWidth": 100,
   "bracketSpacing": true,
   "jsxBracketSameLine": false,
-  "arrowParens": "avoid"
+  "arrowParens": "avoid",
+  "svelteBracketNewLine": true,
+  "pluginSearchDirs": [
+    "./**/*.html",
+    "./**/*.svelte",
+    "./**/*.js",
+    "./**/*.cjs"
+  ]
 }

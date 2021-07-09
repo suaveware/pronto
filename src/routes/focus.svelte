@@ -4,13 +4,13 @@
 	import {
 		completeActivity,
 		saveActivity,
-		state
+		state,
 	} from '$lib/state';
 	import {
 		ChevronLeftIcon,
 		CheckIcon,
 		SquareIcon,
-		CheckSquareIcon
+		CheckSquareIcon,
 	} from 'svelte-feather-icons';
 	import { DateTime } from 'luxon';
 	import { ACTIVITIES_STATE } from '$lib/constants';
@@ -20,9 +20,9 @@
 	$: {
 		activity = $state.activities.find(activity => activity.state === ACTIVITIES_STATE.READY);
 
-		// Gambiarra that makes the description text work properly
-		if (descriptionNode && activity?.description) {
-			descriptionNode.innerText = activity.description;
+		// We don't want to run this code if descriptionNode is focused.
+		if (descriptionNode && document.activeElement !== descriptionNode) {
+			descriptionNode.innerText = activity.description || '...';
 		}
 	}
 
@@ -41,9 +41,6 @@
 	const handleDescriptionOnBlur = () => {
 		const newDescription = descriptionNode.innerText.trim();
 
-		// Gambiarra that makes the description text work properly
-		// activity.set('description', newDescription);
-
 		descriptionNode.contentEditable = false;
 		saveActivity(activity.set('description', newDescription));
 
@@ -53,22 +50,20 @@
 	};
 
 	const handleDescriptionOnClick = () => {
+		// Don't rerun this logic if the element is already focused
 		if (document.activeElement === descriptionNode) {
 			return;
 		}
 
+		descriptionNode.innerText = activity.description;
 		descriptionNode.contentEditable = true;
 		descriptionNode.focus();
-
-		if (!activity?.description) {
-			descriptionNode.innerText = '';
-		}
 	};
 
 	const handleCheckItemClicked = (index) => {
 		saveActivity(activity.setIn(
 			['checkList', index, 'checked'],
-			!activity.checkList.get(index).checked
+			!activity.checkList.get(index).checked,
 		));
 	};
 </script>
@@ -86,16 +81,15 @@
 
 <div
 	class='w-full h-full inline-flex flex-col text-blueGray-600 gap-6 p-4 justify-center items-center'>
-	<p
-		class='text-bg font-bold text-xl'>{activity ? activity?.title : "You're done!"}</p>
+	<p class='text-bg font-bold text-xl'>
+		{activity ? activity?.title : "You're done!"}
+	</p>
 	<p
 		bind:this={descriptionNode}
 		on:click={handleDescriptionOnClick}
 		on:blur={handleDescriptionOnBlur}
 		class='font-light text-sm font-mono text-base whitespace-pre-wrap'
-	>
-		{activity ? (activity.description || "...") : "There's nothing else to do."}
-	</p>
+	></p>
 	<div class='inline-flex flex-col gap-2 px-4 pt-4 w-full'>
 		{#each activity?.checkList.toArray() || [] as item, index (item._id)}
 			<div
