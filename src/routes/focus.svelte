@@ -22,7 +22,11 @@
 
 		// We don't want to run this code if descriptionNode is focused.
 		if (descriptionNode && document.activeElement !== descriptionNode) {
-			descriptionNode.innerText = activity.description || '...';
+			if (activity) {
+				descriptionNode.innerText = activity.description || '...';
+			} else {
+				descriptionNode.innerText = 'Nothing else to do!';
+			}
 		}
 	}
 
@@ -51,7 +55,7 @@
 
 	const handleDescriptionOnClick = () => {
 		// Don't rerun this logic if the element is already focused
-		if (document.activeElement === descriptionNode) {
+		if (!activity || document.activeElement === descriptionNode) {
 			return;
 		}
 
@@ -82,7 +86,7 @@
 <div
 	class='w-full h-full inline-flex flex-col text-blueGray-600 gap-6 p-4 justify-center items-center'>
 	<p class='text-bg font-bold text-xl'>
-		{activity ? activity?.title : "You're done!"}
+		{activity?.title || 'Pronto!'}
 	</p>
 	<p
 		bind:this={descriptionNode}
