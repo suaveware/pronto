@@ -3,9 +3,18 @@
  * @type {{READY: ('ready'), DONE: ('done'), WAITING: ('waiting')}}
  */
 export const ACTIVITIES_STATE = {
-	READY: 'ready',
-	DONE: 'done',
-	WAITING: 'waiting',
+	READY: {
+		key: 'ready',
+		label: 'Próximo',
+	},
+	DONE: {
+		key: 'done',
+		label: 'Finalizado',
+	},
+	WAITING: {
+		key: 'waiting',
+		label: 'Aguardando',
+	},
 };
 
 /**
@@ -20,16 +29,16 @@ export const ACTIVITIES_STATE = {
 export const RECURRENCE_TYPE = {
 	NO_RECURRENCE: {
 		key: 'no_recurrence',
-		label: 'No recurrence',
+		label: 'Sem recorrência',
 	},
 	// ONCE: 'once',
 	EVERY_WEEK_DAYS: {
 		key: 'every_week_days',
-		label: 'Every weekdays',
+		label: 'Por dias da semana',
 	},
 	EVERY_MONTH_DAYS: {
 		key: 'every_month_days',
-		label: 'Every month days',
+		label: 'Por dias do mês',
 	},
 	// FIXED_INTERVAL: 'fixed_interval',
 };

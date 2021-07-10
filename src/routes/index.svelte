@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { dndzone, TRIGGERS } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
+	import { fade } from 'svelte/transition';
 	import { Activity, reorderActivities, state } from '$lib/state';
 	import ActivityForm from '$lib/ActivityForm.svelte';
 	import ActivityCard from '$lib/ActivityCard.svelte';
@@ -9,16 +10,19 @@
 	import {
 		PlusIcon,
 		MaximizeIcon,
-		MenuIcon,
 		XIcon,
-		ToolIcon
+		InfoIcon,
+		ChevronRightIcon,
 	} from 'svelte-feather-icons';
 	import { base } from '$app/paths';
 	import { ACTIVITIES_STATE } from '$lib/constants';
 	import { List } from 'immutable';
 	import Separator from '$lib/components/Separator.svelte';
+	import { version } from '/package.json';
+	import { fly } from 'svelte/transition';
 
 	const flipDurationMs = 100;
+	const openSettingsDuration = 500;
 
 	let scrollContainer;
 	let isSettingsOpen = false;
@@ -72,9 +76,9 @@
 </svelte:head>
 
 
-<div class='flex flex-col bg-blueGray-600 h-full overflow-hidden'>
+<div class='flex flex-col items-stretch bg-blueGray-600 h-full overflow-hidden'>
 	<div
-		class='flex justify-between left-0 right-0 top-0 items-center pb-8 px-4 pt-4 text-white rounded-b w-full'>
+		class='flex justify-between items-center pb-8 px-4 pt-4 text-white rounded-b w-full'>
 		<div class='text-2xl'>Pronto</div>
 		<div
 			on:click={handleMenuClicked}
@@ -83,26 +87,79 @@
 			{#if isSettingsOpen}
 				<XIcon size='24' />
 			{:else}
-				<MenuIcon size='24' />
+				<InfoIcon size='24' />
 			{/if}
 		</div>
 	</div>
 
 	<div
-		class='text-white box-border overflow-hidden transition-all ease-in-out max-h-0 duration-500'
-		class:hfull={isSettingsOpen}
+		class='transition-all ease-in-out duration-500 max-h-screen opacity-100'
+		class:hide={!isSettingsOpen}
 	>
-		<div
-			class='p-8 pt-12 inline-flex animate-pulse flex-col gap-4 w-full items-center'>
-			<div class='text-2xl'>Under construction</div>
-			<div class='flex justify-center'>
-				<ToolIcon strokeWidth='0.5' size='150' />
+		{#if isSettingsOpen}
+			<div
+				class='text-white px-4 py-8 overflow-y-scroll inline-flex gap-2 text-xl flex-col items-stretch w-full'
+				style='height: 76vh'
+				transition:fade={{ duration: openSettingsDuration }}
+			>
+				{#if false}
+					This is how the options will look like once we have use for them
+					<button
+						class='inline-flex rounded px-2 w-full w-full items-center gap-3'>
+						<div>
+							<InfoIcon size='24' />
+						</div>
+						<div class=''>Sobre</div>
+						<div class='ml-auto'>
+							<ChevronRightIcon size='24' />
+						</div>
+					</button>
+				{/if}
+
+				<div class='inline-flex flex-col items-center pt-4 gap-2 w-full'>
+					<p>
+						by Suaveware
+					</p>
+					<p class='text-base text-justify'>
+						Este aplicativo é de código livre sob a licença GPL-3 e seu código
+						fonte
+						está disponível neste
+						<a
+							class='underline'
+							href='https://github.com/luizcarlos1405/pronto'
+						>
+							repositório no Github
+						</a>
+						.
+					</p>
+					<p class='text-base text-justify'>
+						Distribuído como <i>progressive web app</i> (PWA) através do
+						endereço:
+					</p>
+					<a class='underline text-base w-full'
+						 href='https://pronto.suaveware.dev'>
+						https://pronto.suaveware.dev
+					</a>
+					<Separator title='Contato' class='text-white mt-4' />
+					<div class='inline-flex text-base w-full flex-col gap-2'>
+						<p>Email: luizcarlos1405@suaveware.dev</p>
+						<p>Twitter: @semmilho</p>
+						<p>YouTube: RSensato</p>
+						<p>TikTok: @RSensato</p>
+					</div>
+
+					<Separator title='Versão' class='text-white mt-4' />
+					<div class='text-sm'>
+						{version}
+					</div>
+				</div>
 			</div>
-		</div>
+		{/if}
 	</div>
 
 	<div
-		class='p-4 pt-6 relative top-0 transition-all duration-300 overflow-y-scroll flex-col bg-white shadow h-full border-bluGray-400 inline-flex rounded-t-2xl gap-2 w-full relative'
+		class='p-4 pt-6 flex-grow transition-all duration-300 overflow-y-scroll flex-col bg-white shadow border-bluGray-400 inline-flex rounded-t-2xl gap-2'
+		class:overflowhidden={isSettingsOpen}
 		bind:this={scrollContainer}
 	>
 		{#if !$state.activities.size}
@@ -135,20 +192,20 @@
 			</div>
 		{/if}
 
-		{#if activitiesByState.get(ACTIVITIES_STATE.WAITING)?.size}
-			<Separator title={ACTIVITIES_STATE.WAITING} class='mt-4' />
+		{#if activitiesByState.get(ACTIVITIES_STATE.WAITING.key)?.size}
+			<Separator title={ACTIVITIES_STATE.WAITING.label} class='mt-4' />
 		{/if}
-		{#each activitiesByState.get(ACTIVITIES_STATE.WAITING, List()).toArray() as activity, index (activity._id)}
+		{#each activitiesByState.get(ACTIVITIES_STATE.WAITING.key, List()).toArray() as activity, index (activity._id)}
 			<ActivityCard
 				on:click={handleItemPressed(activity._id)}
 				activity={activity}
 			/>
 		{/each}
 
-		{#if activitiesByState.get(ACTIVITIES_STATE.DONE)?.size}
-			<Separator title={ACTIVITIES_STATE.DONE} class='mt-4' />
+		{#if activitiesByState.get(ACTIVITIES_STATE.DONE.key)?.size}
+			<Separator title={ACTIVITIES_STATE.DONE.label} class='mt-4' />
 		{/if}
-		{#each activitiesByState.get(ACTIVITIES_STATE.DONE, List()).toArray() as activity, index (activity._id)}
+		{#each activitiesByState.get(ACTIVITIES_STATE.DONE.key, List()).toArray() as activity, index (activity._id)}
 			<ActivityCard
 				on:click={handleItemPressed(activity._id)}
 				activity={activity}
@@ -159,9 +216,10 @@
 
 {#if editingActivity}
 	<ActivityForm bind:activity={editingActivity} />
-{:else}
+{:else if !isSettingsOpen}
 	<div
 		class='fixed bottom-4 text-blueGray-600 right-4 gap-3 items-center inline-flex flex-col'
+		transition:fly={{ y: 300 }}
 	>
 		<button
 			on:click={handlePlusPressed}
@@ -190,8 +248,12 @@
         @apply p-2;
     }
 
-    .hfull {
-        @apply max-h-screen;
+    .hide {
+        @apply max-h-0 opacity-0;
+    }
+
+    .overflowhidden {
+        @apply overflow-hidden;
     }
 
 </style>

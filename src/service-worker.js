@@ -3,13 +3,14 @@ import { precacheAndRoute, precache } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
 
+console.info('Service worker parsed with timestamp: ', timestamp);
+
 // Edit the list of routes so they get cached and routed correctly, allowing
 // cold start or hot reload to work offline.
-const skRoutes = [`/`, `/focus`];
+const skRoutes = ['/', '/focus'];
 
 // Just update to the new serviceworker if there's any
-self.addEventListener('statechanged', () => {
-	console.info('SERVICE WORKER STATE CHANGED');
+self.addEventListener('install', () => {
 	self.skipWaiting();
 });
 
@@ -40,7 +41,7 @@ precache(
 			url,
 			revision: `${timestamp}`,
 		};
-	})
+	}),
 );
 
 const matchCb = ({ url /*, request, event*/ }) => {

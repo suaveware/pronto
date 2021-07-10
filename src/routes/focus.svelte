@@ -25,7 +25,7 @@
 			if (activity) {
 				descriptionNode.innerText = activity.description || '...';
 			} else {
-				descriptionNode.innerText = 'Nothing else to do!';
+				descriptionNode.innerText = 'Nenhuma outra atividade.';
 			}
 		}
 	}

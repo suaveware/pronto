@@ -79,7 +79,7 @@
 >
 
 	<Fieldset
-		title='Activity'
+		title='Atividade'
 		class='bg-blueGray-100 p-4 relative rounded shadow mb-4'
 	>
 		{#if activity?._id}
@@ -91,13 +91,13 @@
 			</button>
 		{/if}
 		<Input
-			label='Title'
+			label='Título'
 			bind:value={form.title}
 			type='text'
 			autofocus
 		/>
 		<TextArea
-			label='Description'
+			label='Descrição'
 			bind:value={form.description}
 			rows={5}
 		/>
@@ -105,7 +105,7 @@
 			{#each form.checkList as item, index (item._id)}
 				<Input
 					small
-					label={!index ? 'Checklist' : ''}
+					label={!index ? 'Lista de tarefas' : ''}
 					scrollOnFocus
 					bind:value={form.checkList[index].name}
 					on:blur={handleTaskOnBlur}
@@ -113,27 +113,27 @@
 					on:keyup={handleTaskKeyUp}
 					placeholder={
 						index < form.checkList.length - 1
-							? 'Leave empty to remove'
-							: 'New task'
+							? 'Deixe vazio para remover'
+							: 'Nova tarefa'
 					}
 				/>
 			{/each}
 		</div>
 		<Select
-			label='Recurrence'
+			label='Recorrência'
 			options={Object.values(RECURRENCE_TYPE).map(({key, label}) => ({value:key, label}))}
 			bind:value={form.recurrence.type}
 		/>
 		{#if form.recurrence.type === RECURRENCE_TYPE.EVERY_WEEK_DAYS.key}
 			<ToggleButtons
-				label='Weekdays'
+				label='Dias da semana'
 				multi
 				options={Info.weekdays('narrow').map((label, index) => ({label, value: index+1}))}
 				bind:value={form.recurrence.weekdays}
 			/>
 		{:else if form.recurrence.type === RECURRENCE_TYPE.EVERY_MONTH_DAYS.key}
 			<ToggleButtons
-				label='Month days'
+				label='Dias do mês'
 				multi
 				options={new Array(31).fill(0).map((v, index) => ({label: index + 1, value: index + 1}))}
 				bind:value={form.recurrence.monthDays}
@@ -148,13 +148,13 @@
 			class='!bg-blueGray-100 !text-blueGray-600'
 			on:click={handleCancelPressed}
 		>
-			Cancel
+			Cancelar
 		</Button>
 		<Button
 			class='!bg-teal-500'
 			on:click={handleConfirmPressed}
 		>
-			{ activity._id ? 'Save' : 'Add' }
+			{ activity._id ? 'Salvar' : 'Adicionar' }
 		</Button>
 	</div>
 </div>
