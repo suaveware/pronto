@@ -18,7 +18,7 @@ export const calculateNextDate = ({ type, weekdays, monthDays, nextDate }) => {
 
 			const fromWeekday = fromDate.weekday;
 			const nextWeekdays = [...weekdays.map(day => +day), ...weekdays.map(day => +day + 7)].sort(
-				(a, b) => a - b
+				(a, b) => a - b,
 			);
 			const nextweekday = nextWeekdays.find(day => day > fromWeekday);
 
@@ -40,7 +40,7 @@ export const calculateNextDate = ({ type, weekdays, monthDays, nextDate }) => {
 			const fromDay = fromDate.day;
 			const nextDays = [
 				...monthDays.map(day => +day),
-				...monthDays.map(day => +day + fromDay.daysInMonth),
+				...monthDays.map(day => +day + fromDate.daysInMonth),
 			].sort();
 			const nextDay = nextDays.find(day => day > fromDay);
 
