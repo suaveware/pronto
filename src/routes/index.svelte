@@ -162,7 +162,7 @@
 		bind:this={scrollContainer}
 	>
 		{#if !$state.activities.size}
-			<span class='text-blueGray-800'>No activities, click the "+" icon to add more.</span>
+			<span class='text-blueGray-800'>Nenhuma atividade, clique no botão de + para adicionar.</span>
 		{/if}
 
 		{#if dndActivities.length}
