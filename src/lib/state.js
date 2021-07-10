@@ -44,7 +44,7 @@ export const Activity = (properties = {}) =>
 			title: '',
 			description: '',
 			order: 0,
-			state: ACTIVITIES_STATE.READY,
+			state: ACTIVITIES_STATE.READY.key,
 			recurrence: Recurrence(),
 			checkList: List(),
 			createdAt: '',
@@ -200,7 +200,7 @@ export const completeActivity = activity => {
 
 	saveActivity(
 		activity
-			.set('state', nextDate ? ACTIVITIES_STATE.WAITING : ACTIVITIES_STATE.DONE)
+			.set('state', nextDate ? ACTIVITIES_STATE.WAITING.key : ACTIVITIES_STATE.DONE.key)
 			.set('completedAt', DateTime.utc().toISO())
 			.setIn(['recurrence', 'nextDate'], nextDate)
 			.updateIn(['checkList'], items => items.map(item => item.set('checked', false)))

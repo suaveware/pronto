@@ -32,7 +32,7 @@
 
 	$: {
 		activitiesByState = $state.activities.groupBy(activity => activity.state);
-		dndActivities = activitiesByState.get(ACTIVITIES_STATE.READY, List()).toJS();
+		dndActivities = activitiesByState.get(ACTIVITIES_STATE.READY.key, List()).toJS();
 	}
 
 	const handleMaximizePressed = () => {

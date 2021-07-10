@@ -14,9 +14,9 @@
 	</div>
 
 
-	{#if activity.state === ACTIVITIES_STATE.WAITING}
+	{#if activity.state === ACTIVITIES_STATE.WAITING.key}
 		<p class='text-xs font-light'>
-			Next date: {' '}
+			Próxima data: {' '}
 			{DateTime.fromISO(activity.recurrence.nextDate).toLocal().toLocaleString(DateTime.DATETIME_SHORT)}
 		</p>
 	{/if}

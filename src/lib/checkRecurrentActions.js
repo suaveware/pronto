@@ -8,9 +8,9 @@ addFunction(() => {
 	dexieDb.activities
 		.filter(
 			({ state, recurrence }) =>
-				state === ACTIVITIES_STATE.WAITING &&
+				state === ACTIVITIES_STATE.WAITING.key &&
 				recurrence?.type &&
-				recurrence.type !== RECURRENCE_TYPE.NO_RECURRENCE &&
+				recurrence.type !== RECURRENCE_TYPE.NO_RECURRENCE.key &&
 				(recurrence.nextDate
 					? DateTime.fromISO(recurrence.nextDate).startOf('day').diffNow().toMillis() <= 0
 					: false)
@@ -22,7 +22,7 @@ addFunction(() => {
 				saveActivity(
 					Activity({
 						...activity,
-						state: ACTIVITIES_STATE.READY,
+						state: ACTIVITIES_STATE.READY.key,
 					})
 				);
 			});

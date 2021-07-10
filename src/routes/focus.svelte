@@ -18,7 +18,7 @@
 	let activity;
 	let descriptionNode;
 	$: {
-		activity = $state.activities.find(activity => activity.state === ACTIVITIES_STATE.READY);
+		activity = $state.activities.find(activity => activity.state === ACTIVITIES_STATE.READY.key);
 
 		// We don't want to run this code if descriptionNode is focused.
 		if (descriptionNode && document.activeElement !== descriptionNode) {
