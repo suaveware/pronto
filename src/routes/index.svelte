@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import { dndzone, TRIGGERS } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
-	import { fade } from 'svelte/transition';
 	import { Activity, reorderActivities, state } from '$lib/state';
 	import ActivityForm from '$lib/ActivityForm.svelte';
 	import ActivityCard from '$lib/ActivityCard.svelte';
@@ -19,7 +18,7 @@
 	import { List } from 'immutable';
 	import Separator from '$lib/components/Separator.svelte';
 	import { version } from '/package.json';
-	import { fly } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 
 	const flipDurationMs = 100;
 	const openSettingsDuration = 500;
@@ -219,7 +218,6 @@
 {:else if !isSettingsOpen}
 	<div
 		class='fixed bottom-4 text-blueGray-600 right-4 gap-3 items-center inline-flex flex-col'
-		transition:fly={{ y: 300 }}
 	>
 		<button
 			on:click={handlePlusPressed}
