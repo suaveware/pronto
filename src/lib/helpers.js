@@ -3,37 +3,46 @@ import { RECURRENCE_TYPE } from '$lib/constants';
 
 export const isClient = () => typeof window !== 'undefined';
 
-export const calculateNextDate = ({ type, weekdays, monthDays, nextDate }) => {
-	const localNow = DateTime.now();
-
+export const calculateNextDate = (
+	{ type, weekdays, monthDays, nextDate },
+	minimumDate = DateTime.now()
+) => {
 	switch (type) {
 		case RECURRENCE_TYPE.EVERY_WEEK_DAYS.key: {
-			const localNextDate = nextDate && DateTime.fromISO(nextDate).toLocal().startOf('day');
-			const fromDate = localNextDate ? localNextDate.startOf('day') : localNow.startOf('day');
+			if (!weekdays.size) {
+				return '';
+			}
 
-			// If localNextDate is in the future, keep same date
-			if (localNextDate && localNextDate.diff(localNow).toMillis() > 0) {
+			const localNextDate = nextDate && DateTime.fromISO(nextDate).toLocal().startOf('day');
+			const fromDate = minimumDate.startOf('day');
+
+			// If localNextDate is already after the minimum keep same date
+			if (localNextDate && localNextDate > minimumDate) {
 				return nextDate;
 			}
 
 			const fromWeekday = fromDate.weekday;
 			const nextWeekdays = [...weekdays.map(day => +day), ...weekdays.map(day => +day + 7)].sort(
-				(a, b) => a - b,
+				(a, b) => a - b
 			);
-			const nextweekday = nextWeekdays.find(day => day > fromWeekday);
+			const nextWeekday = nextWeekdays.find(day => day > fromWeekday);
 
 			return fromDate
-				.plus({ days: nextweekday - fromWeekday })
+				.plus({ days: nextWeekday - fromWeekday })
 				.toUTC()
 				.toISO();
 		}
 
 		case RECURRENCE_TYPE.EVERY_MONTH_DAYS.key: {
-			const localNextDate = nextDate && DateTime.fromISO(nextDate).toLocal().startOf('day');
-			const fromDate = localNextDate ? localNextDate.startOf('day') : localNow.startOf('day');
+			if (!monthDays.size) {
+				return '';
+			}
 
-			// If localNextDate is in the future, keep same date
-			if (localNextDate && localNextDate.diff(localNow).toMillis() > 0) {
+			const localNextDate = nextDate && DateTime.fromISO(nextDate).toLocal().startOf('day');
+			const fromDate = minimumDate.startOf('day');
+
+			// If localNextDate is already after the minimum keep same date
+			if (localNextDate && localNextDate > minimumDate) {
 				return nextDate;
 			}
 

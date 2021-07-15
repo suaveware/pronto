@@ -6,11 +6,5 @@
   "bracketSpacing": true,
   "jsxBracketSameLine": false,
   "arrowParens": "avoid",
-  "svelteBracketNewLine": true,
-  "pluginSearchDirs": [
-    "./**/*.html",
-    "./**/*.svelte",
-    "./**/*.js",
-    "./**/*.cjs"
-  ]
+  "svelteBracketNewLine": true
 }
