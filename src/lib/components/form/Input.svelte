@@ -42,6 +42,7 @@
 			on:focus
 			on:blur
 			on:keyup
+			class:clearButton
 			class:regular={!(small || large)}
 			class:small
 			class:large
@@ -53,7 +54,7 @@
 		{#if clearButton && value}
 			<button
 				on:click={handleClearPressed}
-				class="absolute text-blueGray-600 bg-white right-1 top-1/2 transform -translate-y-1/2"
+				class="absolute text-blueGray-600 right-1 top-1/2 transform -translate-y-1/2"
 			>
 				<XIcon size={small ? '20' : '24'} />
 			</button>
@@ -84,5 +85,9 @@
 
 	.large:focus {
 		@apply outline-none ring;
+	}
+
+	.clearButton {
+		@apply pr-6;
 	}
 </style>
