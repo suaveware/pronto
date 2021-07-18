@@ -1,17 +1,6 @@
 <script>
-	import { goto } from '$app/navigation';
-	import { base } from '$app/paths';
-	import {
-		completeActivity,
-		saveActivity,
-		state,
-	} from '$lib/state';
-	import {
-		ChevronLeftIcon,
-		CheckIcon,
-		SquareIcon,
-		CheckSquareIcon,
-	} from 'svelte-feather-icons';
+	import { completeActivity, saveActivity, state } from '$lib/state';
+	import { ChevronLeftIcon, CheckIcon, SquareIcon, CheckSquareIcon } from 'svelte-feather-icons';
 	import { DateTime } from 'luxon';
 	import { ACTIVITIES_STATE } from '$lib/constants';
 
@@ -35,7 +24,7 @@
 	}
 
 	const handleBackPressed = () => {
-		goto(`${base}/`);
+		window.history.back();
 	};
 
 	const handleCheckPressed = () => {
@@ -64,11 +53,10 @@
 		descriptionNode.focus();
 	};
 
-	const handleCheckItemClicked = (index) => {
-		saveActivity(activity.setIn(
-			['checkList', index, 'checked'],
-			!activity.checkList.get(index).checked,
-		));
+	const handleCheckItemClicked = index => {
+		saveActivity(
+			activity.setIn(['checkList', index, 'checked'], !activity.checkList.get(index).checked)
+		);
 	};
 </script>
 
@@ -76,35 +64,30 @@
 	<title>Focus</title>
 </svelte:head>
 
-<button
-	on:click={handleBackPressed}
-	class='fixed text-blueGray-600 top-4 left-4'
->
-	<ChevronLeftIcon class='text-blueGray-600' size='24' />
+<button on:click={handleBackPressed} class="fixed text-blueGray-600 top-4 left-4">
+	<ChevronLeftIcon class="text-blueGray-600" size="24" />
 </button>
 
 <div
-	class='w-full h-full inline-flex flex-col text-blueGray-600 gap-6 p-4 justify-center items-center'>
-	<p class='text-bg font-bold text-xl'>
+	class="w-full h-full inline-flex flex-col text-blueGray-600 gap-6 p-4 justify-center items-center"
+>
+	<p class="text-bg font-bold text-xl">
 		{activity?.title || 'Pronto!'}
 	</p>
 	<p
 		bind:this={descriptionNode}
 		on:click={handleDescriptionOnClick}
 		on:blur={handleDescriptionOnBlur}
-		class='font-light text-sm font-mono text-base whitespace-pre-wrap'
-	></p>
-	<div class='inline-flex flex-col gap-2 px-4 pt-4 w-full'>
+		class="font-light text-sm font-mono text-base whitespace-pre-wrap"
+	/>
+	<div class="inline-flex flex-col gap-2 px-4 pt-4 w-full">
 		{#each activity?.checkList.toArray() || [] as item, index (item._id)}
-			<div
-				on:click={() => handleCheckItemClicked(index)}
-				class='inline-flex gap-4 cursor-pointer'
-			>
+			<div on:click={() => handleCheckItemClicked(index)} class="inline-flex gap-4 cursor-pointer">
 				<div>
-					{#if (item.checked)}
-						<CheckSquareIcon size='24' />
+					{#if item.checked}
+						<CheckSquareIcon size="24" />
 					{:else}
-						<SquareIcon size='24' />
+						<SquareIcon size="24" />
 					{/if}
 				</div>
 				<div>{item.name}</div>
@@ -114,14 +97,12 @@
 </div>
 
 {#if activity}
-	<div
-		class='fixed bottom-4 right-4 gap-3 items-center inline-flex flex-col'
-	>
+	<div class="fixed bottom-4 right-4 gap-3 items-center inline-flex flex-col">
 		<button
 			on:click={handleCheckPressed}
-			class='p-5 bg-blueGray-400 text-white shadow bg-white rounded-full'
+			class="p-5 bg-blueGray-400 text-white shadow bg-white rounded-full"
 		>
-			<CheckIcon size='28' />
+			<CheckIcon size="28" />
 		</button>
 	</div>
 {/if}
