@@ -24,6 +24,7 @@
 	let activitiesByState;
 	let dndActivities; // Svelte dnd needs mutable stuff
 	let waitingActivities;
+	let doneActivities;
 
 	$: {
 		activitiesByState = $state.activities.groupBy(activity => activity.state);
@@ -34,6 +35,13 @@
 				(a, b) =>
 					DateTime.fromISO(a.recurrence.nextDate).toMillis() -
 					DateTime.fromISO(b.recurrence.nextDate).toMillis()
+			)
+			.toArray();
+		doneActivities = activitiesByState
+			.get(ACTIVITIES_STATE.DONE.key, List())
+			.sort(
+				(a, b) =>
+					DateTime.fromISO(b.completedAt).toMillis() - DateTime.fromISO(a.completedAt).toMillis()
 			)
 			.toArray();
 	}
@@ -174,19 +182,17 @@
 			</div>
 		{/if}
 
-		{#if activitiesByState.get(ACTIVITIES_STATE.WAITING.key)?.size}
+		{#if waitingActivities?.length}
 			<Separator title={ACTIVITIES_STATE.WAITING.label} class="mt-4" />
 		{/if}
 		{#each waitingActivities as activity, index (activity._id)}
 			<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
 		{/each}
 
-		{#if activitiesByState.get(ACTIVITIES_STATE.DONE.key)?.size}
+		{#if doneActivities?.length}
 			<Separator title={ACTIVITIES_STATE.DONE.label} class="mt-4" />
 		{/if}
-		{#each activitiesByState
-			.get(ACTIVITIES_STATE.DONE.key, List())
-			.toArray() as activity, index (activity._id)}
+		{#each doneActivities as activity, index (activity._id)}
 			<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
 		{/each}
 	</div>
