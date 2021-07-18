@@ -12,6 +12,14 @@
 
 	export let activity;
 
+	// Weeks start on sunday...
+	const weekdays = Info.weekdays('narrow').map((label, index) => ({
+		label,
+		value: index + 1,
+	}));
+	const sundayOption = weekdays.pop(); // May the immutable gods forgive me for I've sinned
+	const weekdaysOptions = [sundayOption, ...weekdays];
+
 	let scrollContainer;
 	let form = activity.toJS();
 
@@ -109,7 +117,7 @@
 			<ToggleButtons
 				label="Dias da semana"
 				multi
-				options={Info.weekdays('narrow').map((label, index) => ({ label, value: index + 1 }))}
+				options={weekdaysOptions}
 				bind:value={form.recurrence.weekdays}
 			/>
 		{:else if form.recurrence.type === RECURRENCE_TYPE.EVERY_MONTH_DAYS.key}
