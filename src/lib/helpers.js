@@ -8,6 +8,9 @@ export const calculateNextDate = (
 	minimumDate = DateTime.now()
 ) => {
 	switch (type) {
+		case RECURRENCE_TYPE.NO_RECURRENCE.key: {
+			return '';
+		}
 		case RECURRENCE_TYPE.EVERY_WEEK_DAYS.key: {
 			if (!weekdays.size) {
 				return '';

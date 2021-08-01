@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import { calculateNextDate, isClient } from './helpers';
 import { v4 as uuid } from '@lukeed/uuid';
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 import { dexieDb } from '$lib/dexieDb';
 import { List, Record } from 'immutable';
 import { ACTIVITIES_STATE } from '$lib/constants';
@@ -49,12 +49,14 @@ export const Activity = (properties = {}) =>
 			checkList: List(),
 			createdAt: '',
 			completedAt: '',
+			workIntervals: List(),
 		},
 		'Activity'
 	)({
 		...properties,
 		recurrence: Recurrence(properties.recurrence),
 		checkList: List(properties.checkList?.map?.(CheckItem) || []),
+		workIntervals: List(properties.workIntervals || []),
 	});
 
 /**
@@ -81,8 +83,10 @@ export const state = writable(State());
  * @param operationFunction
  * @returns {function(...[*]): void}
  */
-const createOperation = operationFunction => (...payload) =>
-	state.update(currentState => operationFunction(currentState, ...payload));
+const createOperation =
+	operationFunction =>
+	(...payload) =>
+		state.update(currentState => operationFunction(currentState, ...payload));
 
 /**
  * OPERATIONS
@@ -97,8 +101,6 @@ const createOperation = operationFunction => (...payload) =>
  * @param {Object} activity
  */
 export const saveActivity = createOperation((currentState, activity) => {
-	console.info('Save activity called with ', { currentState, activity });
-
 	const index = currentState.activities.findIndex(a => a._id === activity._id);
 	const newActivity = activity._id
 		? activity
@@ -201,6 +203,7 @@ export const completeActivity = activity => {
 			.set('state', nextDate ? ACTIVITIES_STATE.WAITING.key : ACTIVITIES_STATE.DONE.key)
 			.set('completedAt', DateTime.utc().toISO())
 			.setIn(['recurrence', 'nextDate'], nextDate)
+			.setIn(['workIntervals'], List())
 			.updateIn(['checkList'], items => items.map(item => item.set('checked', false)))
 	);
 };
@@ -221,6 +224,9 @@ if (isClient()) {
 	window.appState = state;
 	window.dexieDb = dexieDb;
 	window.DateTime = DateTime;
+	window.Interval = Interval;
+	window.List = List;
+	window.Record = Record;
 
 	refreshState();
 }

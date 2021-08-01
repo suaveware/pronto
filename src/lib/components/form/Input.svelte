@@ -8,7 +8,7 @@
 	export let value = '';
 	export let scrollOnFocus = false;
 	export let clearButton = false;
-	export let inputElement;
+	export let inputElement = null;
 
 	export let small = false;
 	export let large = false;

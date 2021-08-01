@@ -140,7 +140,7 @@
 					<div class="inline-flex text-base w-full flex-col gap-2">
 						<p>Email: luizcarlos1405@suaveware.dev</p>
 						<p>Twitter: @semmilho</p>
-						<p>YouTube: RSensato</p>
+						<p>YouTube: CanalPalco</p>
 						<p>TikTok: @RSensato</p>
 					</div>
 
