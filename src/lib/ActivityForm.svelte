@@ -1,7 +1,7 @@
 <script>
 	import { RECURRENCE_TYPE } from '$lib/constants';
 	import { TrashIcon } from 'svelte-feather-icons';
-	import { Activity, CheckItem, removeActivity, saveActivity } from '$lib/state';
+	import { Activity, CheckItem, Recurrence, removeActivity, saveActivity } from '$lib/state';
 	import { Info } from 'luxon';
 	import Input from './components/form/Input.svelte';
 	import Fieldset from './components/form/Fieldset.svelte';
@@ -9,6 +9,7 @@
 	import Button from './components/form/Button.svelte';
 	import Select from './components/form/Select.svelte';
 	import ToggleButtons from './components/form/ToggleButtons.svelte';
+	import { calculateNextDate } from '$lib/helpers';
 
 	export let activity;
 
@@ -36,12 +37,18 @@
 		activity = null;
 	};
 
-	// TODO: use the saveActivity here instead of weirdly sending it up
 	const handleConfirmPressed = () => {
+		const nextDate = calculateNextDate(Recurrence(form.recurrence));
+
 		saveActivity(
 			Activity({
 				...activity.toJS(),
 				...form,
+				recurrence: {
+					...activity.recurrence.toJS(),
+					...form.recurrence,
+					nextDate,
+				},
 				checkList: form.checkList.filter(({ name }) => name),
 				_id: activity._id,
 			})

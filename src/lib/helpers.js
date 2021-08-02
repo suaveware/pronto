@@ -3,10 +3,7 @@ import { RECURRENCE_TYPE } from '$lib/constants';
 
 export const isClient = () => typeof window !== 'undefined';
 
-export const calculateNextDate = (
-	{ type, weekdays, monthDays, nextDate },
-	minimumDate = DateTime.now()
-) => {
+export const calculateNextDate = ({ type, weekdays, monthDays }, minimumDate = DateTime.now()) => {
 	switch (type) {
 		case RECURRENCE_TYPE.NO_RECURRENCE.key: {
 			return '';
@@ -16,14 +13,7 @@ export const calculateNextDate = (
 				return '';
 			}
 
-			const localNextDate = nextDate && DateTime.fromISO(nextDate).toLocal().startOf('day');
 			const fromDate = minimumDate.startOf('day');
-
-			// If localNextDate is already after the minimum keep same date
-			if (localNextDate && localNextDate > minimumDate) {
-				return nextDate;
-			}
-
 			const fromWeekday = fromDate.weekday;
 			const nextWeekdays = [...weekdays.map(day => +day), ...weekdays.map(day => +day + 7)].sort(
 				(a, b) => a - b
@@ -41,14 +31,7 @@ export const calculateNextDate = (
 				return '';
 			}
 
-			const localNextDate = nextDate && DateTime.fromISO(nextDate).toLocal().startOf('day');
 			const fromDate = minimumDate.startOf('day');
-
-			// If localNextDate is already after the minimum keep same date
-			if (localNextDate && localNextDate > minimumDate) {
-				return nextDate;
-			}
-
 			const fromDay = fromDate.day;
 			const nextDays = [
 				...monthDays.map(day => +day),

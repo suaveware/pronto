@@ -182,7 +182,10 @@
 	</p>
 	<div class="inline-flex flex-col gap-2 px-4 pt-4 w-full">
 		{#each activity?.checkList.toArray() || [] as item, index (item._id)}
-			<div on:click={() => handleCheckItemClicked(index)} class="inline-flex gap-4 cursor-pointer">
+			<div
+				on:click|stopPropagation={() => handleCheckItemClicked(index)}
+				class="inline-flex gap-4 cursor-pointer"
+			>
 				<div>
 					{#if item.checked}
 						<CheckSquareIcon size="24" />
