@@ -12,6 +12,8 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { fade } from 'svelte/transition';
 
+	// WakeLock api currently available for chrome only https://web.dev/wake-lock/
+	let wakeLockSentinel = null;
 	let justBlurredDescription = false;
 	let activity;
 	let descriptionNode;
@@ -78,6 +80,7 @@
 	onMount(() => {
 		window.updateTimer = updateTimer;
 		workTimeUpdateTimer = setInterval(updateTimer, 100);
+		wakeLockSentinel = navigator.wakeLock?.request();
 	});
 
 	onDestroy(() => {
@@ -89,6 +92,7 @@
 			saveActivity(newActivity);
 		}
 		clearInterval(workTimeUpdateTimer);
+		wakeLockSentinel?.release();
 	});
 
 	const handleBackPressed = () => {

@@ -21,7 +21,6 @@ export const Recurrence = (properties = {}) =>
 			weekdays: List(),
 			monthDays: List(),
 			nextDate: '',
-			...properties,
 		},
 		'Recurrence'
 	)({
@@ -30,6 +29,13 @@ export const Recurrence = (properties = {}) =>
 		monthDays: List(properties.monthDays),
 	});
 
+/**
+ * @param {{
+ *   _id: string,
+ *   name: string,
+ *   checked: boolean,
+ * }} properties
+ */
 export const CheckItem = (properties = {}) =>
 	Record({
 		_id: '',
