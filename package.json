@@ -1,6 +1,6 @@
 {
   "name": "pronto",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "license": "GNU GPLv3",
   "scripts": {
     "dev": "svelte-kit dev",
