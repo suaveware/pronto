@@ -7,26 +7,21 @@
 		CheckSquareIcon,
 		PauseCircleIcon,
 	} from 'svelte-feather-icons';
-	import { DateTime, Interval, Duration } from 'luxon';
 	import { ACTIVITIES_STATE } from '$lib/constants';
 	import { onMount, onDestroy } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import Timer from '$lib/components/atoms/Timer.svelte';
 
 	// WakeLock api currently available for chrome only https://web.dev/wake-lock/
 	let wakeLockSentinel = null;
 	let justBlurredDescription = false;
 	let activity;
 	let descriptionNode;
-	let interval = Interval.after(DateTime.now(), 0);
-	let workTimeUpdateTimer;
-	let workTime = '00:00:00';
-	let isTimerPaused = false;
+	let toggleTimerPause;
+	let isTimerPaused;
 
 	// Loads any changes in the store
 	$: activity = $state.activities.find(activity => activity.state === ACTIVITIES_STATE.READY.key);
-
-	// Saves any changes to activity
-	$: activity && saveActivity(activity);
 
 	$: {
 		if (descriptionNode) {
@@ -39,59 +34,13 @@
 				}
 			}
 		}
-
-		if (activity) {
-			const lastWorkInterval = Interval.fromISO(activity.workIntervals.last());
-
-			if (
-				!activity.workIntervals.size ||
-				interval.start.toMillis() !== lastWorkInterval.start.toMillis()
-			) {
-				activity = activity.set('workIntervals', activity.workIntervals.push(interval.toISO()));
-			}
-		}
 	}
 
-	const updateTimer = () => {
-		if (isTimerPaused) {
-			return;
-		}
-
-		const newInterval = Interval.fromDateTimes(interval.start, DateTime.now());
-		const newActivity = activity?.setIn(
-			['workIntervals', activity.workIntervals.size - 1],
-			newInterval.toISO()
-		);
-		const newWorkTime =
-			newActivity?.workIntervals
-				.reduce(
-					(duration, interval) => Interval.fromISO(interval).toDuration().plus(duration),
-					Duration.fromMillis(0)
-				)
-				.toFormat('hh:mm:ss') || workTime;
-
-		if (workTime !== newWorkTime) {
-			workTime = newWorkTime;
-			interval = newInterval;
-			activity = newActivity;
-		}
-	};
-
 	onMount(() => {
-		window.updateTimer = updateTimer;
-		workTimeUpdateTimer = setInterval(updateTimer, 100);
 		wakeLockSentinel = navigator.wakeLock?.request();
 	});
 
 	onDestroy(() => {
-		if (activity) {
-			const newActivity = activity.setIn(
-				['workIntervals', activity.workIntervals.size - 1],
-				interval.toISO()
-			);
-			saveActivity(newActivity);
-		}
-		clearInterval(workTimeUpdateTimer);
 		wakeLockSentinel?.release();
 	});
 
@@ -101,7 +50,6 @@
 
 	const handleCheckPressed = () => {
 		completeActivity(activity);
-		interval = Interval.after(DateTime.now(), 0);
 	};
 
 	const handleDescriptionOnBlur = () => {
@@ -134,14 +82,17 @@
 			return;
 		}
 
-		isTimerPaused = !isTimerPaused;
+		toggleTimerPause?.();
 	};
 
 	const handleCheckItemClicked = index => {
-		activity = activity.setIn(
-			['checkList', index, 'checked'],
-			!activity.checkList.get(index).checked
+		saveActivity(
+			activity.setIn(['checkList', index, 'checked'], !activity.checkList.get(index).checked)
 		);
+	};
+
+	const handleTimerUpdate = newIntervals => {
+		saveActivity(activity.set('workIntervals', newIntervals));
 	};
 </script>
 
@@ -156,7 +107,14 @@
 	</button>
 
 	<div class="fixed left-1/2 transform -translate-x-1/2">
-		{activity ? workTime : ''}
+		{#if activity}
+			<Timer
+				bind:togglePause={toggleTimerPause}
+				bind:isPaused={isTimerPaused}
+				intervals={activity.workIntervals}
+				onUpdate={handleTimerUpdate}
+			/>
+		{/if}
 		<!-- Timer state animated icon -->
 		{#if isTimerPaused && activity}
 			<div

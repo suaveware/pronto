@@ -3,12 +3,12 @@
 	import { TrashIcon } from 'svelte-feather-icons';
 	import { Activity, CheckItem, Recurrence, removeActivity, saveActivity } from '$lib/state';
 	import { Info } from 'luxon';
-	import Input from './components/form/Input.svelte';
-	import Fieldset from './components/form/Fieldset.svelte';
-	import TextArea from './components/form/TextArea.svelte';
-	import Button from './components/form/Button.svelte';
-	import Select from './components/form/Select.svelte';
-	import ToggleButtons from './components/form/ToggleButtons.svelte';
+	import Input from './components/atoms/Input.svelte';
+	import Fieldset from './components/atoms/Fieldset.svelte';
+	import TextArea from './components/atoms/TextArea.svelte';
+	import Button from './components/atoms/Button.svelte';
+	import Select from './components/atoms/Select.svelte';
+	import ToggleButtons from './components/atoms/ToggleButtons.svelte';
 	import { calculateNextDate } from '$lib/helpers';
 
 	export let activity;
