@@ -1,7 +1,8 @@
 <script>
 	import { RECURRENCE_TYPE } from '$lib/constants';
 	import { TrashIcon } from 'svelte-feather-icons';
-	import { Activity, CheckItem, Recurrence, removeActivity, saveActivity } from '$lib/state';
+	import { removeActivity, saveActivity } from '$lib/state';
+	import { Activity, CheckItem, Recurrence } from '$lib/recordTypes';
 	import { Info } from 'luxon';
 	import Input from './components/atoms/Input.svelte';
 	import Fieldset from './components/atoms/Fieldset.svelte';

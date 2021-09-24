@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { dndzone, TRIGGERS } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
-	import { Activity, reorderActivities, state } from '$lib/state';
+	import { reorderActivities, state } from '$lib/state';
 	import ActivityForm from '$lib/ActivityForm.svelte';
 	import ActivityCard from '$lib/ActivityCard.svelte';
 	import { longpress } from '$lib/custom-actions/longpress';
@@ -14,6 +14,7 @@
 	import Separator from '$lib/components/Separator.svelte';
 	import { version } from '/package.json';
 	import { fade } from 'svelte/transition';
+	import { Activity } from '$lib/recordTypes';
 
 	const flipDurationMs = 100;
 	const openSettingsDuration = 500;

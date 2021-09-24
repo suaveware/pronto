@@ -1,80 +1,10 @@
 import { writable } from 'svelte/store';
 import { calculateNextDate, isClient } from './helpers';
-import { v4 as uuid } from '@lukeed/uuid';
 import { DateTime, Interval } from 'luxon';
 import { dexieDb } from '$lib/dexieDb';
 import { List, Record } from 'immutable';
 import { ACTIVITIES_STATE } from '$lib/constants';
-
-/**
- * @param {{
- *   type: string,
- *   weekdays: Array<Number>,
- *   monthDays: Array<Number>,
- *   nextDate: string,
- * }} properties
- */
-export const Recurrence = (properties = {}) =>
-	Record(
-		{
-			type: 'no_recurrence',
-			weekdays: List(),
-			monthDays: List(),
-			nextDate: '',
-		},
-		'Recurrence'
-	)({
-		...properties,
-		weekdays: List(properties.weekdays),
-		monthDays: List(properties.monthDays),
-	});
-
-/**
- * @param {{
- *   _id: string,
- *   name: string,
- *   checked: boolean,
- * }} properties
- */
-export const CheckItem = (properties = {}) =>
-	Record({
-		_id: '',
-		name: '',
-		checked: false,
-	})({ ...properties, _id: uuid() });
-
-export const Activity = (properties = {}) =>
-	Record(
-		{
-			_id: '',
-			title: '',
-			description: '',
-			order: 0,
-			state: ACTIVITIES_STATE.READY.key,
-			recurrence: Recurrence(),
-			checkList: List(),
-			createdAt: '',
-			completedAt: '',
-			workIntervals: List(),
-		},
-		'Activity'
-	)({
-		...properties,
-		recurrence: Recurrence(properties.recurrence),
-		checkList: List(properties.checkList?.map?.(CheckItem) || []),
-		workIntervals: List(properties.workIntervals || []),
-	});
-
-/**
- * @type {Record.Factory} State
- * @param {{ activities: List<Activity> }} state
- */
-const State = Record(
-	{
-		activities: List(),
-	},
-	'State'
-);
+import { Activity, Config, State } from '$lib/recordTypes';
 
 /**
  * This is a store to represent the entire app state.
@@ -111,7 +41,6 @@ export const saveActivity = createOperation((currentState, activity) => {
 	const newActivity = activity._id
 		? activity
 		: activity.merge({
-				_id: uuid(),
 				createdAt: DateTime.utc().toISO(),
 				order: currentState.activities.size,
 		  });
@@ -121,6 +50,8 @@ export const saveActivity = createOperation((currentState, activity) => {
 			: currentState.activities.set(index, newActivity);
 	const newState = currentState.set('activities', newActivities);
 
+	// TODO: replaec this logic with a put from dexie
+	// https://dexie.org/docs/Table/Table.put()
 	if (activity._id) {
 		dexieDb.activities.update(newActivity._id, newActivity.toJS()).catch(error => {
 			// TODO: Show error message
@@ -199,6 +130,18 @@ export const reorderActivities = createOperation((currentState, newOrder) => {
 	return newState;
 });
 
+export const saveConfig = createOperation((currentState, config) => {
+	const newState = currentState.update('config', config);
+
+	dexieDb.config.put(config.toJS()).catch(error => {
+		// TODO: show error message
+		console.error('Error on saving config: ', { config, error });
+		state.set(currentState);
+	});
+
+	return newState;
+});
+
 export const completeActivity = activity => {
 	const nextDate = calculateNextDate(activity.recurrence);
 
@@ -214,17 +157,17 @@ export const completeActivity = activity => {
 	);
 };
 
-const refreshState = () =>
-	dexieDb.activities
-		.orderBy('order')
-		.toArray()
-		.then(dbActivities => {
-			state.set(
-				State({
-					activities: List(dbActivities.map(Activity)),
-				})
-			);
-		});
+const refreshState = async () => {
+	const dbActivities = await dexieDb.activities.orderBy('order').toArray();
+	const [dbConfig] = await dexieDb.config.toArray();
+
+	state.set(
+		State({
+			activities: List(dbActivities.map(Activity)),
+			config: Config(dbConfig),
+		})
+	);
+};
 
 if (isClient()) {
 	window.appState = state;
@@ -233,6 +176,7 @@ if (isClient()) {
 	window.Interval = Interval;
 	window.List = List;
 	window.Record = Record;
+	window.Config = Config;
 
 	refreshState();
 }

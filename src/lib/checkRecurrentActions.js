@@ -1,8 +1,9 @@
-import { Activity, saveActivity } from '$lib/state';
+import { saveActivity } from '$lib/state';
 import { DateTime } from 'luxon';
 import { addFunction } from '$lib/tick';
 import { dexieDb } from '$lib/dexieDb';
 import { ACTIVITIES_STATE, RECURRENCE_TYPE } from '$lib/constants';
+import { Activity } from '$lib/recordTypes';
 
 // This function is separated this way because I was planning to write some
 // When there is any bugs in this logic I'll do it.

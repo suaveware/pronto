@@ -6,8 +6,9 @@ export let dexieDb;
 if (isClient()) {
 	dexieDb = new Dexie('pronto');
 
-	dexieDb.version(3).stores({
+	dexieDb.version(4).stores({
 		activities: '_id,order',
+		config: '_id',
 	});
 
 	window.dexieDb = dexieDb;
