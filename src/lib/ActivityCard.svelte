@@ -13,13 +13,13 @@
 </script>
 
 <div
-	class="w-full p-1 inline-flex bg-white text-blueGray-800 border-l-4 border-blueGray-500 flex-col gap-2 shadow-md border rounded"
+	class="w-full p-2 inline-flex bg-white text-blueGray-800 border-l-4 border-blueGray-500 flex-col gap-2 shadow-md border rounded"
 	on:click
 >
 	<div class="inline-flex justify-start gap-2 items-center w-full">
 		{#if activity.state === ACTIVITIES_STATE.READY.key}
 			<span class="cursor-default" on:click|stopPropagation={handleCheckBoxClicked}>
-				<SquareIcon size="20" /></span
+				<SquareIcon size="24" /></span
 			>
 		{/if}
 		<div>{activity.title}</div>
@@ -34,3 +34,4 @@
 		</p>
 	{/if}
 </div>
+
