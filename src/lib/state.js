@@ -120,6 +120,7 @@ export const saveConfig = createOperation((currentState, config) => {
   const newState = currentState.set('config', config);
 
   Object.keys(config.toJS()).forEach(key => {
+    console.log("setting", key, config.get(key));
     localStorage.setItem(key, config.get(key));
   });
 
@@ -148,8 +149,8 @@ const refreshState = async () => {
     State({
       activities: List(dbActivities.map(Activity)),
       config: Config({
-        showDoneActivities: localStorage.getItem('showDoneActivities'),
-        showWaitingActivities: localStorage.getItem('showWaitingActivities'),
+        showDoneActivities: localStorage.getItem('showDoneActivities') === 'true',
+        showWaitingActivities: localStorage.getItem('showWaitingActivities') === 'true',
       }),
     })
   );
