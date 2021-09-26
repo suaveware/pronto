@@ -100,74 +100,74 @@
 	<title>Focus</title>
 </svelte:head>
 
-<!-- Topbar thingy -->
-<div class="inline-flex items-center absolute top-0 left-0 right-0 p-4 text-blueGray-600">
-	<button on:click={handleBackPressed}>
-		<ChevronLeftIcon class="text-blueGray-600" size="24" />
-	</button>
-
-	<div class="fixed left-1/2 transform -translate-x-1/2">
-		{#if activity}
-			<Timer
-				bind:togglePause={toggleTimerPause}
-				bind:isPaused={isTimerPaused}
-				intervals={activity.workIntervals}
-				onUpdate={handleTimerUpdate}
-			/>
-		{/if}
-		<!-- Timer state animated icon -->
-		{#if isTimerPaused && activity}
-			<div
-				class="fixed top-8 text-blueGray-400 transform -translate-x-1/2 left-1/2"
-				transition:fade={{ duration: 100 }}
-			>
-				<PauseCircleIcon size="48" />
-			</div>
-		{/if}
-	</div>
-</div>
-
-<div
-	on:click={handlePageOnClick}
-	class="w-full h-full inline-flex flex-col text-blueGray-600 gap-6 p-4 justify-center items-center"
->
-	<p class="text-bg font-bold text-xl">
-		{activity?.title || 'Pronto!'}
-	</p>
-	<p
-		bind:this={descriptionNode}
-		on:click|stopPropagation={handleDescriptionOnClick}
-		on:blur={handleDescriptionOnBlur}
-		class="font-light text-sm font-mono text-base whitespace-pre-wrap"
-	>
-		{''}
-	</p>
-	<div class="inline-flex flex-col gap-2 px-4 pt-4 w-full">
-		{#each activity?.checkList.toArray() || [] as item, index (item._id)}
-			<div
-				on:click|stopPropagation={() => handleCheckItemClicked(index)}
-				class="inline-flex gap-4 cursor-pointer"
-			>
-				<div>
-					{#if item.checked}
-						<CheckSquareIcon size="24" />
-					{:else}
-						<SquareIcon size="24" />
-					{/if}
-				</div>
-				<div>{item.name}</div>
-			</div>
-		{/each}
-	</div>
-</div>
-
-{#if activity}
-	<div class="fixed bottom-4 right-4 gap-3 items-center inline-flex flex-col">
-		<button
-			on:click={handleCheckPressed}
-			class="p-5 bg-blueGray-400 text-white shadow bg-white rounded-full"
-		>
-			<CheckIcon size="28" />
+<div on:click={handlePageOnClick} class="inline-flex flex-col h-full w-full">
+	<div class="inline-flex relative items-center w-ful p-4 text-blueGray-600">
+		<!-- Topbar thingy -->
+		<button on:click={handleBackPressed}>
+			<ChevronLeftIcon class="text-blueGray-600" size="24" />
 		</button>
+
+		<div class="ml-auto inline-flex gap-2 items-center opacity-60 pr-2">
+			{#if isTimerPaused && activity}
+				<div class="top-8" transition:fade={{ duration: 100 }}>
+					<PauseCircleIcon size="24" />
+				</div>
+			{/if}
+			{#if activity}
+				<Timer
+					bind:togglePause={toggleTimerPause}
+					bind:isPaused={isTimerPaused}
+					intervals={activity.workIntervals}
+					onUpdate={handleTimerUpdate}
+				/>
+			{/if}
+			<!-- Timer state animated icon -->
+		</div>
 	</div>
-{/if}
+
+	<!-- Activity Data -->
+	<div
+		class="w-full inline-flex box-border flex-col overflow-y-scroll text-blueGray-600 gap-6 p-4 items-center"
+	>
+		<p class="text-bg font-bold text-xl">
+			{activity?.title || 'Pronto!'}
+		</p>
+		<p
+			bind:this={descriptionNode}
+			on:click|stopPropagation={handleDescriptionOnClick}
+			on:blur={handleDescriptionOnBlur}
+			class="font-light text-sm font-mono text-base whitespace-pre-wrap"
+		>
+			{''}
+		</p>
+		<div class="inline-flex flex-col gap-2 px-4 pt-4 w-full">
+			{#each activity?.checkList.toArray() || [] as item, index (item._id)}
+				<div
+					on:click|stopPropagation={() => handleCheckItemClicked(index)}
+					class="inline-flex gap-4 cursor-pointer"
+				>
+					<div>
+						{#if item.checked}
+							<CheckSquareIcon size="24" />
+						{:else}
+							<SquareIcon size="24" />
+						{/if}
+					</div>
+					<div>{item.name}</div>
+				</div>
+			{/each}
+		</div>
+	</div>
+
+	<!-- FAB -->
+	{#if activity}
+		<div class="fixed bottom-4 right-4 gap-3 items-center inline-flex flex-col">
+			<button
+				on:click={handleCheckPressed}
+				class="p-5 bg-blueGray-400 text-white shadow bg-white rounded-full"
+			>
+				<CheckIcon size="28" />
+			</button>
+		</div>
+	{/if}
+</div>
