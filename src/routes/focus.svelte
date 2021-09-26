@@ -1,7 +1,8 @@
 <script>
-	import { completeActivity, saveActivity, state } from '$lib/state';
+	import { completeActivity, reorderActivities, saveActivity, state } from '$lib/state';
 	import {
 		ChevronLeftIcon,
+		ChevronsRightIcon,
 		CheckIcon,
 		SquareIcon,
 		CheckSquareIcon,
@@ -11,6 +12,8 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Timer from '$lib/components/atoms/Timer.svelte';
+	import FabContainer from '$lib/components/atoms/FabContainer.svelte';
+	import Fab from '$lib/components/atoms/Fab.svelte';
 
 	// WakeLock api currently available for chrome only https://web.dev/wake-lock/
 	let wakeLockSentinel = null;
@@ -50,6 +53,22 @@
 
 	const handleCheckPressed = () => {
 		completeActivity(activity);
+	};
+
+	const handleDoLaterPressed = () => {
+		const jsReadyActivities = $state.activities
+			.toJS()
+			.filter(({ state }) => state === ACTIVITIES_STATE.READY.key);
+		const jsOtherActivities = $state.activities
+			.toJS()
+			.filter(({ state }) => state !== ACTIVITIES_STATE.READY.key);
+
+		if (jsReadyActivities.length > 1) {
+			const [first, second, ...rest] = jsReadyActivities;
+			const newOrder = [second, first, ...rest, ...jsOtherActivities];
+
+			reorderActivities(newOrder);
+		}
 	};
 
 	const handleDescriptionOnBlur = () => {
@@ -161,13 +180,9 @@
 
 	<!-- FAB -->
 	{#if activity}
-		<div class="fixed bottom-4 right-4 gap-3 items-center inline-flex flex-col">
-			<button
-				on:click={handleCheckPressed}
-				class="p-5 bg-blueGray-400 text-white shadow bg-white rounded-full"
-			>
-				<CheckIcon size="28" />
-			</button>
-		</div>
+		<FabContainer>
+			<Fab on:click={handleDoLaterPressed} color="bg-blueGray-400" small icon={ChevronsRightIcon} />
+			<Fab on:click={handleCheckPressed} color="bg-blueGray-400" icon={CheckIcon} />
+		</FabContainer>
 	{/if}
 </div>

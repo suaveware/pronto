@@ -25,9 +25,21 @@
 		<Separator title="Contato" class="text-white mt-4" />
 		<div class="inline-flex text-base w-full flex-col gap-2">
 			<p>Email: luizcarlos1405@suaveware.dev</p>
-			<p>Twitter: @semmilho</p>
-			<p>YouTube: CanalPalco</p>
-			<p>TikTok: @RSensato</p>
+			<p>
+				Twitter:
+				<a class="underline text-base w-full" href="https://twitter.com/semmilho"> @semmilho </a>
+			</p>
+			<p>
+				YouTube: <a class="underline text-base w-full" href="https://youtube.com/CanalPalco">
+					CanalPalco
+				</a>
+			</p>
+			<p>
+				TikTok:
+				<a class="underline text-base w-full" href="https://www.tiktok.com/@rsensato">
+					@RSensato
+				</a>
+			</p>
 		</div>
 
 		<Separator title="Versão" class="text-white mt-4" />

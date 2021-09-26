@@ -5,6 +5,7 @@
 	import { reorderActivities, saveConfig, state } from '$lib/state';
 	import ActivityForm from '$lib/ActivityForm.svelte';
 	import ActivityCard from '$lib/ActivityCard.svelte';
+	import Fab from '$lib/components/atoms/Fab.svelte';
 	import { longpress } from '$lib/custom-actions/longpress';
 	import {
 		PlusIcon,
@@ -22,6 +23,7 @@
 	import Separator from '$lib/components/Separator.svelte';
 	import { fade } from 'svelte/transition';
 	import { Activity } from '$lib/recordTypes';
+	import FabContainer from '$lib/components/atoms/FabContainer.svelte';
 
 	const flipDurationMs = 100;
 	const openSettingsDuration = 500;
@@ -203,27 +205,15 @@
 {#if editingActivity}
 	<ActivityForm bind:activity={editingActivity} />
 {:else if !isSettingsOpen}
-	<div class="fixed bottom-4 text-blueGray-600 right-4 gap-3 items-center inline-flex flex-col">
-		<button on:click={handlePlusPressed} class="fab" class:small={!!$state.activities.size}>
-			<PlusIcon size={$state.activities.size ? '20' : '28'} />
-		</button>
+	<FabContainer>
+		<Fab on:click={handlePlusPressed} small={!!$state.activities.size} icon={PlusIcon} />
 		{#if $state.activities.size}
-			<button on:click={handleMaximizePressed} class="fab">
-				<MaximizeIcon size="28" />
-			</button>
+			<Fab on:click={handleMaximizePressed} icon={MaximizeIcon} />
 		{/if}
-	</div>
+	</FabContainer>
 {/if}
 
 <style>
-	.fab {
-		@apply p-5 shadow bg-blueGray-500 text-white rounded-full;
-	}
-
-	.small {
-		@apply p-2;
-	}
-
 	.hide {
 		@apply max-h-0 opacity-0;
 	}
