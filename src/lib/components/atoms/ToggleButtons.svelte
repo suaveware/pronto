@@ -10,18 +10,19 @@
 	let pressedMap = Object.fromEntries(valueArray.map(v => [v, true]));
 </script>
 
-<div class='inline-flex flex-col w-full'>
+<div class="inline-flex flex-col w-full">
 	{#if label}
 		<label
-			class='block uppercase text-blueGray-600 text-xs font-bold mb-2'
-			for='form-toggle-button'
+			class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+			for="form-toggle-button"
 		>
 			{label}
 		</label>
 	{/if}
 	<div
-		id='form-toggle-button'
-		class='box-border shadow bg-white rounded p-2 w-full gap-1 grid grid-cols-7 auto-cols-min'>
+		id="form-toggle-button"
+		class="box-border shadow bg-white rounded p-2 w-full gap-1 grid grid-cols-7 auto-cols-min"
+	>
 		{#each options as option, index}
 			<Button
 				toggle
@@ -29,18 +30,19 @@
 				outlined
 				bind:pressed={pressedMap[option.value]}
 				on:click={() => {
-				value = multi
-					? Object.entries(pressedMap).filter(([, isPressed]) => isPressed).map(([optionValue]) => optionValue)
-					: option.value;
+					value = multi
+						? Object.entries(pressedMap)
+								.filter(([, isPressed]) => isPressed)
+								.map(([optionValue]) => optionValue)
+						: option.value;
 
-				if (!multi) {
-					pressedMap = { [option.value]: true };
-				}
-			}}
+					if (!multi) {
+						pressedMap = { [option.value]: true };
+					}
+				}}
 			>
 				{option.label}
 			</Button>
 		{/each}
 	</div>
 </div>
-

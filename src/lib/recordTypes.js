@@ -11,19 +11,19 @@ import { ACTIVITIES_STATE } from '$lib/constants';
  * }} properties
  */
 export const Recurrence = (properties = {}) =>
-  Record(
-    {
-      type: 'no_recurrence',
-      weekdays: List(),
-      monthDays: List(),
-      nextDate: '',
-    },
-    'Recurrence'
-  )({
-    ...properties,
-    weekdays: List(properties.weekdays),
-    monthDays: List(properties.monthDays),
-  });
+	Record(
+		{
+			type: 'no_recurrence',
+			weekdays: List(),
+			monthDays: List(),
+			nextDate: '',
+		},
+		'Recurrence'
+	)({
+		...properties,
+		weekdays: List(properties.weekdays),
+		monthDays: List(properties.monthDays),
+	});
 
 /**
  * @param {{
@@ -33,54 +33,54 @@ export const Recurrence = (properties = {}) =>
  * }} properties
  */
 export const CheckItem = (properties = {}) =>
-  Record({
-    _id: '',
-    name: '',
-    checked: false,
-  })({ ...properties, _id: uuid() });
+	Record({
+		_id: '',
+		name: '',
+		checked: false,
+	})({ ...properties, _id: uuid() });
 
 export const Activity = (properties = {}) =>
-  Record(
-    {
-      _id: '',
-      title: '',
-      description: '',
-      order: 0,
-      state: ACTIVITIES_STATE.READY.key,
-      recurrence: Recurrence(),
-      checkList: List(),
-      createdAt: '',
-      completedAt: '',
-      workIntervals: List(),
-    },
-    'Activity'
-  )({
-    _id: uuid(),
-    ...properties,
-    recurrence: Recurrence(properties.recurrence),
-    checkList: List(properties.checkList?.map?.(CheckItem) || []),
-    workIntervals: List(properties.workIntervals || []),
-  });
+	Record(
+		{
+			_id: '',
+			title: '',
+			description: '',
+			order: 0,
+			state: ACTIVITIES_STATE.READY.key,
+			recurrence: Recurrence(),
+			checkList: List(),
+			createdAt: '',
+			completedAt: '',
+			workIntervals: List(),
+		},
+		'Activity'
+	)({
+		_id: uuid(),
+		...properties,
+		recurrence: Recurrence(properties.recurrence),
+		checkList: List(properties.checkList?.map?.(CheckItem) || []),
+		workIntervals: List(properties.workIntervals || []),
+	});
 
 export const Config = (properties = {}) =>
-  Record(
-    {
-      showDoneActivities: false,
-      showWaitingActivities: true
-    },
-    'Config'
-  )({
-    ...properties,
-  });
+	Record(
+		{
+			showDoneActivities: false,
+			showWaitingActivities: true,
+		},
+		'Config'
+	)({
+		...properties,
+	});
 
 /**
  * @type {Record.Factory} State
  * @param {{ activities: List<Activity> }} state
  */
 export const State = Record(
-  {
-    activities: List(),
-    config: Config(),
-  },
-  'State'
+	{
+		activities: List(),
+		config: Config(),
+	},
+	'State'
 );

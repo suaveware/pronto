@@ -34,8 +34,6 @@
 	let waitingActivities;
 	let doneActivities;
 
-	console.log('$state.config.showDoneActivities', $state.config.showDoneActivities);
-
 	$: {
 		activitiesByState = $state.activities.groupBy(activity => activity.state);
 		dndActivities = activitiesByState.get(ACTIVITIES_STATE.READY.key, List()).toJS();

@@ -1,12 +1,10 @@
 {
-  "useTabs": true,
-  "singleQuote": true,
-  "trailingComma": "es5",
-  "printWidth": 100,
-  "bracketSpacing": true,
-  "jsxBracketSameLine": false,
-  "arrowParens": "avoid",
-  "pluginSearchDirs": [
-    "."
-  ]
+	"useTabs": true,
+	"singleQuote": true,
+	"trailingComma": "es5",
+	"printWidth": 100,
+	"bracketSpacing": true,
+	"jsxBracketSameLine": false,
+	"arrowParens": "avoid",
+	"pluginSearchDirs": ["."]
 }

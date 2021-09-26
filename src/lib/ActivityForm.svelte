@@ -39,7 +39,6 @@
 	};
 
 	const handleConfirmPressed = () => {
-		console.log('saving activity');
 		const nextDate = calculateNextDate(Recurrence(form.recurrence));
 
 		saveActivity(

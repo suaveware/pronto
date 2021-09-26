@@ -1,10 +1,14 @@
 module.exports = {
 	plugins: [
-		['module-resolver', {
-			root: '/', alias: {
-				'$lib': ['./src/lib'],
+		[
+			'module-resolver',
+			{
+				root: '/',
+				alias: {
+					$lib: ['./src/lib'],
+				},
 			},
-		}],
+		],
 	],
 	presets: [
 		[

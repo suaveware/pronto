@@ -7,13 +7,13 @@ apenas a próxima tarefa.
 Por enquanto, este é o conceito do app, muito simples. Futuramente pretendo
 implementar:
 
-* Tarefas recorrentes: essas tarefas reaparecerão sozinhas na sua lista sem
+- Tarefas recorrentes: essas tarefas reaparecerão sozinhas na sua lista sem
   você precisar se preocupar com elas.
-* Interrupções: você poderá trabalhar com tranquilidade porque quando um horário
+- Interrupções: você poderá trabalhar com tranquilidade porque quando um horário
   importante chegar o aplicativo vai te interromper e mudar qual a tarefa atual.
-* Visão de calendário: onde você poderia ver todas as interrupções que estão
+- Visão de calendário: onde você poderia ver todas as interrupções que estão
   marcadas.
-  
+
 # Running
 
 1. Clone this repository.

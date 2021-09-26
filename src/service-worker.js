@@ -41,7 +41,7 @@ precache(
 			url,
 			revision: `${timestamp}`,
 		};
-	}),
+	})
 );
 
 const matchCb = ({ url /*, request, event*/ }) => {
