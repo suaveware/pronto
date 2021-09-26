@@ -5,14 +5,12 @@
 	overrideItemIdKeyNameBeforeInitialisingDndZones('_id');
 </script>
 
-
-<main class='w-full h-full bg-white'>
+<main class="w-full h-full m-0 bg-white">
 	<slot />
 </main>
 
-
 <style>
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
+	@tailwind base;
+	@tailwind components;
+	@tailwind utilities;
 </style>

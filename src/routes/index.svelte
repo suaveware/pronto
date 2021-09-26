@@ -2,17 +2,24 @@
 	import { goto } from '$app/navigation';
 	import { dndzone, TRIGGERS } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
-	import { reorderActivities, state } from '$lib/state';
+	import { reorderActivities, saveConfig, state } from '$lib/state';
 	import ActivityForm from '$lib/ActivityForm.svelte';
 	import ActivityCard from '$lib/ActivityCard.svelte';
 	import { longpress } from '$lib/custom-actions/longpress';
-	import { PlusIcon, MaximizeIcon, XIcon, InfoIcon, ChevronRightIcon } from 'svelte-feather-icons';
+	import {
+		PlusIcon,
+		MaximizeIcon,
+		XIcon,
+		InfoIcon,
+		ChevronRightIcon,
+		ChevronDownIcon,
+	} from 'svelte-feather-icons';
+	import Checkbox from '$lib/components/atoms/Checkbox.svelte';
 	import { base } from '$app/paths';
 	import { ACTIVITIES_STATE } from '$lib/constants';
 	import { DateTime } from 'luxon';
 	import { List } from 'immutable';
 	import Separator from '$lib/components/Separator.svelte';
-	import { version } from '/package.json';
 	import { fade } from 'svelte/transition';
 	import { Activity } from '$lib/recordTypes';
 
@@ -26,6 +33,8 @@
 	let dndActivities; // Svelte dnd needs mutable stuff
 	let waitingActivities;
 	let doneActivities;
+
+	console.log('$state.config.showDoneActivities', $state.config.showDoneActivities);
 
 	$: {
 		activitiesByState = $state.activities.groupBy(activity => activity.state);
@@ -80,6 +89,18 @@
 	const handleMenuClicked = () => {
 		isSettingsOpen = !isSettingsOpen;
 	};
+
+	const handleAboutClicked = () => {
+		goto(`${base}/menu/about`);
+	};
+
+	const handleDoneActivitiesHeaderClicked = () => {
+		saveConfig($state.config.set('showDoneActivities', !$state.config.showDoneActivities));
+	};
+
+	const handleWaitingActivitiesHeaderClicked = () => {
+		saveConfig($state.config.set('showWaitingActivities', !$state.config.showWaitingActivities));
+	};
 </script>
 
 <svelte:head>
@@ -104,52 +125,19 @@
 	>
 		{#if isSettingsOpen}
 			<div
-				class="text-white px-4 py-8 overflow-y-scroll inline-flex gap-2 text-xl flex-col items-stretch w-full"
+				class="text-white px-6 py-8 overflow-y-scroll inline-flex gap-4 text-xl flex-col items-stretch w-full"
 				style="height: 76vh"
-				transition:fade={{ duration: openSettingsDuration }}
+				transition:fade|local={{ duration: openSettingsDuration }}
 			>
-				{#if false}
-					This is how the options will look like once we have use for them
-					<button class="inline-flex rounded px-2 w-full w-full items-center gap-3">
-						<span>
-							<InfoIcon size="24" />
-						</span>
-						<span class="">Sobre</span>
-						<span class="ml-auto">
-							<ChevronRightIcon size="24" />
-						</span>
-					</button>
-				{/if}
-
-				<div class="inline-flex flex-col items-center pt-4 gap-2 w-full">
-					<p>by Suaveware</p>
-					<p class="text-base text-justify">
-						Este aplicativo é de código livre sob a licença GPL-3 e seu código fonte está disponível
-						neste
-						<a class="underline" href="https://github.com/luizcarlos1405/pronto">
-							repositório no Github
-						</a>
-						.
-					</p>
-					<p class="text-base text-justify">
-						Distribuído como <i>progressive web app</i> (PWA) através do endereço:
-					</p>
-					<a class="underline text-base w-full" href="https://pronto.suaveware.dev">
-						https://pronto.suaveware.dev
-					</a>
-					<Separator title="Contato" class="text-white mt-4" />
-					<div class="inline-flex text-base w-full flex-col gap-2">
-						<p>Email: luizcarlos1405@suaveware.dev</p>
-						<p>Twitter: @semmilho</p>
-						<p>YouTube: CanalPalco</p>
-						<p>TikTok: @RSensato</p>
-					</div>
-
-					<Separator title="Versão" class="text-white mt-4" />
-					<div class="text-sm">
-						{version}
-					</div>
-				</div>
+				<button
+					on:click={handleAboutClicked}
+					class="inline-flex rounded w-full w-full items-center gap-3"
+				>
+					<span>
+						<InfoIcon size="24" />
+					</span>
+					<span class="">Sobre</span>
+				</button>
 			</div>
 		{/if}
 	</div>
@@ -184,18 +172,33 @@
 		{/if}
 
 		{#if waitingActivities?.length}
-			<Separator title={ACTIVITIES_STATE.WAITING.label} class="mt-4" />
+			<Separator
+				on:click={handleWaitingActivitiesHeaderClicked}
+				icon={$state.config.showWaitingActivities ? ChevronDownIcon : ChevronRightIcon}
+				title={ACTIVITIES_STATE.WAITING.label}
+				class="mt-4"
+			/>
 		{/if}
-		{#each waitingActivities as activity, index (activity._id)}
-			<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
-		{/each}
+
+		{#if $state.config.showWaitingActivities}
+			{#each waitingActivities as activity, index (activity._id)}
+				<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
+			{/each}
+		{/if}
 
 		{#if doneActivities?.length}
-			<Separator title={ACTIVITIES_STATE.DONE.label} class="mt-4" />
+			<Separator
+				on:click={handleDoneActivitiesHeaderClicked}
+				icon={$state.config.showDoneActivities ? ChevronDownIcon : ChevronRightIcon}
+				title={ACTIVITIES_STATE.DONE.label}
+				class="mt-4"
+			/>
+			{#if $state.config.showDoneActivities}
+				{#each doneActivities as activity, index (activity._id)}
+					<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
+				{/each}
+			{/if}
 		{/if}
-		{#each doneActivities as activity, index (activity._id)}
-			<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
-		{/each}
 	</div>
 </div>
 
