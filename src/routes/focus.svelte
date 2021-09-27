@@ -146,16 +146,16 @@
 
 	<!-- Activity Data -->
 	<div
-		class="w-full inline-flex box-border flex-col overflow-y-scroll text-blueGray-600 gap-6 p-4 items-center"
+		class="w-full inline-flex my-auto box-border flex-col overflow-y-scroll text-blueGray-600 gap-6 p-4 items-center"
 	>
 		<p class="text-bg font-bold text-xl">
 			{activity?.title || 'Pronto!'}
 		</p>
 		<p
+			class="font-light text-sm font-mono text-base whitespace-pre-wrap"
 			bind:this={descriptionNode}
 			on:click|stopPropagation={handleDescriptionOnClick}
 			on:blur={handleDescriptionOnBlur}
-			class="font-light text-sm font-mono text-base whitespace-pre-wrap"
 		>
 			{''}
 		</p>
