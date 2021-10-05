@@ -15,7 +15,6 @@
 		ChevronRightIcon,
 		ChevronDownIcon,
 	} from 'svelte-feather-icons';
-	import Checkbox from '$lib/components/atoms/Checkbox.svelte';
 	import { base } from '$app/paths';
 	import { ACTIVITIES_STATE } from '$lib/constants';
 	import { DateTime } from 'luxon';
@@ -129,10 +128,7 @@
 				style="height: 76vh"
 				transition:fade|local={{ duration: openSettingsDuration }}
 			>
-				<button
-					on:click={handleAboutClicked}
-					class="inline-flex rounded w-full w-full items-center gap-3"
-				>
+				<button on:click={handleAboutClicked} class="inline-flex rounded w-full items-center gap-3">
 					<span>
 						<InfoIcon size="24" />
 					</span>
