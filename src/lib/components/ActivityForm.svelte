@@ -4,12 +4,12 @@
 	import { removeActivity, saveActivity } from '$lib/state';
 	import { Activity, CheckItem, Recurrence } from '$lib/recordTypes';
 	import { Info } from 'luxon';
-	import Input from './components/atoms/Input.svelte';
-	import Fieldset from './components/atoms/Fieldset.svelte';
-	import TextArea from './components/atoms/TextArea.svelte';
-	import Button from './components/atoms/Button.svelte';
-	import Select from './components/atoms/Select.svelte';
-	import ToggleButtons from './components/atoms/ToggleButtons.svelte';
+	import Input from '$lib/components/atoms/Input.svelte';
+	import Fieldset from '$lib/components/atoms/Fieldset.svelte';
+	import TextArea from '$lib/components/atoms/TextArea.svelte';
+	import Button from '$lib/components/atoms/Button.svelte';
+	import Select from '$lib/components/atoms/Select.svelte';
+	import ToggleButtons from '$lib/components/atoms/ToggleButtons.svelte';
 	import { calculateNextDate } from '$lib/helpers';
 
 	export let activity;

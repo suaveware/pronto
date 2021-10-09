@@ -57,6 +57,7 @@
 		"cookie": "^0.4.1",
 		"dexie": "^3.0.3",
 		"immutable": "^4.0.0-rc.12",
+		"interactjs": "^1.10.11",
 		"luxon": "^1.27.0",
 		"nodemon": "^2.0.7",
 		"svelte-dnd-action": "./src/svelte-dnd-action",

@@ -3,8 +3,8 @@
 	import { dndzone, TRIGGERS } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 	import { reorderActivities, saveConfig, state } from '$lib/state';
-	import ActivityForm from '$lib/ActivityForm.svelte';
-	import ActivityCard from '$lib/ActivityCard.svelte';
+	import ActivityForm from '$lib/components/ActivityForm.svelte';
+	import ActivityCard from '$lib/components/ActivityCard.svelte';
 	import Fab from '$lib/components/atoms/Fab.svelte';
 	import { longpress } from '$lib/custom-actions/longpress';
 	import {
@@ -19,10 +19,11 @@
 	import { ACTIVITIES_STATE } from '$lib/constants';
 	import { DateTime } from 'luxon';
 	import { List } from 'immutable';
-	import Separator from '$lib/components/Separator.svelte';
+	import Separator from '$lib/components/atoms/Separator.svelte';
 	import { fade } from 'svelte/transition';
 	import { Activity } from '$lib/recordTypes';
 	import FabContainer from '$lib/components/atoms/FabContainer.svelte';
+	import { draggable } from '$lib/custom-actions/draggable';
 
 	const flipDurationMs = 100;
 	const openSettingsDuration = 500;
@@ -109,7 +110,7 @@
 <div class="flex flex-col items-stretch bg-blueGray-600 h-full overflow-hidden">
 	<div class="flex justify-between items-center pb-8 px-4 pt-4 text-white rounded-b w-full">
 		<div class="text-2xl">Pronto</div>
-		<div on:click={handleMenuClicked} class="cursor-pointer">
+		<div use:draggable on:click={handleMenuClicked} class="cursor-pointer">
 			{#if isSettingsOpen}
 				<XIcon size="24" />
 			{:else}

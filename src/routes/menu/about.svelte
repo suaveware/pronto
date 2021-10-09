@@ -1,5 +1,5 @@
 <script>
-	import Separator from '$lib/components/Separator.svelte';
+	import Separator from '$lib/components/atoms/Separator.svelte';
 	import { version } from '/package.json';
 </script>
 

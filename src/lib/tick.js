@@ -1,29 +1,24 @@
 import { isClient } from '$lib/helpers';
 
-export let addFunction = () => {};
+const TIMEOUT = 500;
+const functionsToCall = [];
+
+export const addFunction = functionsToCall.push.bind(functionsToCall);
 
 if (isClient()) {
-	const timeout = 500;
-	window.prontoTick = () => {};
+	window.prontoTick = () => {
+		console.log('tick');
+		functionsToCall.forEach(functionToCall => functionToCall());
+	};
 
 	const timer = setInterval(
 		() =>
 			window.prontoTick({
 				timer,
-				timeout,
+				TIMEOUT,
 			}),
-		timeout
+		TIMEOUT
 	);
 
 	window.prontoTickTimer = timer;
-
-	addFunction = fun => {
-		const old = window.prontoTick;
-		window.prontoTick = (...args) => {
-			old(...args);
-			fun(...args);
-		};
-
-		window.prontoTick();
-	};
 }

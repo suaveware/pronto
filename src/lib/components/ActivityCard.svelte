@@ -2,7 +2,7 @@
 	import { ACTIVITIES_STATE } from '$lib/constants';
 	import { DateTime } from 'luxon';
 	import { SquareIcon } from 'svelte-feather-icons';
-	import { completeActivity } from './state';
+	import { completeActivity } from '$lib/state';
 	import { Activity } from '$lib/recordTypes';
 
 	export let activity;
@@ -34,4 +34,3 @@
 		</p>
 	{/if}
 </div>
-

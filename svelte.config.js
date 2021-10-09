@@ -6,6 +6,7 @@ const config = {
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte',
 		adapter: adapterStatic(),
+		appDir: 'app',
 	},
 };
 

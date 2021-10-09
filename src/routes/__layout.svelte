@@ -1,5 +1,5 @@
 <script>
-	import '$lib/checkRecurrentActions';
+	import '$lib/onLoad';
 	import { overrideItemIdKeyNameBeforeInitialisingDndZones } from 'svelte-dnd-action';
 
 	overrideItemIdKeyNameBeforeInitialisingDndZones('_id');
