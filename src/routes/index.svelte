@@ -11,6 +11,7 @@
 		PlusIcon,
 		MaximizeIcon,
 		XIcon,
+		MenuIcon,
 		InfoIcon,
 		ChevronRightIcon,
 		ChevronDownIcon,
@@ -30,14 +31,17 @@
 	let scrollContainer;
 	let isSettingsOpen = false;
 	let editingActivity = null;
-	let activitiesByState;
-	let dndActivities; // Svelte dnd needs mutable stuff
+	let readyActivities;
 	let waitingActivities;
 	let doneActivities;
 
 	$: {
-		activitiesByState = $state.activities.groupBy(activity => activity.state);
-		dndActivities = activitiesByState.get(ACTIVITIES_STATE.READY.key, List()).toJS();
+		const activitiesByState = $state.activities.groupBy(activity => activity.state);
+
+		readyActivities = activitiesByState
+			.get(ACTIVITIES_STATE.READY.key, List())
+			.sort((a, b) => a.order - b.order)
+			.toArray();
 		waitingActivities = activitiesByState
 			.get(ACTIVITIES_STATE.WAITING.key, List())
 			.sort(
@@ -67,24 +71,6 @@
 		editingActivity = $state.activities.find(activity => activity._id === _id);
 	};
 
-	const handleDnd = ({ detail }) => {
-		dndActivities = detail.items;
-
-		// We need to add and remove these classes to prevent scrolling while
-		// reordering the activities
-		if (detail.info.trigger === TRIGGERS.DRAG_STARTED) {
-			scrollContainer.classList.add('overflow-hidden');
-			scrollContainer.classList.remove('overflow-y-scroll');
-		}
-		if (detail.info.trigger.includes('dropped')) {
-			scrollContainer.classList.add('overflow-y-scroll');
-			scrollContainer.classList.remove('overflow-hidden');
-		}
-		if (detail.info.trigger === TRIGGERS.DROPPED_INTO_ZONE) {
-			reorderActivities(detail.items);
-		}
-	};
-
 	const handleMenuClicked = () => {
 		isSettingsOpen = !isSettingsOpen;
 	};
@@ -104,10 +90,17 @@
 	const handleOnDragStart = ({ itemNodeCopy }) => {
 		itemNodeCopy.style['box-shadow'] = '0px 4px 6px -2px rgba(0,0,0,0.8)';
 		itemNodeCopy.style.transform = `${itemNodeCopy.style.transform} scale(1.01, 1.01)`;
+		scrollContainer.style.overflow = 'hidden';
 	};
 
 	const handleOnDragMove = ({ itemNodeCopy }) => {
 		itemNodeCopy.style.transform = `${itemNodeCopy.style.transform} scale(1.01, 1.01)`;
+	};
+
+	const handleOnDragEnd = ({ itemNodes }) => {
+		scrollContainer.style.overflow = 'scroll';
+		const newOrder = itemNodes.map(node => ({ _id: node.getAttribute('activityId') }));
+		reorderActivities(newOrder);
 	};
 </script>
 
@@ -122,7 +115,7 @@
 			{#if isSettingsOpen}
 				<XIcon size="24" />
 			{:else}
-				<InfoIcon size="24" />
+				<MenuIcon size="24" />
 			{/if}
 		</div>
 	</div>
@@ -152,23 +145,27 @@
 		class:overflowhidden={isSettingsOpen}
 		bind:this={scrollContainer}
 	>
-		{#if !$state.activities.size}
-			<span class="text-blueGray-800">Nenhuma atividade, clique no botão de + para adicionar.</span>
-		{/if}
-
-		{#if dndActivities.length}
+		{#if readyActivities?.length}
 			<div
 				class="w-full mb-10 flex-col inline-flex gap-2"
-				on:consider={handleDnd}
-				on:finalize={handleDnd}
-				use:orderableChildren={{ onStart: handleOnDragStart, onMove: handleOnDragMove }}
+				use:orderableChildren={{
+					onStart: handleOnDragStart,
+					onMove: handleOnDragMove,
+					onEnd: handleOnDragEnd,
+				}}
 			>
-				{#each dndActivities as activity, index (activity._id)}
-					<span class="rounded" animate:flip={{ duration: flipDurationMs }}>
+				{#each readyActivities as activity, index (activity._id)}
+					<span
+						class="rounded"
+						animate:flip={{ duration: flipDurationMs }}
+						activityId={activity._id}
+					>
 						<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
 					</span>
 				{/each}
 			</div>
+		{:else}
+			<span class="text-blueGray-800">Nenhuma atividade, clique no botão de + para adicionar.</span>
 		{/if}
 
 		{#if waitingActivities?.length}

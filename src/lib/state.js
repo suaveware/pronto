@@ -122,7 +122,6 @@ export const saveConfig = createOperation((currentState, config) => {
 	const newState = currentState.set('config', config);
 
 	Object.keys(config.toJS()).forEach(key => {
-		console.log('setting', key, config.get(key));
 		localStorage.setItem(key, config.get(key));
 	});
 

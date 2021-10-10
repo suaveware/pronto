@@ -8,13 +8,6 @@ export const orderableChildren = (
 	const itemNodes = Array.from(containerNode?.children || []);
 	let itemNodeCopy = null;
 
-	// This prevents scrolling on touchmove events
-	const handleTouchMove = event => {
-		event.preventDefault();
-	};
-	containerNode.addEventListener('mousemove', handleTouchMove);
-	containerNode.addEventListener('touchmove', handleTouchMove);
-
 	// This is where the magic begins
 	itemNodes.forEach((itemNode, index) => {
 		const position = { x: 0, y: 0 };
@@ -24,11 +17,6 @@ export const orderableChildren = (
 			.draggable({
 				autoScroll: true,
 				manualStart: true,
-				modifiers: [
-					interact.modifiers.restrict({
-						restriction: 'parent',
-					}),
-				],
 				...options,
 				listeners: {
 					start(event) {
@@ -39,20 +27,21 @@ export const orderableChildren = (
 
 						// This prevents other events from being fired while dragging
 						itemNode.style['pointer-events'] = 'none';
+						itemNode.style['touch-action'] = 'none';
 						itemNode.style.opacity = '0%';
 
 						itemNodeCopy.style['pointer-events'] = 'none';
-						itemNodeCopy.style.position = 'fixed';
-						itemNodeCopy.style.top = 0;
-						itemNodeCopy.style.left = 0;
+						itemNodeCopy.style['touch-action'] = 'none';
 						itemNodeCopy.style['z-index'] = 99999;
 						itemNodeCopy.style.width = `${itemNode.clientWidth}px`;
 						itemNodeCopy.style.height = `${itemNode.clientHeight}px`;
+						itemNodeCopy.style.position = 'fixed';
+						itemNodeCopy.style.top = 0;
+						itemNodeCopy.style.left = 0;
 						itemNodeCopy.style.transform = `translate(${position.x}px, ${position.y}px)`;
 
 						containerNode.appendChild(itemNodeCopy);
 
-						console.log('onStart', onStart);
 						onStart?.({ containerNode, itemNodeCopy, itemNode, itemNodes, event, position });
 					},
 					move(event) {
@@ -79,18 +68,18 @@ export const orderableChildren = (
 								const switchNode = itemNodes[itemNodeOrder + direction];
 								const switchNodeOrder = +switchNode.style.order;
 
-								itemNode.style.order = switchNodeOrder;
 								switchNode.style.order = itemNodeOrder;
-								itemNodes[itemNodeOrder] = switchNode;
+								itemNode.style.order = switchNodeOrder;
 								itemNodes[switchNodeOrder] = itemNode;
+								itemNodes[itemNodeOrder] = switchNode;
 							}
 						}
 
 						onMove?.({ containerNode, itemNodeCopy, itemNode, itemNodes, event, position });
 					},
 					end(event) {
-						containerNode.style['touch-action'] = null;
 						itemNode.style['pointer-events'] = null;
+						itemNode.style['touch-action'] = null;
 						itemNode.style.opacity = '100%';
 						itemNodeCopy.remove();
 						itemNodeCopy = null;
