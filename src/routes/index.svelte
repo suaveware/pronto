@@ -221,8 +221,4 @@
 	.overflowhidden {
 		@apply overflow-hidden;
 	}
-
-	.dragging {
-		@apply scale-110;
-	}
 </style>

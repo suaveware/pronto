@@ -1,69 +1,69 @@
 {
-	"name": "pronto",
-	"version": "1.1.4",
-	"license": "GNU GPLv3",
-	"scripts": {
-		"dev": "svelte-kit dev",
-		"build": "svelte-kit build",
-		"preview": "svelte-kit preview",
-		"lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
-		"format": "prettier --write --plugin-search-dir=. .",
-		"generate-assets": "pwa-asset-generator ./static/icon.svg ./static -i ./src/app.html -m ./static/manifest.json -f",
-		"deploy": "zsh deploy.sh",
-		"test": "jest tests"
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "yarn test"
-		}
-	},
-	"nodemonConfig": {
-		"exec": "yarn build; yarn preview --host -H",
-		"ext": "*.js,*.svelte,*.html,*.css",
-		"ignore": [
-			".svelte-kit/*",
-			"build/*"
-		]
-	},
-	"devDependencies": {
-		"@babel/core": "^7.14.6",
-		"@babel/preset-env": "^7.14.7",
-		"@sveltejs/adapter-static": "^1.0.0-next.0",
-		"@sveltejs/kit": "^1.0.0-next.123",
-		"@tailwindcss/forms": "^0.3.3",
-		"autoprefixer": "^10.3.0",
-		"babel-jest": "^27.0.6",
-		"babel-plugin-module-resolver": "^4.1.0",
-		"concurrently": "^6.2.0",
-		"cross-env": "^7.0.3",
-		"eslint": "^7.30.0",
-		"eslint-config-prettier": "^8.1.0",
-		"eslint-plugin-jest": "^24.3.6",
-		"eslint-plugin-svelte3": "^3.2.0",
-		"gh-pages": "^3.2.3",
-		"husky": "^7.0.1",
-		"jest": "^27.0.6",
-		"postcss-cli": "^8.3.1",
-		"prettier": "^2.3.2",
-		"prettier-plugin-svelte": "^2.2.0",
-		"svelte": "^3.34.0",
-		"svelte-jester": "^1.7.0",
-		"tailwindcss": "^2.2.4"
-	},
-	"type": "module",
-	"dependencies": {
-		"@fontsource/fira-mono": "^4.2.2",
-		"@lukeed/uuid": "^2.0.0",
-		"cookie": "^0.4.1",
-		"dexie": "^3.0.3",
-		"immutable": "^4.0.0-rc.12",
-		"interactjs": "^1.10.11",
-		"luxon": "^1.27.0",
-		"nodemon": "^2.0.7",
-		"svelte-dnd-action": "./src/svelte-dnd-action",
-		"svelte-feather-icons": "^3.5.0",
-		"workbox-precaching": "^6.1.5",
-		"workbox-routing": "^6.1.5",
-		"workbox-strategies": "^6.1.5"
-	}
+  "name": "pronto",
+  "version": "1.1.4",
+  "license": "GNU GPLv3",
+  "scripts": {
+    "dev": "svelte-kit dev",
+    "build": "svelte-kit build",
+    "preview": "svelte-kit preview",
+    "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
+    "format": "prettier --write --plugin-search-dir=. .",
+    "generate-assets": "pwa-asset-generator ./static/icon.svg ./static -i ./src/app.html -m ./static/manifest.json -f",
+    "deploy": "zsh deploy.sh",
+    "test": "jest tests"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn test"
+    }
+  },
+  "nodemonConfig": {
+    "exec": "yarn build; yarn preview --host -H",
+    "ext": "*.js,*.svelte,*.html,*.css",
+    "ignore": [
+      ".svelte-kit/*",
+      "build/*"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "@sveltejs/adapter-static": "^1.0.0-next.0",
+    "@sveltejs/kit": "^1.0.0-next.123",
+    "@tailwindcss/forms": "^0.3.3",
+    "autoprefixer": "^10.3.0",
+    "babel-jest": "^27.0.6",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "concurrently": "^6.2.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.30.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-svelte3": "^3.2.0",
+    "gh-pages": "^3.2.3",
+    "husky": "^7.0.1",
+    "jest": "^27.0.6",
+    "postcss-cli": "^8.3.1",
+    "prettier": "^2.3.2",
+    "prettier-plugin-svelte": "^2.2.0",
+    "svelte": "^3.34.0",
+    "svelte-jester": "^1.7.0",
+    "tailwindcss": "^2.2.4"
+  },
+  "type": "module",
+  "dependencies": {
+    "@fontsource/fira-mono": "^4.2.2",
+    "@lukeed/uuid": "^2.0.0",
+    "cookie": "^0.4.1",
+    "dexie": "^3.0.3",
+    "immutable": "^4.0.0-rc.12",
+    "interactjs": "^1.10.11",
+    "luxon": "^1.27.0",
+    "nodemon": "^2.0.7",
+    "svelte-dnd-action": "./src/svelte-dnd-action",
+    "svelte-feather-icons": "^3.5.0",
+    "workbox-precaching": "^6.1.5",
+    "workbox-routing": "^6.1.5",
+    "workbox-strategies": "^6.1.5"
+  }
 }
