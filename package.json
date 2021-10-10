@@ -60,7 +60,6 @@
     "interactjs": "^1.10.11",
     "luxon": "^1.27.0",
     "nodemon": "^2.0.7",
-    "svelte-dnd-action": "./src/svelte-dnd-action",
     "svelte-feather-icons": "^3.5.0",
     "workbox-precaching": "^6.1.5",
     "workbox-routing": "^6.1.5",
