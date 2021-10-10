@@ -6,7 +6,7 @@
 	import ActivityForm from '$lib/components/ActivityForm.svelte';
 	import ActivityCard from '$lib/components/ActivityCard.svelte';
 	import Fab from '$lib/components/atoms/Fab.svelte';
-	import { longpress } from '$lib/custom-actions/longpress';
+	import { orderableChildren } from '$lib/custom-actions/orderableChildren';
 	import {
 		PlusIcon,
 		MaximizeIcon,
@@ -23,7 +23,6 @@
 	import { fade } from 'svelte/transition';
 	import { Activity } from '$lib/recordTypes';
 	import FabContainer from '$lib/components/atoms/FabContainer.svelte';
-	import { draggable } from '$lib/custom-actions/draggable';
 
 	const flipDurationMs = 100;
 	const openSettingsDuration = 500;
@@ -101,6 +100,15 @@
 	const handleWaitingActivitiesHeaderClicked = () => {
 		saveConfig($state.config.set('showWaitingActivities', !$state.config.showWaitingActivities));
 	};
+
+	const handleOnDragStart = ({ itemNodeCopy }) => {
+		itemNodeCopy.style['box-shadow'] = '0px 4px 6px -2px rgba(0,0,0,0.8)';
+		itemNodeCopy.style.transform = `${itemNodeCopy.style.transform} scale(1.01, 1.01)`;
+	};
+
+	const handleOnDragMove = ({ itemNodeCopy }) => {
+		itemNodeCopy.style.transform = `${itemNodeCopy.style.transform} scale(1.01, 1.01)`;
+	};
 </script>
 
 <svelte:head>
@@ -110,7 +118,7 @@
 <div class="flex flex-col items-stretch bg-blueGray-600 h-full overflow-hidden">
 	<div class="flex justify-between items-center pb-8 px-4 pt-4 text-white rounded-b w-full">
 		<div class="text-2xl">Pronto</div>
-		<div use:draggable on:click={handleMenuClicked} class="cursor-pointer">
+		<div on:click={handleMenuClicked} class="cursor-pointer">
 			{#if isSettingsOpen}
 				<XIcon size="24" />
 			{:else}
@@ -151,17 +159,12 @@
 		{#if dndActivities.length}
 			<div
 				class="w-full mb-10 flex-col inline-flex gap-2"
-				use:dndzone={{
-					items: dndActivities,
-					dragDisabled: isSettingsOpen,
-					flipDurationMs,
-					customStartEvent: 'longpress',
-				}}
 				on:consider={handleDnd}
 				on:finalize={handleDnd}
+				use:orderableChildren={{ onStart: handleOnDragStart, onMove: handleOnDragMove }}
 			>
 				{#each dndActivities as activity, index (activity._id)}
-					<span animate:flip={{ duration: flipDurationMs }} use:longpress>
+					<span class="rounded" animate:flip={{ duration: flipDurationMs }}>
 						<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
 					</span>
 				{/each}
@@ -217,5 +220,9 @@
 
 	.overflowhidden {
 		@apply overflow-hidden;
+	}
+
+	.dragging {
+		@apply scale-110;
 	}
 </style>

@@ -39,12 +39,13 @@ const createOperation =
  */
 export const saveActivity = createOperation((currentState, activity) => {
 	const index = currentState.activities.findIndex(a => a._id === activity._id);
-	const newActivity = activity._id
-		? activity
-		: activity.merge({
-				createdAt: DateTime.utc().toISO(),
-				order: currentState.activities.size,
-		  });
+	const newActivity =
+		index >= 0
+			? activity
+			: activity.merge({
+					createdAt: DateTime.utc().toISO(),
+					order: currentState.activities.size,
+			  });
 	const newActivities =
 		index < 0
 			? currentState.activities.push(newActivity)
@@ -207,5 +208,4 @@ if (isClient()) {
 
 	refreshState();
 	addFunction(checkRecurrencies);
-	console.log('checkRecurrencies', checkRecurrencies);
 }

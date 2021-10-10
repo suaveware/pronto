@@ -4,7 +4,6 @@ const colors = require('tailwindcss/colors');
 // Theme and plugin from Notus Svelte by Creative Tim
 module.exports = {
 	mode: 'jit',
-	// TODO: enable purging only for production somehow https://tailwindcss.com/docs/optimizing-for-production
 	purge: {
 		enabled: true,
 		content: ['./src/**/*.svelte'],

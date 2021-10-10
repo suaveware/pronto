@@ -7,7 +7,6 @@ export const addFunction = functionsToCall.push.bind(functionsToCall);
 
 if (isClient()) {
 	window.prontoTick = () => {
-		console.log('tick');
 		functionsToCall.forEach(functionToCall => functionToCall());
 	};
 
