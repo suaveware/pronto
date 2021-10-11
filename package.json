@@ -1,11 +1,11 @@
 {
   "name": "pronto",
   "version": "1.2.2",
-  "license": "GNU GPLv3",
+  "license": "GPL-3.0",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
-    "preview": "svelte-kit preview --host",
+    "preview": "svelte-kit preview --https --host",
     "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "format": "prettier --write --plugin-search-dir=. .",
     "generate-assets": "pwa-asset-generator ./static/icon.svg ./static -i ./src/app.html -m ./static/manifest.json -f",

@@ -1,15 +1,15 @@
 <script>
 	import { RECURRENCE_TYPE } from '$lib/constants';
-	import { TrashIcon, Trash2Icon } from 'svelte-feather-icons';
+	import { Trash2Icon } from 'svelte-feather-icons';
 	import { removeActivity, saveActivity } from '$lib/state';
 	import { Activity, CheckItem, Recurrence } from '$lib/recordTypes';
 	import { Info } from 'luxon';
 	import Input from '$lib/components/atoms/Input.svelte';
 	import Fieldset from '$lib/components/atoms/Fieldset.svelte';
 	import TextArea from '$lib/components/atoms/TextArea.svelte';
-	import Button from '$lib/components/atoms/Button.svelte';
 	import Select from '$lib/components/atoms/Select.svelte';
 	import ToggleButtons from '$lib/components/atoms/ToggleButtons.svelte';
+	import ThemeColorChanger from '$lib/components/ThemeColorChanger.svelte';
 	import { calculateNextDate } from '$lib/helpers';
 
 	export let activity;
@@ -22,6 +22,7 @@
 	const sundayOption = weekdays.pop(); // May the immutable gods forgive me for I've sinned
 	const weekdaysOptions = [sundayOption, ...weekdays];
 
+	let themeColoredNode = null;
 	let scrollContainer;
 	let form = activity.toJS();
 
@@ -87,6 +88,8 @@
 	};
 </script>
 
+<ThemeColorChanger themeColoredNode={scrollContainer} />
+
 <div
 	class="absolute z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col bg-base-100 text-base-content h-full"
 	bind:this={scrollContainer}
@@ -140,7 +143,7 @@
 
 	<div class="box-border mt-auto w-full bottom-2 inline-flex justify-evenly mb-4 mt-auto">
 		<button class="btn btn-ghost btn-secondary" on:click={handleCancelPressed}> Cancelar </button>
-		<button class="btn brn-primary" on:click={handleConfirmPressed}>
+		<button class="btn btn-primary" on:click={handleConfirmPressed}>
 			{activity._id ? 'Salvar' : 'Adicionar'}
 		</button>
 	</div>

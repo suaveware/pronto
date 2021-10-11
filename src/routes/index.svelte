@@ -25,9 +25,11 @@
 	import { fade } from 'svelte/transition';
 	import { Activity } from '$lib/recordTypes';
 	import FabContainer from '$lib/components/atoms/FabContainer.svelte';
+	import ThemeColorChanger from '$lib/components/ThemeColorChanger.svelte';
 
 	const flipDurationMs = 100;
 	const openSettingsDuration = 500;
+	let themeColoredNode = null;
 
 	export let preview = false;
 
@@ -120,12 +122,11 @@
 	};
 </script>
 
-<svelte:head>
-	<title>Pronto</title>
-</svelte:head>
+<ThemeColorChanger {themeColoredNode} />
 
 <div
 	class="flex flex-col relative items-stretch bg-base-300 text-base-content w-full h-full overflow-hidden"
+	bind:this={themeColoredNode}
 >
 	<!-- TOP BAR -->
 	<div class="flex justify-between items-center pb-8 px-4 pt-4 rounded-b w-full">

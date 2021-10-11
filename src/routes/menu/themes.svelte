@@ -1,6 +1,7 @@
 <script>
 	import Select from '$lib/components/atoms/Select.svelte';
 	import { saveConfig, state } from '$lib/state';
+	import { isClient } from '$lib/helpers';
 	import Index from '../index.svelte';
 
 	const themes = [
@@ -29,7 +30,7 @@
 	];
 	let chosenTheme = $state.config.theme;
 
-	$: saveConfig($state.config.set('theme', chosenTheme));
+	$: isClient() && saveConfig($state.config.set('theme', chosenTheme));
 </script>
 
 <div class="flex flex-col overflow-y-scroll justify-center space-y-4">

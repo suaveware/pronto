@@ -11,8 +11,10 @@
 	import { onMount, onDestroy } from 'svelte';
 	import FabContainer from '$lib/components/atoms/FabContainer.svelte';
 	import Fab from '$lib/components/atoms/Fab.svelte';
+	import ThemeColorChanger from '$lib/components/ThemeColorChanger.svelte';
 
 	// WakeLock api currently available for chrome only https://web.dev/wake-lock/
+	let themeColoredNode = null;
 	let wakeLockSentinel = null;
 	let justBlurredDescription = false;
 	let activity;
@@ -105,12 +107,15 @@
 	};
 </script>
 
+<ThemeColorChanger {themeColoredNode} />
+
 <svelte:head>
 	<title>Focus</title>
 </svelte:head>
 
 <div
 	on:click={handlePageOnClick}
+	bind:this={themeColoredNode}
 	class="bg-base-100 text-base-content inline-flex flex-col h-full w-full"
 >
 	<div class="inline-flex relative items-center w-ful p-4">
