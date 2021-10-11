@@ -3,6 +3,8 @@
   "short_name": "Pronto",
   "start_url": ".",
   "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "description": "Todo app that shows only one task at a time.",
   "icons": [
     {
