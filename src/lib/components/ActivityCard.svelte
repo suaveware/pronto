@@ -8,7 +8,9 @@
 	export let activity;
 
 	const handleCheckBoxClicked = () => {
-		completeActivity(Activity(activity));
+		console.log('checkboxclicked');
+		console.log('activity', activity);
+		completeActivity(activity);
 	};
 </script>
 
