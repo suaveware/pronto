@@ -192,6 +192,7 @@ const refreshState = async () => {
 			config: Config({
 				showDoneActivities: localStorage.getItem('showDoneActivities') === 'true',
 				showWaitingActivities: localStorage.getItem('showWaitingActivities') === 'true',
+				theme: localStorage.getItem('theme'),
 			}),
 		})
 	);
