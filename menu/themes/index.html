@@ -180,7 +180,8 @@
 		<link rel="modulepreload" href="/./_app/chunks/paths-7dc55c62.js">
 		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-33f34575.js">
 		<link rel="modulepreload" href="/./_app/chunks/state-d0752e44.js">
-		<link rel="modulepreload" href="/./_app/pages/index.svelte-f20d06d4.js">
+		<link rel="modulepreload" href="/./_app/pages/menu/__layout.svelte-7a04e77d.js">
+		<link rel="modulepreload" href="/./_app/pages/menu/themes.svelte-e579bc3c.js">
 		<link rel="modulepreload" href="/./_app/chunks/index-3e6ded5e.js">
 		<link rel="modulepreload" href="/./_app/chunks/FabContainer-d034607e.js">
 		<link rel="modulepreload" href="/./_app/chunks/Separator-23d91dcd.js">
@@ -204,11 +205,12 @@
 					error: null,
 					nodes: [
 						import("/./_app/pages/__layout.svelte-33f34575.js"),
-						import("/./_app/pages/index.svelte-f20d06d4.js")
+						import("/./_app/pages/menu/__layout.svelte-7a04e77d.js"),
+						import("/./_app/pages/menu/themes.svelte-e579bc3c.js")
 					],
 					page: {
 						host: location.host, // TODO this is redundant
-						path: "/",
+						path: "/menu/themes",
 						query: new URLSearchParams(""),
 						params: {}
 					}
@@ -225,7 +227,35 @@
 
 
 
-<main class="w-full h-full m-0 bg-white" data-theme="">
+<main class="w-full h-full m-0 bg-white" data-theme=""><div class="w-full h-full m-0 bg-base-300 text-base-content"><button class="p-4"><svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left "><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+	<div class="flex flex-col overflow-y-scroll justify-center space-y-4"><div class="px-6"><div class="inline-flex text-base-content flex-col w-full undefined"><label class="label" for="form-select"><span class="label-text">Temas</span></label>
+	<div id="form-select" class="input flex flex-row justify-between relative bg-base-100 items-center border cursor-pointer box-border"><div>Automático</div>
+<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down "><polyline points="6 9 12 15 18 9"></polyline></svg>
+<div class="card absolute box-border overflow-y-scroll max-h-40 p-2 space-y-1 bg-base-100 top-full translate-y-2 left-0 w-full shadow-lg z-30 transition-all duration-75 hidden opacity-0"><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 bg-base-300">Automático
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Light
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Dark
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Cupcake
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Bumblebee
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Emerald
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Corporate
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Synthwave
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Retro
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Cyberpunk
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Valentine
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Halloween
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Garden
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Forest
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Aqua
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Lofi
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Pastel
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Fantasy
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Wireframe
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Black
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Luxury
+		</div><div class="px-2 box-border rounded text-base-content pointer-events-auto hover:bg-base-300 ">Dracula
+		</div></div></div></div></div>
+	<div class="mockup-phone relative"><div class="camera"></div>
+<div class="display"><div class="w-full h-full artboard phone-1 artboard-demo">
 
 <div class="flex flex-col relative items-stretch bg-base-300 text-base-content w-full h-full overflow-hidden">
 	<div class="flex justify-between items-center pb-8 px-4 pt-4 rounded-b w-full"><div class="text-2xl">Pronto</div>
@@ -250,7 +280,7 @@
 <div class="absolute bottom-4 right-4 gap-3 items-center inline-flex flex-col"><button class="btn btn-lg btn-circle btn-primary svelte-hznbn8"><svg xmlns="http://www.w3.org/2000/svg" width="28px" height="28px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus "><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
 	
 </button>
-</div>
+</div></div></div></div></div></div>
 </main>
 
 
