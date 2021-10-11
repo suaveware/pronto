@@ -88,7 +88,7 @@
 </script>
 
 <div
-	class="fixed z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col bg-base-100 text-base-content h-full"
+	class="absolute z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col bg-base-100 text-base-content h-full"
 	bind:this={scrollContainer}
 >
 	<Fieldset title="Atividade" class="bg-base-300 mb-6 p-4 relative">

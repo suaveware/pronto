@@ -69,6 +69,7 @@ export const Config = (properties = {}) =>
 		{
 			showDoneActivities: false,
 			showWaitingActivities: true,
+			theme: '',
 		},
 		'Config'
 	)({

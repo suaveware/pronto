@@ -14,6 +14,8 @@
 		InfoIcon,
 		ChevronRightIcon,
 		ChevronDownIcon,
+		LayoutIcon,
+		FeatherIcon,
 	} from 'svelte-feather-icons';
 	import { base } from '$app/paths';
 	import { ACTIVITIES_STATE } from '$lib/constants';
@@ -26,6 +28,8 @@
 
 	const flipDurationMs = 100;
 	const openSettingsDuration = 500;
+
+	export let preview = false;
 
 	let scrollContainer;
 	let isSettingsOpen = false;
@@ -59,14 +63,23 @@
 	}
 
 	const handleMaximizePressed = () => {
+		if (preview) {
+			return;
+		}
 		goto(`${base}/focus`);
 	};
 
 	const handlePlusPressed = () => {
+		if (preview) {
+			return;
+		}
 		editingActivity = Activity();
 	};
 
 	const handleItemPressed = _id => () => {
+		if (preview) {
+			return;
+		}
 		editingActivity = $state.activities.find(activity => activity._id === _id);
 	};
 
@@ -74,8 +87,11 @@
 		isSettingsOpen = !isSettingsOpen;
 	};
 
-	const handleAboutClicked = () => {
-		goto(`${base}/menu/about`);
+	const handleMenuItemClicked = itemName => {
+		if (preview) {
+			return;
+		}
+		goto(`${base}/menu/${itemName}`);
 	};
 
 	const handleDoneActivitiesHeaderClicked = () => {
@@ -107,7 +123,9 @@
 	<title>Pronto</title>
 </svelte:head>
 
-<div class="flex flex-col items-stretch bg-base-300 text-base-content h-full overflow-hidden">
+<div
+	class="flex flex-col relative items-stretch bg-base-300 text-base-content w-full h-full overflow-hidden"
+>
 	<!-- TOP BAR -->
 	<div class="flex justify-between items-center pb-8 px-4 pt-4 rounded-b w-full">
 		<div class="text-2xl">Pronto</div>
@@ -120,6 +138,7 @@
 		</div>
 	</div>
 
+	<!-- SETTINGS -->
 	<div
 		class="transition-all ease-in-out duration-500 max-h-screen opacity-100"
 		class:hide={!isSettingsOpen}
@@ -130,11 +149,34 @@
 				style="height: 76vh"
 				transition:fade|local={{ duration: openSettingsDuration }}
 			>
-				<button on:click={handleAboutClicked} class="inline-flex rounded w-full items-center gap-3">
+				<button
+					on:click={() => handleMenuItemClicked('themes')}
+					class="inline-flex rounded w-full items-center gap-3"
+				>
+					<span>
+						<LayoutIcon size="24" />
+					</span>
+					<span>Temas</span>
+				</button>
+				<!-- FEEDBACK
+				<button
+					on:click={() => handleMenuItemClicked('feedback')}
+					class="inline-flex rounded w-full items-center gap-3"
+				>
+					<span>
+						<FeatherIcon size="24" />
+					</span>
+					<span>Me diga sua opinião</span>
+				</button>
+        -->
+				<button
+					on:click={() => handleMenuItemClicked('about')}
+					class="inline-flex rounded w-full items-center gap-3"
+				>
 					<span>
 						<InfoIcon size="24" />
 					</span>
-					<span class="">Sobre</span>
+					<span>Sobre</span>
 				</button>
 			</div>
 		{/if}
@@ -146,6 +188,7 @@
 		class:overflowhidden={isSettingsOpen}
 		bind:this={scrollContainer}
 	>
+		<!-- READY ACTIVITIES -->
 		{#if readyActivities?.length}
 			<div
 				class="w-full mb-10 flex-col inline-flex gap-2"
@@ -169,6 +212,7 @@
 			<span class="text-base-conent">Nenhuma atividade, clique no botão de + para adicionar.</span>
 		{/if}
 
+		<!-- WAITING ACTIVITIES -->
 		{#if waitingActivities?.length}
 			<Separator
 				on:click={handleWaitingActivitiesHeaderClicked}
@@ -186,6 +230,7 @@
 			{/each}
 		{/if}
 
+		<!-- DONE ACTIVITIES -->
 		{#if doneActivities?.length}
 			<Separator
 				on:click={handleDoneActivitiesHeaderClicked}
@@ -204,13 +249,14 @@
 	</div>
 </div>
 
+<!-- ACTIVITY FORM -->
 {#if editingActivity}
 	<ActivityForm bind:activity={editingActivity} />
 {:else if !isSettingsOpen}
 	<FabContainer>
 		<Fab
 			class="btn-primary"
-			on:click={handlePlusPressed}
+			on:click={!preview && handlePlusPressed}
 			small={!!$state.activities.size}
 			icon={PlusIcon}
 		/>

@@ -30,7 +30,7 @@
 		</div>
 		<ChevronDownIcon size="24" />
 		<div
-			class="card absolute box-border p-2 space-y-1 bg-base-100 top-full translate-y-2 left-0 w-full shadow-lg z-30 transition-all duration-75 {open
+			class="card absolute box-border overflow-y-scroll max-h-40 p-2 space-y-1 bg-base-100 top-full translate-y-2 left-0 w-full shadow-lg z-30 transition-all duration-75 {open
 				? 'opacity-100'
 				: 'hidden opacity-0'}"
 		>

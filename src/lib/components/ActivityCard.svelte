@@ -14,12 +14,12 @@
 </script>
 
 <div
-	class="card shadow w-full p-2 flex bg-base-100 text-base-content border-l-4 border-accent flex-col space-y-2"
+	class="card shadow w-full p-2 flex bg-base-100 text-base-content border border-l-4 border-primary flex-col space-y-2"
 	on:click
 >
 	<div class="flex space-x-2 items-center">
 		{#if activity.state === ACTIVITIES_STATE.READY.key}
-			<div class="cursor-pointer text-accent" on:click|stopPropagation={handleCheckBoxClicked}>
+			<div class="cursor-pointer text-primary" on:click|stopPropagation={handleCheckBoxClicked}>
 				<SquareIcon size="24" />
 			</div>
 		{/if}

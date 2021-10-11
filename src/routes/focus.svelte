@@ -122,7 +122,7 @@
 
 	<!-- Activity Data -->
 	<div
-		class="w-full inline-flex my-auto box-border flex-col overflow-y-scroll gap-6 p-4 items-center"
+		class="text-accent w-full inline-flex my-auto box-border flex-col overflow-y-scroll gap-6 p-4 items-center"
 	>
 		<p class="text-bg font-bold text-xl">
 			{activity?.title || 'Pronto!'}
