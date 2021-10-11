@@ -112,9 +112,10 @@
 		itemNodeCopy.style.transform = `${itemNodeCopy.style.transform} scale(1.01, 1.01)`;
 	};
 
-	const handleOnDragEnd = ({ itemNodes }) => {
+	const handleOnDragEnd = ({ containerNode }) => {
 		scrollContainer.style.overflow = 'scroll';
-		const newOrder = itemNodes.map(node => ({ _id: node.getAttribute('activityId') }));
+		const children = Array.from(containerNode?.children || []);
+		const newOrder = children.map(node => ({ _id: node.getAttribute('activityId') }));
 		reorderActivities(newOrder);
 	};
 </script>

@@ -9,9 +9,8 @@ export const orderableChildren = (
 	let itemNodeCopy = null;
 
 	// This is where the magic begins
-	itemNodes.forEach((itemNode, index) => {
+	const makeInteract = (itemNode, order) => {
 		const position = { x: 0, y: 0 };
-		itemNode.style.order = index;
 
 		interact(itemNode)
 			.draggable({
@@ -57,21 +56,13 @@ export const orderableChildren = (
 							.find(node => node !== itemNode && node?.parentNode === containerNode);
 
 						if (overNode) {
-							const overNodeInitialOrder = +overNode.style.order;
-							const itemNodeInitialOrder = +itemNode.style.order;
-							const difference = overNodeInitialOrder - itemNodeInitialOrder;
-							const distance = Math.abs(difference);
-							const direction = Math.sign(difference);
-
-							for (let i = 0; i < distance; ++i) {
-								const itemNodeOrder = +itemNode.style.order;
-								const switchNode = itemNodes[itemNodeOrder + direction];
-								const switchNodeOrder = +switchNode.style.order;
-
-								switchNode.style.order = itemNodeOrder;
-								itemNode.style.order = switchNodeOrder;
-								itemNodes[switchNodeOrder] = itemNode;
-								itemNodes[itemNodeOrder] = switchNode;
+							switch (itemNode.compareDocumentPosition(overNode)) {
+								case Node.DOCUMENT_POSITION_PRECEDING:
+									containerNode.insertBefore(itemNode, overNode);
+									break;
+								case Node.DOCUMENT_POSITION_FOLLOWING:
+									containerNode.insertBefore(itemNode, overNode.nextSibling);
+									break;
 							}
 						}
 
@@ -95,7 +86,31 @@ export const orderableChildren = (
 					start({ name: 'drag' }, event.interactable, event.currentTarget);
 				}
 			});
-	});
+	};
+
+	// Observe current nodes
+	itemNodes.forEach(makeInteract);
+
+	// React to new nodes being added and observe those too
+	// https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+	const handleMutations = mutationRecords => {
+		const mutations = Array.from(mutationRecords);
+
+		mutations.forEach(mutationList =>
+			mutationList.addedNodes?.forEach(newNode => {
+				if (itemNodes.find(node => node === newNode)) {
+					console.log('skip');
+					return;
+				}
+
+				console.log('itemNodes.length', itemNodes.length);
+				makeInteract(newNode, itemNodes.length);
+				itemNodes.push(newNode);
+			})
+		);
+	};
+	const observer = new MutationObserver(handleMutations);
+	observer.observe(containerNode, { childList: true });
 
 	return {
 		update: newParameters => {
