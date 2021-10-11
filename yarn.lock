@@ -2073,6 +2073,11 @@ cssstyle@^2.3.0:
   dependencies:
     cssom "~0.3.6"
 
+daisyui@^1.14.3:
+  version "1.14.3"
+  resolved "https://registry.yarnpkg.com/daisyui/-/daisyui-1.14.3.tgz#ea385af9d7e76288e0f1765d884de2cc07e83838"
+  integrity sha512-wnbgJI+00SD0w9UnzlDeDCJI/FCyiyx1rJ8+h8JO66TJ/0/NFu7visSHvRdKIh2eFYucevp8pdTL1FZaoChNlg==
+
 data-urls@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/data-urls/-/data-urls-2.0.0.tgz#156485a72963a970f5d5821aaf642bef2bf2db9b"
@@ -4891,9 +4896,6 @@ supports-hyperlinks@^2.0.0:
   dependencies:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
-
-svelte-dnd-action@./src/svelte-dnd-action:
-  version "0.9.2"
 
 svelte-feather-icons@^3.5.0:
   version "3.5.0"

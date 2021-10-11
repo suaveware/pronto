@@ -1,6 +1,4 @@
 <script>
-	import Button from './Button.svelte';
-
 	export let label = '';
 	export let options = [];
 	export let multi;
@@ -8,28 +6,32 @@
 
 	const valueArray = Array.isArray(value) ? value : [value];
 	let pressedMap = Object.fromEntries(valueArray.map(v => [v, true]));
+
+	$: console.log('pressedMap', pressedMap);
 </script>
 
-<div class="inline-flex flex-col w-full">
+<div class="text-base-content inline-flex flex-col w-full">
 	{#if label}
-		<label
-			class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-			for="form-toggle-button"
-		>
-			{label}
+		<label class="label" for="form-toggle-button">
+			<span class="label-text">{label}</span>
 		</label>
 	{/if}
 	<div
 		id="form-toggle-button"
-		class="box-border shadow bg-white rounded p-2 w-full gap-1 grid grid-cols-7 auto-cols-min"
+		class="input !h-auto bg-base-100 box-border p-2 w-full gap-1 grid grid-cols-7 auto-cols-min"
 	>
-		{#each options as option, index}
-			<Button
+		{#each options as option}
+			<button
+				class="bg-base-100 border rounded-full border-base-content {pressedMap[option.value]
+					? 'bg-base-content text-base-100'
+					: ''}"
 				toggle
 				extrasmall
 				outlined
-				bind:pressed={pressedMap[option.value]}
 				on:click={() => {
+					pressedMap[option.value] = !pressedMap[option.value];
+					console.log('clicked');
+					console.log('option', option);
 					value = multi
 						? Object.entries(pressedMap)
 								.filter(([, isPressed]) => isPressed)
@@ -42,7 +44,7 @@
 				}}
 			>
 				{option.label}
-			</Button>
+			</button>
 		{/each}
 	</div>
 </div>

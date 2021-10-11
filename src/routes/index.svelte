@@ -1,6 +1,5 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { dndzone, TRIGGERS } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 	import { reorderActivities, saveConfig, state } from '$lib/state';
 	import ActivityForm from '$lib/components/ActivityForm.svelte';
@@ -108,8 +107,9 @@
 	<title>Pronto</title>
 </svelte:head>
 
-<div class="flex flex-col items-stretch bg-blueGray-600 h-full overflow-hidden">
-	<div class="flex justify-between items-center pb-8 px-4 pt-4 text-white rounded-b w-full">
+<div class="flex flex-col items-stretch bg-base-300 text-base-content h-full overflow-hidden">
+	<!-- TOP BAR -->
+	<div class="flex justify-between items-center pb-8 px-4 pt-4 rounded-b w-full">
 		<div class="text-2xl">Pronto</div>
 		<div on:click={handleMenuClicked} class="cursor-pointer">
 			{#if isSettingsOpen}
@@ -126,7 +126,7 @@
 	>
 		{#if isSettingsOpen}
 			<div
-				class="text-white px-6 py-8 overflow-y-scroll inline-flex gap-4 text-xl flex-col items-stretch w-full"
+				class="px-6 py-8 overflow-y-scroll inline-flex gap-4 text-xl flex-col items-stretch w-full"
 				style="height: 76vh"
 				transition:fade|local={{ duration: openSettingsDuration }}
 			>
@@ -140,8 +140,9 @@
 		{/if}
 	</div>
 
+	<!-- ACTIVITIES -->
 	<div
-		class="p-4 pt-6 flex-grow transition-all duration-300 overflow-y-scroll flex-col bg-white shadow border-bluGray-400 inline-flex rounded-t-2xl gap-2"
+		class="bg-base-200 text-base-content p-4 pt-6 flex-grow transition-all duration-300 overflow-y-scroll flex-col shadow-lg border-base-100 border-t-4 inline-flex rounded-t-2xl gap-2"
 		class:overflowhidden={isSettingsOpen}
 		bind:this={scrollContainer}
 	>
@@ -154,9 +155,9 @@
 					onEnd: handleOnDragEnd,
 				}}
 			>
-				{#each readyActivities as activity, index (activity._id)}
+				{#each readyActivities as activity (activity._id)}
 					<span
-						class="rounded"
+						class="card shadow"
 						animate:flip={{ duration: flipDurationMs }}
 						activityId={activity._id}
 					>
@@ -165,7 +166,7 @@
 				{/each}
 			</div>
 		{:else}
-			<span class="text-blueGray-800">Nenhuma atividade, clique no botão de + para adicionar.</span>
+			<span class="text-base-conent">Nenhuma atividade, clique no botão de + para adicionar.</span>
 		{/if}
 
 		{#if waitingActivities?.length}
@@ -173,13 +174,15 @@
 				on:click={handleWaitingActivitiesHeaderClicked}
 				icon={$state.config.showWaitingActivities ? ChevronDownIcon : ChevronRightIcon}
 				title={ACTIVITIES_STATE.WAITING.label}
-				class="mt-4"
+				class="mt-4 text-base-content"
 			/>
 		{/if}
 
 		{#if $state.config.showWaitingActivities}
-			{#each waitingActivities as activity, index (activity._id)}
-				<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
+			{#each waitingActivities as activity (activity._id)}
+				<span>
+					<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
+				</span>
 			{/each}
 		{/if}
 
@@ -188,11 +191,13 @@
 				on:click={handleDoneActivitiesHeaderClicked}
 				icon={$state.config.showDoneActivities ? ChevronDownIcon : ChevronRightIcon}
 				title={ACTIVITIES_STATE.DONE.label}
-				class="mt-4"
+				class="mt-4 text-base-content"
 			/>
 			{#if $state.config.showDoneActivities}
-				{#each doneActivities as activity, index (activity._id)}
-					<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
+				{#each doneActivities as activity (activity._id)}
+					<span>
+						<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
+					</span>
 				{/each}
 			{/if}
 		{/if}
@@ -203,9 +208,14 @@
 	<ActivityForm bind:activity={editingActivity} />
 {:else if !isSettingsOpen}
 	<FabContainer>
-		<Fab on:click={handlePlusPressed} small={!!$state.activities.size} icon={PlusIcon} />
+		<Fab
+			class="btn-primary"
+			on:click={handlePlusPressed}
+			small={!!$state.activities.size}
+			icon={PlusIcon}
+		/>
 		{#if $state.activities.size}
-			<Fab on:click={handleMaximizePressed} icon={MaximizeIcon} />
+			<Fab class="btn-primary" on:click={handleMaximizePressed} icon={MaximizeIcon} />
 		{/if}
 	</FabContainer>
 {/if}

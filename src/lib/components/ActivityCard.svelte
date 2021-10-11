@@ -3,7 +3,6 @@
 	import { DateTime } from 'luxon';
 	import { SquareIcon } from 'svelte-feather-icons';
 	import { completeActivity } from '$lib/state';
-	import { Activity } from '$lib/recordTypes';
 
 	export let activity;
 
@@ -15,14 +14,14 @@
 </script>
 
 <div
-	class="w-full p-2 inline-flex bg-white text-blueGray-800 border-l-4 border-blueGray-500 flex-col gap-2 shadow-md border rounded"
+	class="card shadow w-full p-2 flex bg-base-100 text-base-content border-l-4 border-accent flex-col space-y-2"
 	on:click
 >
-	<div class="inline-flex justify-start gap-2 items-center w-full">
+	<div class="flex space-x-2 items-center">
 		{#if activity.state === ACTIVITIES_STATE.READY.key}
-			<span class="cursor-default" on:click|stopPropagation={handleCheckBoxClicked}>
-				<SquareIcon size="24" /></span
-			>
+			<div class="cursor-pointer text-accent" on:click|stopPropagation={handleCheckBoxClicked}>
+				<SquareIcon size="24" />
+			</div>
 		{/if}
 		<div>{activity.title}</div>
 	</div>

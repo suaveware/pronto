@@ -6,9 +6,9 @@
 	};
 </script>
 
-<div class="w-full h-full m-0 bg-blueGray-600">
+<div class="w-full h-full m-0 bg-base-300 text-base-content">
 	<button on:click={handleBackClicked} class="p-4">
-		<ChevronLeftIcon class="text-white" size="24" />
+		<ChevronLeftIcon size="24" />
 	</button>
 	<slot />
 </div>

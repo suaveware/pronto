@@ -1,11 +1,8 @@
 <script>
 	import '$lib/onLoad';
-	import { overrideItemIdKeyNameBeforeInitialisingDndZones } from 'svelte-dnd-action';
-
-	overrideItemIdKeyNameBeforeInitialisingDndZones('_id');
 </script>
 
-<main class="w-full h-full m-0 bg-white">
+<main class="w-full h-full m-0 bg-white" data-theme="dracula">
 	<slot />
 </main>
 

@@ -71,6 +71,7 @@
 
 		descriptionNode.contentEditable = false;
 		saveActivity(activity.set('description', newDescription));
+		console.log('newDescription', newDescription);
 
 		if (!newDescription) {
 			descriptionNode.innerText = '...';
@@ -108,23 +109,26 @@
 	<title>Focus</title>
 </svelte:head>
 
-<div on:click={handlePageOnClick} class="inline-flex flex-col h-full w-full">
-	<div class="inline-flex relative items-center w-ful p-4 text-blueGray-600">
+<div
+	on:click={handlePageOnClick}
+	class="bg-base-100 text-base-content inline-flex flex-col h-full w-full"
+>
+	<div class="inline-flex relative items-center w-ful p-4">
 		<!-- Topbar thingy -->
 		<button on:click={handleBackPressed}>
-			<ChevronLeftIcon class="text-blueGray-600" size="24" />
+			<ChevronLeftIcon size="24" />
 		</button>
 	</div>
 
 	<!-- Activity Data -->
 	<div
-		class="w-full inline-flex my-auto box-border flex-col overflow-y-scroll text-blueGray-600 gap-6 p-4 items-center"
+		class="w-full inline-flex my-auto box-border flex-col overflow-y-scroll gap-6 p-4 items-center"
 	>
 		<p class="text-bg font-bold text-xl">
 			{activity?.title || 'Pronto!'}
 		</p>
 		<p
-			class="font-light font-mono text-base whitespace-pre-wrap"
+			class="font-light font-mono whitespace-pre-wrap"
 			bind:this={descriptionNode}
 			on:click|stopPropagation={handleDescriptionOnClick}
 			on:blur={handleDescriptionOnBlur}
@@ -135,7 +139,7 @@
 			{#each activity?.checkList.toArray() || [] as item, index (item._id)}
 				<div
 					on:click|stopPropagation={() => handleCheckItemClicked(index)}
-					class="inline-flex gap-4 cursor-pointer"
+					class="inline-flex items-center gap-4 cursor-pointer"
 				>
 					<div>
 						{#if item.checked}
@@ -153,8 +157,8 @@
 	<!-- FAB -->
 	{#if activity}
 		<FabContainer>
-			<Fab on:click={handleDoLaterPressed} color="bg-blueGray-400" small icon={ChevronsRightIcon} />
-			<Fab on:click={handleCheckPressed} color="bg-blueGray-400" icon={CheckIcon} />
+			<Fab on:click={handleDoLaterPressed} small icon={ChevronsRightIcon} />
+			<Fab on:click={handleCheckPressed} icon={CheckIcon} />
 		</FabContainer>
 	{/if}
 </div>

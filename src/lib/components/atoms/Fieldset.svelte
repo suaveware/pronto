@@ -2,9 +2,9 @@
 	export let title;
 </script>
 
-<div class={$$props.class}>
+<div class="card overflow-visible shadow {$$props.class}">
 	{#if title}
-		<h6 class="text-blueGray-600 text-sm mt-2 mb-6 font-bold uppercase">
+		<h6 class="text-base-content text-lg mt-2 mb-6 font-bold">
 			{title}
 		</h6>
 	{/if}

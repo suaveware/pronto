@@ -1,6 +1,6 @@
 <script>
 	import { RECURRENCE_TYPE } from '$lib/constants';
-	import { TrashIcon } from 'svelte-feather-icons';
+	import { TrashIcon, Trash2Icon } from 'svelte-feather-icons';
 	import { removeActivity, saveActivity } from '$lib/state';
 	import { Activity, CheckItem, Recurrence } from '$lib/recordTypes';
 	import { Info } from 'luxon';
@@ -88,13 +88,13 @@
 </script>
 
 <div
-	class="fixed z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col bg-blueGray-600 h-full"
+	class="fixed z-20 right-0 left-0 bottom-0 top-0 p-4 overflow-y-scroll inline-flex justify-start flex-col bg-base-100 text-base-content h-full"
 	bind:this={scrollContainer}
 >
-	<Fieldset title="Atividade" class="bg-blueGray-100 p-4 relative rounded shadow mb-4">
+	<Fieldset title="Atividade" class="bg-base-300 mb-6 p-4 relative">
 		{#if activity?._id}
-			<button on:click={handleTrashPressed} class="absolute text-blueGray-600 top-5 right-3">
-				<TrashIcon size="24" />
+			<button on:click={handleTrashPressed} class="btn btn-square btn-ghost absolute top-3 right-3">
+				<Trash2Icon size="24" strokeWidth="3" />
 			</button>
 		{/if}
 		<Input label="Título" bind:value={form.title} type="text" autofocus />
@@ -139,11 +139,9 @@
 	</Fieldset>
 
 	<div class="box-border mt-auto w-full bottom-2 inline-flex justify-evenly mb-4 mt-auto">
-		<Button class="!bg-blueGray-100 !text-blueGray-600" on:click={handleCancelPressed}>
-			Cancelar
-		</Button>
-		<Button class="!bg-teal-500" on:click={handleConfirmPressed}>
+		<button class="btn btn-ghost btn-secondary" on:click={handleCancelPressed}> Cancelar </button>
+		<button class="btn brn-primary" on:click={handleConfirmPressed}>
 			{activity._id ? 'Salvar' : 'Adicionar'}
-		</Button>
+		</button>
 	</div>
 </div>
