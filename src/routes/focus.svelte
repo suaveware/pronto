@@ -70,7 +70,7 @@
 		const newDescription = descriptionNode.innerText.trim();
 
 		descriptionNode.contentEditable = false;
-		activity = activity.set('description', newDescription);
+		saveActivity(activity.set('description', newDescription));
 
 		if (!newDescription) {
 			descriptionNode.innerText = '...';
