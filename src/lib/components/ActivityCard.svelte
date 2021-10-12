@@ -14,14 +14,17 @@
 </script>
 
 <div
-	class="card shadow w-full p-2 flex bg-base-100 text-base-content border border-l-4 border-primary flex-col space-y-2"
+	class="card w-full px-4 py-3 flex bg-base-100 border-l-4 text-base-content border-primary flex-col space-y-2"
 	on:click
 >
 	<div class="flex space-x-2 items-center">
-		{#if activity.state === ACTIVITIES_STATE.READY.key}
-			<div class="cursor-pointer text-primary" on:click|stopPropagation={handleCheckBoxClicked}>
-				<SquareIcon size="24" />
-			</div>
+		{#if activity.state === ACTIVITIES_STATE.READY.key || activity.state === ACTIVITIES_STATE.DONE.key}
+			<input
+				type="checkbox"
+				checked={activity.state === ACTIVITIES_STATE.DONE.key}
+				class="checkbox border-2 checkbox-sm checkbox-primary"
+				on:click|stopPropagation={handleCheckBoxClicked}
+			/>
 		{/if}
 		<div>{activity.title}</div>
 	</div>

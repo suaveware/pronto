@@ -127,19 +127,22 @@
 <ThemeColorChanger {themeColoredNode} />
 
 <div
-	class="flex flex-col relative items-stretch bg-base-300 text-base-content w-full h-full overflow-hidden"
+	class="flex flex-col relative items-stretch bg-base-300 text-base-content w-full h-full overflow-y-scroll"
 	bind:this={themeColoredNode}
 >
 	<!-- TOP BAR -->
-	<div class="flex justify-between items-center pb-8 px-4 pt-4 rounded-b w-full">
-		<div class="text-2xl">Pronto</div>
-		<div on:click={handleMenuClicked} class="cursor-pointer">
-			{#if isSettingsOpen}
-				<XIcon size="24" />
-			{:else}
-				<MenuIcon size="24" />
-			{/if}
+	<div class="w-full sticky top-0 z-20">
+		<div class="flex bg-base-300 justify-between items-center pb-6 px-8 pt-8 rounded-b w-full">
+			<div class="text-2xl">Pronto</div>
+			<div on:click={handleMenuClicked} class="cursor-pointer">
+				{#if isSettingsOpen}
+					<XIcon size="24" />
+				{:else}
+					<MenuIcon size="24" />
+				{/if}
+			</div>
 		</div>
+		<div class="w-full h-12 bg-gradient-to-b from-base-300 to-transparent" />
 	</div>
 
 	<!-- SETTINGS -->
@@ -186,7 +189,7 @@
 
 	<!-- ACTIVITIES -->
 	<div
-		class="bg-base-200 text-base-content p-4 pt-6 flex-grow transition-all duration-300 overflow-y-scroll flex-col shadow-lg border-base-100 border-t-4 inline-flex rounded-t-2xl gap-2"
+		class="bg-base-300 text-base-content p-6 pt-0 flex-grow transition-all duration-300 flex-col inline-flex gap-2"
 		class:overflowhidden={isSettingsOpen}
 		bind:this={scrollContainer}
 	>
@@ -202,7 +205,7 @@
 			>
 				{#each readyActivities as activity (activity._id)}
 					<span
-						class="card shadow"
+						class="card overflow-visible border-none bg-transparent"
 						animate:flip={{ duration: flipDurationMs }}
 						activityId={activity._id}
 					>
