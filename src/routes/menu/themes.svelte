@@ -38,11 +38,11 @@
 	}
 </script>
 
-<div class="flex flex-col overflow-y-scroll justify-center space-y-4">
+<div class="flex flex-col overflow-y-scroll justify-center">
 	<div class="px-6">
 		<Select label="Temas" options={themes} bind:value={chosenTheme} />
 	</div>
-	<div class="mockup-phone relative">
+	<div class="mockup-phone relative transform scale-90">
 		<div class="camera" />
 		<div class="display">
 			<div class="w-full h-full artboard phone-1 artboard-demo">
