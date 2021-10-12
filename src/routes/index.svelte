@@ -162,17 +162,15 @@
 					</span>
 					<span>Temas</span>
 				</button>
-				<!-- FEEDBACK
-				<button
-					on:click={() => handleMenuItemClicked('feedback')}
+				<a
+					href="https://docs.google.com/forms/d/e/1FAIpQLSdt5iCVOdCW6jP6HbdckHLx3_AduXTIn44PaUQakkJESkUM2g/viewform?usp=sf_link"
 					class="inline-flex rounded w-full items-center gap-3"
 				>
 					<span>
 						<FeatherIcon size="24" />
 					</span>
 					<span>Me diga sua opinião</span>
-				</button>
-        -->
+				</a>
 				<button
 					on:click={() => handleMenuItemClicked('about')}
 					class="inline-flex rounded w-full items-center gap-3"
