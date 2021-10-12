@@ -184,8 +184,9 @@ export const checkRecurrencies = createOperation(currentState =>
 		activities.map(activity => {
 			if (
 				activity.state === ACTIVITIES_STATE.WAITING.key &&
-				DateTime.now() >= DateTime.fromISO(activity.nextDate)
+				DateTime.now() >= DateTime.fromISO(activity.recurrence.nextDate)
 			) {
+				console.log('activity', activity);
 				return activity.set('state', ACTIVITIES_STATE.READY.key);
 			}
 
