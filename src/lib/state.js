@@ -1,11 +1,12 @@
 import { writable } from 'svelte/store';
-import { calculateNextDate, isClient } from './helpers';
+import { calculateNextDate, isClient, moveListItem } from './helpers';
 import { DateTime, Interval } from 'luxon';
 import { dexieDb } from '$lib/dexieDb';
 import { List } from 'immutable';
 import { ACTIVITIES_STATE } from '$lib/constants';
 import { Activity, Config, State } from '$lib/recordTypes';
 import { addFunction } from '$lib/tick';
+import { current_component } from 'svelte/internal';
 
 /**
  * This is a store to represent the entire app state.
@@ -118,6 +119,33 @@ export const reorderActivities = createOperation((currentState, newOrder) => {
 	return newState;
 });
 
+export const moveActivity = createOperation((currentState, fromIndex, toIndex) => {
+	const newActivities = moveListItem(currentState.activities, fromIndex, toIndex).map(
+		(activity, index) => activity.set('order', index)
+	);
+	const newState = currentState.set('activities', newActivities);
+
+	console.log('fromIndex, toIndex', fromIndex, toIndex);
+	dexieDb
+		.transaction('rw', dexieDb.activities, async () =>
+			newActivities.map(activity =>
+				dexieDb.activities.update(activity._id, { order: activity.order })
+			)
+		)
+		.catch(error => {
+			console.error('Error on reordering activities: ', {
+				activities: currentState.activities,
+				newActivities,
+				error,
+			});
+			state.set(currentState);
+		});
+
+	console.log('currentState, newState', currentState, newState);
+	console.log('currentState, newState', currentState, newState);
+	return newState;
+});
+
 export const saveConfig = createOperation((currentState, config) => {
 	const newState = currentState.set('config', config);
 
@@ -207,5 +235,5 @@ if (isClient()) {
 	window.checkRecurrencies = checkRecurrencies;
 
 	refreshState();
-	addFunction(checkRecurrencies);
+	// addFunction(checkRecurrencies);
 }

@@ -5,11 +5,13 @@ export const orderableChildren = (
 	{ startEvent = 'hold', onStart, onMove, onEnd, ...options } = {}
 ) => {
 	// This array is going to be mutated for the sake of my mental health
-	const itemNodes = Array.from(containerNode?.children || []);
+	let itemNodes = Array.from(containerNode?.children || []);
 	let itemNodeCopy = null;
+	let itemNodeIndex = -1;
+	let lastOverNode = null;
 
 	// This is where the magic begins
-	const makeInteract = (itemNode, order) => {
+	const makeInteract = itemNode => {
 		const position = { x: 0, y: 0 };
 
 		interact(itemNode)
@@ -19,15 +21,18 @@ export const orderableChildren = (
 				...options,
 				listeners: {
 					start(event) {
+						itemNodes = Array.from(containerNode?.children || []);
 						const targetRect = event.target.getBoundingClientRect();
+
+						itemNodeIndex = itemNodes.findIndex(node => node === itemNode);
+						itemNodeCopy = event.target.cloneNode(true);
 						position.x = targetRect.x;
 						position.y = targetRect.y;
-						itemNodeCopy = event.target.cloneNode(true);
 
 						// This prevents other events from being fired while dragging
 						itemNode.style['pointer-events'] = 'none';
 						itemNode.style['touch-action'] = 'none';
-						itemNode.style.opacity = '0%';
+						itemNode.style.opacity = '20%';
 
 						itemNodeCopy.style['pointer-events'] = 'none';
 						itemNodeCopy.style['touch-action'] = 'none';
@@ -44,29 +49,41 @@ export const orderableChildren = (
 						onStart?.({ containerNode, itemNodeCopy, itemNode, itemNodes, event, position });
 					},
 					move(event) {
+						itemNodes = Array.from(containerNode?.children || []);
+						itemNodeIndex = itemNodes.findIndex(node => node === itemNode);
 						// Move item copy to mouse position
 						position.x += event.dx;
 						position.y += event.dy;
 
 						itemNodeCopy.style.transform = `translate(${position.x}px, ${position.y}px)`;
 
-						// Move item to it's new position
-						const overNode = document
-							.elementsFromPoint(event.clientX, event.clientY)
-							.find(node => node !== itemNode && node?.parentNode === containerNode);
+						// Get toIndex value
+						const elementsUnderPoint = document.elementsFromPoint(event.clientX, event.clientY);
+						const overNode = elementsUnderPoint.find(
+							node => node !== itemNode && node?.parentNode === containerNode
+						);
 
-						if (overNode) {
-							switch (itemNode.compareDocumentPosition(overNode)) {
-								case Node.DOCUMENT_POSITION_PRECEDING:
-									containerNode.insertBefore(itemNode, overNode);
-									break;
-								case Node.DOCUMENT_POSITION_FOLLOWING:
-									containerNode.insertBefore(itemNode, overNode.nextSibling);
-									break;
-							}
+						// Don't change back with the same node right after switching places with it
+						if (overNode === lastOverNode) {
+							return;
 						}
 
-						onMove?.({ containerNode, itemNodeCopy, itemNode, itemNodes, event, position });
+						const overNodeIndex = itemNodes.findIndex(node => node === overNode);
+						lastOverNode = overNode;
+
+						if (overNodeIndex >= 0 && itemNodeIndex !== overNodeIndex) {
+							onMove?.({
+								fromIndex: itemNodeIndex,
+								toIndex: overNodeIndex,
+								toNode: overNode,
+								containerNode,
+								itemNodeCopy,
+								itemNode,
+								itemNodes,
+								event,
+								position,
+							});
+						}
 					},
 					end(event) {
 						itemNode.style['pointer-events'] = null;
@@ -88,10 +105,10 @@ export const orderableChildren = (
 			});
 	};
 
-	// Observe current nodes
+	// Interact with current children
 	itemNodes.forEach(makeInteract);
 
-	// React to new nodes being added and observe those too
+	// React to new children being added and interact with those too
 	// https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
 	const handleMutations = mutationRecords => {
 		const mutations = Array.from(mutationRecords);
@@ -99,11 +116,9 @@ export const orderableChildren = (
 		mutations.forEach(mutationList =>
 			mutationList.addedNodes?.forEach(newNode => {
 				if (itemNodes.find(node => node === newNode)) {
-					console.log('skip');
 					return;
 				}
 
-				console.log('itemNodes.length', itemNodes.length);
 				makeInteract(newNode, itemNodes.length);
 				itemNodes.push(newNode);
 			})

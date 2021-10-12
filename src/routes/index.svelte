@@ -26,6 +26,7 @@
 	import { Activity } from '$lib/recordTypes';
 	import FabContainer from '$lib/components/atoms/FabContainer.svelte';
 	import ThemeColorChanger from '$lib/components/ThemeColorChanger.svelte';
+	import { moveArrayItem } from '$lib/helpers';
 
 	const flipDurationMs = 100;
 	const openSettingsDuration = 500;
@@ -110,15 +111,16 @@
 		scrollContainer.style.overflow = 'hidden';
 	};
 
-	const handleOnDragMove = ({ itemNodeCopy }) => {
+	const handleOnDragMove = ({ itemNodeCopy, itemNode, toNode, fromIndex, toIndex }) => {
 		itemNodeCopy.style.transform = `${itemNodeCopy.style.transform} scale(1.01, 1.01)`;
+		reorderActivities(moveArrayItem(readyActivities, fromIndex, toIndex));
 	};
 
 	const handleOnDragEnd = ({ containerNode }) => {
 		scrollContainer.style.overflow = 'scroll';
-		const children = Array.from(containerNode?.children || []);
-		const newOrder = children.map(node => ({ _id: node.getAttribute('activityId') }));
-		reorderActivities(newOrder);
+		/* const children = Array.from(containerNode?.children || []); */
+		/* const newOrder = children.map(node => ({ _id: node.getAttribute('activityId') })); */
+		/* reorderActivities(newOrder); */
 	};
 </script>
 

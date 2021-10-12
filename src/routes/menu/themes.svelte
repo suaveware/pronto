@@ -30,7 +30,12 @@
 	];
 	let chosenTheme = $state.config.theme;
 
-	$: isClient() && saveConfig($state.config.set('theme', chosenTheme));
+	$: {
+		if (isClient()) {
+			saveConfig($state.config.set('theme', chosenTheme));
+			document.body.setAttribute('data-theme', chosenTheme);
+		}
+	}
 </script>
 
 <div class="flex flex-col overflow-y-scroll justify-center space-y-4">
