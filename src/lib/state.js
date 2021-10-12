@@ -119,6 +119,7 @@ export const reorderActivities = createOperation((currentState, newOrder) => {
 	return newState;
 });
 
+// Not being used, but it's pretty I'll keep it here
 export const moveActivity = createOperation((currentState, fromIndex, toIndex) => {
 	const newActivities = moveListItem(currentState.activities, fromIndex, toIndex).map(
 		(activity, index) => activity.set('order', index)
@@ -179,37 +180,44 @@ export const setActivityState = activity =>
 		})
 	);
 
-export const checkRecurrencies = createOperation(currentState =>
-	currentState.update('activities', activities =>
+// TODO: first we have to move all operations inside the state by making a custom
+// store https://www.newline.co/@kchan/state-management-with-svelte-stores-part-3--21dbb2a7
+// Then this have to check the activities by querying the db so we don't update
+// the state every tick
+export const checkRecurrencies = createOperation(currentState => {
+	const newState = currentState.update('activities', activities =>
 		activities.map(activity => {
 			if (
 				activity.state === ACTIVITIES_STATE.WAITING.key &&
 				DateTime.now() >= DateTime.fromISO(activity.recurrence.nextDate)
 			) {
-				console.log('activity', activity);
 				return activity.set('state', ACTIVITIES_STATE.READY.key);
 			}
 
 			return activity;
 		})
-	)
-);
+	);
 
-// createOperation(currentState =>
-// 	currentState.update('dateTimeEvents', dateTimeEvents =>
-// 		dateTimeEvents
-// 			.map(dateTimeEvent => {
-// 				if (DateTime.now() >= DateTime.fromISO(dateTimeEvent.dateTime)) {
-// 					callback?.(dateTimeEvent);
+	// TODO: This goes through ALL activities and update even the ones we don't
+	// need to. It's an oportunity to make it more performant as this would scale
+	// with time if we accumulate many DONE activities.
+	dexieDb
+		.transaction('rw', dexieDb.activities, async () =>
+			newState.activities.map(activity =>
+				dexieDb.activities.update(activity._id, { state: activity.state })
+			)
+		)
+		.catch(error => {
+			console.error('Error on reordering activities: ', {
+				activities: currentState.activities,
+				newActivities,
+				error,
+			});
+			state.set(currentState);
+		});
 
-// 					return dateTimeEvent.set('called', true);
-// 				}
-
-// 				return dateTimeEvent;
-// 			})
-// 			.filter(({ called }) => !called)
-// 	)
-// );
+	return newState;
+});
 
 const refreshState = async () => {
 	const dbActivities = await dexieDb.activities.orderBy('order').toArray();
