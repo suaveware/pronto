@@ -1,15 +1,21 @@
 <script>
 	import { ACTIVITIES_STATE } from '$lib/constants';
 	import { DateTime } from 'luxon';
-	import { SquareIcon } from 'svelte-feather-icons';
-	import { completeActivity } from '$lib/state';
+	import { completeActivity, setActivityState } from '$lib/state';
 
 	export let activity;
 
 	const handleCheckBoxClicked = () => {
-		console.log('checkboxclicked');
-		console.log('activity', activity);
-		completeActivity(activity);
+		switch (activity.state) {
+			case ACTIVITIES_STATE.READY.key:
+				// Does a little bit more than just changing the activity state
+				completeActivity(activity);
+				break;
+
+			case ACTIVITIES_STATE.DONE.key:
+				setActivityState(activity, ACTIVITIES_STATE.READY.key);
+				break;
+		}
 	};
 </script>
 

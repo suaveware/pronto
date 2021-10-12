@@ -172,13 +172,7 @@ export const completeActivity = activity => {
 	);
 };
 
-export const setActivityState = activity =>
-	saveActivity(
-		Activity({
-			...activity,
-			state: ACTIVITIES_STATE.READY.key,
-		})
-	);
+export const setActivityState = (activity, state) => saveActivity(activity.set('state', state));
 
 // TODO: first we have to move all operations inside the state by making a custom
 // store https://www.newline.co/@kchan/state-management-with-svelte-stores-part-3--21dbb2a7

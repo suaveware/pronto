@@ -36,11 +36,12 @@
 		}
 	}
 
-	onMount(() => {
-		wakeLockSentinel = navigator.wakeLock?.request();
+	onMount(async () => {
+		wakeLockSentinel = await navigator.wakeLock?.request();
 	});
 
 	onDestroy(() => {
+		console.log('wakeLockSentinel', wakeLockSentinel);
 		wakeLockSentinel?.release();
 	});
 
