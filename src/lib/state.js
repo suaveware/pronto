@@ -235,5 +235,5 @@ if (isClient()) {
 	window.checkRecurrencies = checkRecurrencies;
 
 	refreshState();
-	// addFunction(checkRecurrencies);
+	addFunction(checkRecurrencies);
 }
