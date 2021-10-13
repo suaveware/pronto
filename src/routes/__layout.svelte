@@ -1,5 +1,14 @@
 <script>
 	import '$lib/onLoad';
+	import { isClient } from '$lib/helpers';
+
+	if (isClient()) {
+		// Prevents the appearance of the contextmenu
+		// https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/oncontextmenu
+		window.oncontextmenu = event => {
+			event.preventDefault();
+		};
+	}
 </script>
 
 <svelte:head>
