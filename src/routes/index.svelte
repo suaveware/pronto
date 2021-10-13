@@ -28,6 +28,7 @@
 	import ThemeColorChanger from '$lib/components/ThemeColorChanger.svelte';
 	import { moveArrayItem } from '$lib/helpers';
 	import { hold } from '$lib/custom-actions/hold';
+	import TopBar from '$lib/components/atoms/TopBar.svelte';
 
 	const flipDurationMs = 100;
 	const openSettingsDuration = 500;
@@ -139,19 +140,16 @@
 	bind:this={themeColoredNode}
 >
 	<!-- TOP BAR -->
-	<div class="w-full sticky top-0 z-20">
-		<div class="flex bg-base-300 justify-between items-center pb-6 px-8 pt-8 rounded-b w-full">
-			<div class="text-2xl">Pronto</div>
-			<div on:click={handleMenuClicked} class="cursor-pointer">
-				{#if isSettingsOpen}
-					<XIcon size="24" />
-				{:else}
-					<MenuIcon size="24" />
-				{/if}
-			</div>
+	<TopBar color="base-300">
+		<div class="text-2xl">Pronto</div>
+		<div on:click={handleMenuClicked} class="cursor-pointer">
+			{#if isSettingsOpen}
+				<XIcon size="24" />
+			{:else}
+				<MenuIcon size="24" />
+			{/if}
 		</div>
-		<div class="w-full h-12 bg-gradient-to-b from-base-300 to-transparent" />
-	</div>
+	</TopBar>
 
 	<!-- SETTINGS -->
 	<div
@@ -197,7 +195,7 @@
 
 	<!-- ACTIVITIES -->
 	<div
-		class="bg-base-300 text-base-content p-6 pt-0 flex-grow transition-all duration-300 flex-col inline-flex gap-2"
+		class="text-base-content p-6 pt-0 flex-grow transition-all duration-300 flex-col inline-flex gap-2"
 		class:overflowhidden={isSettingsOpen}
 		bind:this={scrollContainer}
 	>

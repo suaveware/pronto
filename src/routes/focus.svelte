@@ -12,6 +12,7 @@
 	import FabContainer from '$lib/components/atoms/FabContainer.svelte';
 	import Fab from '$lib/components/atoms/Fab.svelte';
 	import ThemeColorChanger from '$lib/components/ThemeColorChanger.svelte';
+	import TopBar from '$lib/components/atoms/TopBar.svelte';
 
 	// WakeLock api currently available for chrome only https://web.dev/wake-lock/
 	let themeColoredNode = null;
@@ -117,31 +118,30 @@
 <div
 	on:click={handlePageOnClick}
 	bind:this={themeColoredNode}
-	class="bg-base-100 text-base-content inline-flex flex-col h-full w-full"
+	class="bg-base-100 text-accent h-full w-full flex flex-col overflow-y-scroll"
 >
-	<div class="inline-flex relative items-center w-ful p-4">
-		<!-- Topbar thingy -->
+	<TopBar>
 		<button on:click={handleBackPressed}>
 			<ChevronLeftIcon size="24" />
 		</button>
-	</div>
+	</TopBar>
 
 	<!-- Activity Data -->
-	<div
-		class="text-accent w-full inline-flex my-auto box-border flex-col overflow-y-scroll gap-6 p-4 items-center"
-	>
-		<p class="text-bg font-bold text-xl">
+	<div class="text-accent w-full space-y-6 my-auto flex flex-col justify-center items-center">
+		<p class="text-bg font-bold text-2xl mb-6">
 			{activity?.title || 'Pronto!'}
 		</p>
-		<p
-			class="font-light font-mono whitespace-pre-wrap"
-			bind:this={descriptionNode}
-			on:click|stopPropagation={handleDescriptionOnClick}
-			on:blur={handleDescriptionOnBlur}
-		>
-			{''}
-		</p>
-		<div class="inline-flex flex-col gap-2 px-4 pt-4 w-full">
+		<div class="px-8">
+			<p
+				class="font-light font-mono whitespace-pre-wrap mb-6"
+				bind:this={descriptionNode}
+				on:click|stopPropagation={handleDescriptionOnClick}
+				on:blur={handleDescriptionOnBlur}
+			>
+				{''}
+			</p>
+		</div>
+		<div class="inline-flex flex-col gap-2 px-10 pt-4 w-full pb-12">
 			{#each activity?.checkList.toArray() || [] as item, index (item._id)}
 				<div
 					on:click|stopPropagation={() => handleCheckItemClicked(index)}

@@ -1,4 +1,5 @@
 <script>
+	import TopBar from '$lib/components/atoms/TopBar.svelte';
 	import { ChevronLeftIcon } from 'svelte-feather-icons';
 
 	const handleBackClicked = () => {
@@ -7,8 +8,10 @@
 </script>
 
 <div class="w-full h-full m-0 bg-base-300 text-base-content">
-	<button on:click={handleBackClicked} class="p-4">
-		<ChevronLeftIcon size="24" />
-	</button>
+	<TopBar color="base-300">
+		<button on:click={handleBackClicked}>
+			<ChevronLeftIcon size="24" />
+		</button>
+	</TopBar>
 	<slot />
 </div>
