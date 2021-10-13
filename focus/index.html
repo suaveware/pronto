@@ -174,19 +174,21 @@
 
 		
 
-		<link rel="modulepreload" href="/./_app/start-db8c7198.js">
-		<link rel="modulepreload" href="/./_app/chunks/vendor-6f51b870.js">
+		<link rel="modulepreload" href="/./_app/start-786d9b57.js">
+		<link rel="modulepreload" href="/./_app/chunks/vendor-c3741222.js">
 		<link rel="modulepreload" href="/./_app/chunks/paths-7dc55c62.js">
-		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-e3180fae.js">
-		<link rel="modulepreload" href="/./_app/chunks/tick-e562c02b.js">
-		<link rel="modulepreload" href="/./_app/pages/focus.svelte-8ecbf0fb.js">
-		<link rel="modulepreload" href="/./_app/chunks/FabContainer-17fc4ac8.js">
+		<link rel="modulepreload" href="/./_app/pages/__layout.svelte-c37734cf.js">
+		<link rel="modulepreload" href="/./_app/chunks/tick-cf308ed2.js">
+		<link rel="modulepreload" href="/./_app/pages/focus.svelte-3d691ab1.js">
+		<link rel="modulepreload" href="/./_app/chunks/FabContainer-b4fc8d7c.js">
+		<link rel="modulepreload" href="/./_app/chunks/TopBar-e1b953c3.js">
 		<link rel="stylesheet" href="/./_app/assets/start-8077b9bf.css">
-		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-4e484611.css">
+		<link rel="stylesheet" href="/./_app/assets/pages/__layout.svelte-e27ae88e.css">
 		<link rel="stylesheet" href="/./_app/assets/FabContainer-be0f404a.css">
+		<link rel="stylesheet" href="/./_app/assets/TopBar-5de6adb8.css">
 
 		<script type="module">
-			import { start } from "/./_app/start-db8c7198.js";
+			import { start } from "/./_app/start-786d9b57.js";
 			start({
 				target: document.querySelector("#svelte"),
 				paths: {"base":"","assets":"/."},
@@ -199,8 +201,8 @@
 					status: 200,
 					error: null,
 					nodes: [
-						import("/./_app/pages/__layout.svelte-e3180fae.js"),
-						import("/./_app/pages/focus.svelte-8ecbf0fb.js")
+						import("/./_app/pages/__layout.svelte-c37734cf.js"),
+						import("/./_app/pages/focus.svelte-3d691ab1.js")
 					],
 					page: {
 						host: location.host, // TODO this is redundant
@@ -225,13 +227,14 @@
 
 
 
-<div class="bg-base-100 text-base-content inline-flex flex-col h-full w-full"><div class="inline-flex relative items-center w-ful p-4">
-<button><svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left "><polyline points="15 18 9 12 15 6"></polyline></svg></button></div>
+<div class="bg-base-100 text-accent h-full w-full flex flex-col overflow-y-scroll"><div class="w-full sticky top-0 z-20"><div class="flex justify-between items-center pb-6 px-8 pt-8 rounded-b w-full svelte-10azmma bg100"><button><svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left "><polyline points="15 18 9 12 15 6"></polyline></svg></button></div>
+	<div class="w-full h-12 bg-gradient-to-b svelte-10azmma bggradient100"></div>
+</div>
 
 	
-	<div class="text-accent w-full inline-flex my-auto box-border flex-col overflow-y-scroll gap-6 p-4 items-center"><p class="text-bg font-bold text-xl">Pronto!</p>
-<p class="font-light font-mono whitespace-pre-wrap"></p>
-<div class="inline-flex flex-col gap-2 px-4 pt-4 w-full"></div></div>
+	<div class="text-accent w-full space-y-6 my-auto flex flex-col justify-center items-center"><p class="text-bg font-bold text-2xl mb-6">Pronto!</p>
+<div class="px-8"><p class="font-light font-mono whitespace-pre-wrap mb-6"></p></div>
+<div class="inline-flex flex-col gap-2 px-10 pt-4 w-full pb-12"></div></div>
 
 	
 	</div>
