@@ -1,6 +1,6 @@
 const MOVE_TOLERANCE = 50;
 
-export function longpress(node, duration = 400) {
+export function hold(node, duration = 400) {
 	let timer;
 	let startPosition;
 
@@ -31,9 +31,10 @@ export function longpress(node, duration = 400) {
 			node.removeEventListener('touchend', handleMouseup);
 
 			node.dispatchEvent(
-				new CustomEvent('longpress', {
+				new CustomEvent('hold', {
 					detail: {
-						clientPosition: startPosition,
+						clientX: startPosition.x,
+						clientY: startPosition.y,
 					},
 				})
 			);

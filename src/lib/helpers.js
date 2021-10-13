@@ -4,6 +4,15 @@ import { RECURRENCE_TYPE } from '$lib/constants';
 export const isClient = () => typeof window !== 'undefined';
 
 export const moveArrayItem = (array, fromIndex, toIndex) => {
+	if (!(array[fromIndex] && array[toIndex])) {
+		console.warning('Tried to move elements from out of bounds index:', {
+			array,
+			fromIndex,
+			toIndex,
+		});
+		return;
+	}
+
 	const newArray = [...array];
 	const moveItem = newArray[fromIndex];
 

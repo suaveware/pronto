@@ -27,6 +27,7 @@
 	import FabContainer from '$lib/components/atoms/FabContainer.svelte';
 	import ThemeColorChanger from '$lib/components/ThemeColorChanger.svelte';
 	import { moveArrayItem } from '$lib/helpers';
+	import { hold } from '$lib/custom-actions/hold';
 
 	const flipDurationMs = 100;
 	const openSettingsDuration = 500;
@@ -105,15 +106,22 @@
 		saveConfig($state.config.set('showWaitingActivities', !$state.config.showWaitingActivities));
 	};
 
-	const handleOnDragStart = ({ itemNodeCopy }) => {
+	const handleOnDragStart = ({ itemNodeCopy, event }) => {
 		itemNodeCopy.style['box-shadow'] = '0px 4px 6px -2px rgba(0,0,0,0.8)';
 		itemNodeCopy.style.transform = `${itemNodeCopy.style.transform} scale(1.01, 1.01)`;
+		event.currentTarget.style.opacity = '0%';
 		scrollContainer.style.overflow = 'hidden';
 	};
 
 	const handleOnDragMove = ({ itemNodeCopy, itemNode, toNode, fromIndex, toIndex }) => {
 		itemNodeCopy.style.transform = `${itemNodeCopy.style.transform} scale(1.01, 1.01)`;
-		reorderActivities(moveArrayItem(readyActivities, fromIndex, toIndex));
+		reorderActivities(
+			moveArrayItem(
+				readyActivities.map(activity => activity.toJS()),
+				fromIndex,
+				toIndex
+			)
+		);
 	};
 
 	const handleOnDragEnd = ({ containerNode }) => {
@@ -207,6 +215,7 @@
 					<span
 						class="card overflow-visible border-none bg-transparent"
 						animate:flip={{ duration: flipDurationMs }}
+						use:hold
 						activityId={activity._id}
 					>
 						<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />

@@ -16,3 +16,5 @@ echo "Added CNAME file with the url to point github pages to"
 
 echo "\n==== Deploying with gh-pages ===="
 gh-pages -d build --dotfiles
+
+echo "\n==== PRONTO ===="
