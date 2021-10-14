@@ -17,35 +17,43 @@ const extractEventClientPosition = event => {
 
 export const orderableChildren = (
 	containerNode,
-	{ startEvent = 'hold', onStart, onMove, onEnd } = {}
+	{ startEvent = 'hold', preventClickWhenReleasing = true, onStart, onMove, onEnd } = {}
 ) => {
 	// This array is going to be mutated for the sake of my mental health
 	let itemNodes = Array.from(containerNode?.children || []);
+	let itemNode = null;
 	let itemNodeCopy = null;
 	let itemNodeIndex = -1;
 	let lastOverNode = null;
 	let translateOffset = { x: 0, y: 0 };
 
+	const stopEventPropagationOnce = useCapture => event => {
+		event.stopPropagation();
+		event.currentTarget.removeEventListener(event.type, stopEventPropagationOnce, useCapture);
+	};
+
 	const handleStartEvent = event => {
-		const targetRect = event.currentTarget.getBoundingClientRect();
+		itemNode = event.currentTarget;
+		if (preventClickWhenReleasing) {
+			event.currentTarget.addEventListener('click', stopEventPropagationOnce(true), true);
+		}
+
+		const targetRect = itemNode.getBoundingClientRect();
 		const position = extractEventClientPosition(event);
 
 		itemNodes = Array.from(containerNode?.children || []);
+		itemNode.isDragging = true;
 		translateOffset.x = targetRect.left - event.detail.clientX;
 		translateOffset.y = targetRect.top - event.detail.clientY;
 
-		itemNodeIndex = itemNodes.findIndex(node => node === event.currentTarget);
-		itemNodeCopy = event.currentTarget.cloneNode(true);
-
-		// This prevents other events from being fired while dragging
-		event.currentTarget.style['pointer-events'] = 'none';
-		event.currentTarget.style['touch-action'] = 'none';
+		itemNodeIndex = itemNodes.findIndex(node => node === itemNode);
+		itemNodeCopy = itemNode.cloneNode(true);
 
 		itemNodeCopy.style['pointer-events'] = 'none';
 		itemNodeCopy.style['touch-action'] = 'none';
-		itemNodeCopy.style['z-index'] = 99999;
-		itemNodeCopy.style.width = `${event.currentTarget.clientWidth}px`;
-		itemNodeCopy.style.height = `${event.currentTarget.clientHeight}px`;
+		itemNodeCopy.style['z-index'] = 1;
+		itemNodeCopy.style.width = `${itemNode.clientWidth}px`;
+		itemNodeCopy.style.height = `${itemNode.clientHeight}px`;
 		itemNodeCopy.style.position = 'fixed';
 		itemNodeCopy.style.top = 0;
 		itemNodeCopy.style.left = 0;
@@ -58,7 +66,7 @@ export const orderableChildren = (
 			position,
 			containerNode,
 			itemNodeCopy,
-			itemNode: event.currentTarget,
+			itemNode,
 			itemNodes,
 		});
 	};
@@ -75,13 +83,13 @@ export const orderableChildren = (
 		};
 
 		itemNodes = Array.from(containerNode?.children || []);
-		itemNodeIndex = itemNodes.findIndex(node => node === event.currentTarget);
+		itemNodeIndex = itemNodes.findIndex(node => node === itemNode);
 		itemNodeCopy.style.transform = `translate(${translate.x}px, ${translate.y}px)`;
 
 		// Get toIndex value
 		const elementsUnderPoint = document.elementsFromPoint(position.x, position.y);
 		const overNode = elementsUnderPoint.find(
-			node => node !== event.currentTarget && node?.parentNode === containerNode
+			node => node !== itemNode && node?.parentNode === containerNode
 		);
 
 		// Don't change back with the same node right after switching places with it
@@ -101,7 +109,7 @@ export const orderableChildren = (
 				toNode: overNode,
 				containerNode,
 				itemNodeCopy,
-				itemNode: event.currentTarget,
+				itemNode,
 				itemNodes,
 			});
 		}
@@ -111,33 +119,34 @@ export const orderableChildren = (
 		if (!itemNodeCopy) {
 			return;
 		}
-
+		event.stopPropagation();
+		event.stopImmediatePropagation();
 		const position = extractEventClientPosition(event);
 
-		event.currentTarget.style['pointer-events'] = null;
-		event.currentTarget.style['touch-action'] = null;
-		event.currentTarget.style.opacity = '100%';
+		itemNode.style['pointer-events'] = 'auto';
+		itemNode.style['touch-action'] = 'auto';
+		itemNode.isDragging = undefined;
 		itemNodeCopy.remove();
 		itemNodeCopy = null;
 
 		onEnd?.({
 			event,
+			itemNode,
 			position,
 			containerNode,
 			itemNodeCopy,
-			itemNode: event.currentTarget,
 			itemNodes,
 		});
 	};
 
 	const addEventListeners = itemNode => {
 		itemNode.addEventListener(startEvent, handleStartEvent);
-		moveEvents.forEach(eventName => itemNode.addEventListener(eventName, handleMoveEvent, true));
-		endEvents.forEach(eventName => itemNode.addEventListener(eventName, handleEndEvent, true));
+		moveEvents.forEach(eventName => window.addEventListener(eventName, handleMoveEvent));
+		endEvents.forEach(eventName => window.addEventListener(eventName, handleEndEvent));
 	};
 
 	const removeEventListeners = itemNode => {
-		removeEventListener(startEvent, handleStartEvent);
+		itemNode.removeEventListener(startEvent, handleStartEvent);
 		moveEvents.forEach(eventName => itemNode.removeEventListener(eventName, handleMoveEvent));
 		endEvents.forEach(eventName => itemNode.removeEventListener(eventName, handleEndEvent));
 	};

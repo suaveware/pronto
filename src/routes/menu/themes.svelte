@@ -38,7 +38,7 @@
 	}
 </script>
 
-<div class="flex flex-col overflow-y-scroll justify-center">
+<div class="flex flex-col overflow-y-scroll bg-base-300 justify-center">
 	<div class="px-6">
 		<Select label="Temas" options={themes} bind:value={chosenTheme} />
 	</div>

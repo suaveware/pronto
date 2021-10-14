@@ -3,7 +3,11 @@
 	export let icon = null;
 </script>
 
-<button on:click|stopPropagation class="btn btn-lg btn-circle {$$props.class}" class:small>
+<button
+	on:click|stopPropagation
+	class="btn btn-lg btn-circle shadow-md {$$props.class}"
+	class:small
+>
 	<svelte:component this={icon} size={small ? '20' : '28'} />
 	<slot />
 </button>

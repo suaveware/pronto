@@ -6,8 +6,6 @@
 
 	const valueArray = Array.isArray(value) ? value : [value];
 	let pressedMap = Object.fromEntries(valueArray.map(v => [v, true]));
-
-	$: console.log('pressedMap', pressedMap);
 </script>
 
 <div class="text-base-content inline-flex flex-col w-full">

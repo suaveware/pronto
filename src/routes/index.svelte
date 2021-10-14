@@ -32,7 +32,6 @@
 
 	const flipDurationMs = 100;
 	const openSettingsDuration = 500;
-	let themeColoredNode = null;
 
 	export let preview = false;
 
@@ -81,7 +80,7 @@
 		editingActivity = Activity();
 	};
 
-	const handleItemPressed = _id => () => {
+	const handleItemPressed = _id => event => {
 		if (preview) {
 			return;
 		}
@@ -107,14 +106,14 @@
 		saveConfig($state.config.set('showWaitingActivities', !$state.config.showWaitingActivities));
 	};
 
-	const handleOnDragStart = ({ itemNodeCopy, event }) => {
+	const handleOnDragStart = ({ itemNodeCopy, itemNode }) => {
 		itemNodeCopy.style['box-shadow'] = '0px 4px 6px -2px rgba(0,0,0,0.8)';
 		itemNodeCopy.style.transform = `${itemNodeCopy.style.transform} scale(1.01, 1.01)`;
-		event.currentTarget.style.opacity = '0%';
-		scrollContainer.style.overflow = 'hidden';
+		itemNode.style.opacity = '0%';
+		scrollContainer.style.overflowY = 'hidden';
 	};
 
-	const handleOnDragMove = ({ itemNodeCopy, itemNode, toNode, fromIndex, toIndex }) => {
+	const handleOnDragMove = ({ itemNodeCopy, fromIndex, toIndex }) => {
 		itemNodeCopy.style.transform = `${itemNodeCopy.style.transform} scale(1.01, 1.01)`;
 		reorderActivities(
 			moveArrayItem(
@@ -125,19 +124,17 @@
 		);
 	};
 
-	const handleOnDragEnd = ({ containerNode }) => {
-		scrollContainer.style.overflow = 'scroll';
-		/* const children = Array.from(containerNode?.children || []); */
-		/* const newOrder = children.map(node => ({ _id: node.getAttribute('activityId') })); */
-		/* reorderActivities(newOrder); */
+	const handleOnDragEnd = ({ itemNode }) => {
+		scrollContainer.style.overflowY = 'scroll';
+		itemNode.style.opacity = '100%';
 	};
 </script>
 
-<ThemeColorChanger {themeColoredNode} />
+<ThemeColorChanger themeColoredNode={scrollContainer} />
 
 <div
 	class="flex flex-col relative items-stretch bg-base-300 text-base-content w-full h-full overflow-y-scroll"
-	bind:this={themeColoredNode}
+	bind:this={scrollContainer}
 >
 	<!-- TOP BAR -->
 	<TopBar color="base-300">
@@ -197,7 +194,6 @@
 	<div
 		class="text-base-content p-6 pt-0 flex-grow transition-all duration-300 flex-col inline-flex gap-2"
 		class:overflowhidden={isSettingsOpen}
-		bind:this={scrollContainer}
 	>
 		<!-- READY ACTIVITIES -->
 		{#if readyActivities?.length}
@@ -214,9 +210,9 @@
 						class="card overflow-visible border-none bg-transparent"
 						animate:flip={{ duration: flipDurationMs }}
 						use:hold
-						activityId={activity._id}
+						let:isDragging
 					>
-						<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
+						<ActivityCard on:click={!isDragging && handleItemPressed(activity._id)} {activity} />
 					</span>
 				{/each}
 			</div>
@@ -250,13 +246,14 @@
 				title={ACTIVITIES_STATE.DONE.label}
 				class="mt-4 text-base-content"
 			/>
-			{#if $state.config.showDoneActivities}
-				{#each doneActivities as activity (activity._id)}
-					<span>
-						<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
-					</span>
-				{/each}
-			{/if}
+		{/if}
+
+		{#if $state.config.showDoneActivities}
+			{#each doneActivities as activity (activity._id)}
+				<span>
+					<ActivityCard on:click={handleItemPressed(activity._id)} {activity} />
+				</span>
+			{/each}
 		{/if}
 	</div>
 </div>

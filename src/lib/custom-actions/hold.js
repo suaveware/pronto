@@ -25,8 +25,8 @@ export function hold(node, duration = 400) {
 		startPosition = { x: clientX, y: clientY };
 
 		timer = setTimeout(() => {
-			node.removeEventListener('mousedown', handleMousedown);
-			node.removeEventListener('touchStart', handleMousedown);
+			// node.removeEventListener('mousedown', handleMousedown);
+			// node.removeEventListener('touchStart', handleMousedown);
 			node.removeEventListener('mouseup', handleMouseup);
 			node.removeEventListener('touchend', handleMouseup);
 

@@ -20,7 +20,7 @@
 </script>
 
 <div
-	class="card w-full px-4 py-3 flex bg-base-100 text-base-content border-primary flex-col space-y-2"
+	class="card w-full px-4 py-3 flex bg-base-100 text-base-content select-none border-primary flex-col space-y-2"
 	on:click
 >
 	<div class="flex space-x-2 items-center">
