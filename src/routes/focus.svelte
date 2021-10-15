@@ -128,7 +128,7 @@
 
 	<!-- Activity Data -->
 	<div class="text-accent w-full space-y-6 my-auto flex flex-col justify-center items-center">
-		<p class="text-bg font-bold text-2xl mb-6">
+		<p class="text-bg font-bold text-2xl mb-6 px-8">
 			{activity?.title || 'Pronto!'}
 		</p>
 		<div class="px-8">

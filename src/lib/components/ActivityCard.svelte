@@ -28,7 +28,7 @@
 		<input
 			type="checkbox"
 			checked={activity.state !== ACTIVITIES_STATE.READY.key}
-			class="checkbox border-2 checkbox-sm checkbox-primary"
+			class="checkbox border-2 checkbox-sm checkbox-primary flex-shrink-0"
 			on:click|stopPropagation={handleCheckBoxClicked}
 		/>
 		<div class="space-y-2">
