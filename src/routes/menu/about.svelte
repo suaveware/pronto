@@ -11,9 +11,7 @@
 		<p class="text-2xl font-bold">by Suaveware</p>
 		<p class="text-justify">
 			Este aplicativo é de código livre sob a licença GPL-3 e seu código fonte está disponível neste
-			<a class="underline" href="https://github.com/luizcarlos1405/pronto">
-				repositório no Github
-			</a>
+			<a class="underline" href="https://github.com/suaveware/pronto"> repositório no Github </a>
 			.
 		</p>
 		<p class="text-justify">
